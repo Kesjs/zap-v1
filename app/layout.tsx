@@ -64,7 +64,20 @@ export default function RootLayout({
     >
       <body className={`${dmSans.className} antialiased`} style={{ background: "#000000" }}>
         <TopLoader />
-        <Toaster position="top-right" richColors theme="dark" closeButton />
+        <Toaster
+          position="top-right"
+          theme="dark"
+          closeButton
+          toastOptions={{
+            style: {
+              background: "#0A0A0A",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
+              color: "#F4F4F5",
+              borderRadius: "14px",
+              boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.9)",
+            },
+          }}
+        />
         <NavBar />
         {children}
       </body>

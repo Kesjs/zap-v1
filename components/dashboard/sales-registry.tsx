@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { toast } from "sonner";
+import CustomSelect, { SelectOption } from "@/components/ui/custom-select";
 import {
   MagnifyingGlassIcon,
   PlusIcon,
@@ -13,6 +15,13 @@ import {
   XMarkIcon,
   EllipsisVerticalIcon,
 } from "@heroicons/react/24/outline";
+
+const DOC_TYPE_OPTIONS: SelectOption[] = [
+  { value: "all", label: "Tous les types" },
+  { value: "recu", label: "Reçus", badge: "REC" },
+  { value: "facture", label: "Factures", badge: "FAC" },
+  { value: "devis", label: "Devis", badge: "DEV" },
+];
 
 export interface DocumentItem {
   id: string;
@@ -87,7 +96,6 @@ export default function SalesRegistry({
   const [paymentMode, setPaymentMode] = useState<"Wave" | "MoMo" | "Cash">("Wave");
   const [encaissementAmount, setEncaissementAmount] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Metrics calculation
   const totalEncaissed = useMemo(() => {
@@ -138,9 +146,11 @@ export default function SalesRegistry({
         )
       );
       setIsProcessing(false);
+      const encDocNum = encaisserDoc.number;
       setEncaisserDoc(null);
-      setToastMessage("Reçu généré avec succès.");
-      setTimeout(() => setToastMessage(null), 3000);
+      toast.success("Reçu généré avec succès", {
+        description: `La pièce ${encDocNum} a été encaissée et le reçu est prêt.`,
+      });
     }, 600);
   };
 
@@ -172,31 +182,6 @@ export default function SalesRegistry({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div
-          style={{
-            position: "fixed",
-            bottom: "24px",
-            right: "24px",
-            background: "#171717",
-            border: "1px solid rgba(255, 255, 255, 0.15)",
-            borderRadius: "12px",
-            padding: "12px 20px",
-            color: "#F4F4F5",
-            zIndex: 999,
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "14px",
-          }}
-        >
-          <CheckBadgeIcon style={{ width: 18, height: 18, color: "#FFFFFF" }} />
-          <span>{toastMessage}</span>
-        </div>
-      )}
-
       {/* Onboarding Checklist */}
       {showChecklist && (
         <div
@@ -421,28 +406,13 @@ export default function SalesRegistry({
           </div>
 
           {/* Filters */}
-          <div className="flex items-center gap-2">
-            <select
+          <div className="flex items-center gap-2.5">
+            <CustomSelect
               value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              style={{
-                height: "44px",
-                background: "#171717",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px",
-                padding: "0 14px",
-                color: "#F4F4F5",
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: "13px",
-                outline: "none",
-                cursor: "pointer",
-              }}
-            >
-              <option value="all">Tous les types</option>
-              <option value="recu">Reçus</option>
-              <option value="facture">Factures</option>
-              <option value="devis">Devis</option>
-            </select>
+              onChange={(val) => setSelectedType(val)}
+              options={DOC_TYPE_OPTIONS}
+              className="w-44 shrink-0"
+            />
 
             {/* Primary CTA */}
             <button

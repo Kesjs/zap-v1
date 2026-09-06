@@ -18,8 +18,29 @@ import {
 } from "@heroicons/react/24/outline";
 import { useWorkshop, MobileMoneyAccount } from "./workshop-context";
 import { createClient } from "@/lib/supabase/client";
+import CustomSelect, { SelectOption } from "@/components/ui/custom-select";
 
 const supabase = createClient();
+
+const OPERATOR_OPTIONS: SelectOption[] = [
+  { value: "MTN MoMo", label: "MTN Mobile Money", badge: "MoMo" },
+  { value: "Moov Money", label: "Moov Money", badge: "Moov" },
+  { value: "Wave", label: "Wave", badge: "Wave" },
+  { value: "Celtiis", label: "Celtiis Cash", badge: "Celtiis" },
+  { value: "Orange Money", label: "Orange Money", badge: "OM" },
+];
+
+const COUNTRY_OPTIONS: SelectOption[] = [
+  { value: "Bénin", label: "Bénin", badge: "+229" },
+  { value: "Côte d'Ivoire", label: "Côte d'Ivoire", badge: "+225" },
+  { value: "Sénégal", label: "Sénégal", badge: "+221" },
+  { value: "Togo", label: "Togo", badge: "+228" },
+  { value: "Mali", label: "Mali", badge: "+223" },
+  { value: "Burkina Faso", label: "Burkina Faso", badge: "+226" },
+  { value: "Guinée", label: "Guinée", badge: "+224" },
+  { value: "Niger", label: "Niger", badge: "+227" },
+  { value: "Cameroun", label: "Cameroun", badge: "+237" },
+];
 
 type SettingsTab = "identity" | "stamp" | "payments" | "security";
 
@@ -527,14 +548,13 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
 
                   <div>
                     <label className="block text-xs font-medium text-zinc-300 mb-1.5">
-                      Pays
+                      Pays d&apos;activité
                     </label>
-                    <input
-                      type="text"
+                    <CustomSelect
                       value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      placeholder="ex: Bénin"
-                      className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-white/40 transition-colors"
+                      onChange={(val) => setCountry(val)}
+                      options={COUNTRY_OPTIONS}
+                      placeholder="Sélectionnez votre pays..."
                     />
                   </div>
                 </div>
@@ -723,6 +743,21 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                     </div>
                   )}
                 </div>
+
+                <div className="flex justify-end pt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      toast.success("Tampon & signature enregistrés", {
+                        description: "Votre cachet officiel et signature sont prêts pour vos documents.",
+                      });
+                    }}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-colors cursor-pointer shadow-sm active:scale-98"
+                  >
+                    <CheckIcon className="w-4 h-4" />
+                    <span>Enregistrer le cachet & la signature</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -753,22 +788,16 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                       <label className="block text-xs font-medium text-zinc-400 mb-1">
                         Opérateur
                       </label>
-                      <select
+                      <CustomSelect
                         value={mm1.provider}
-                        onChange={(e) =>
+                        onChange={(val) =>
                           setMm1((prev) => ({
                             ...prev,
-                            provider: e.target.value as any,
+                            provider: val as any,
                           }))
                         }
-                        className="h-10 w-full rounded-xl border border-white/15 bg-black px-3 text-xs text-white outline-none focus:border-white/40"
-                      >
-                        <option value="MTN MoMo">MTN Mobile Money</option>
-                        <option value="Moov Money">Moov Money</option>
-                        <option value="Wave">Wave</option>
-                        <option value="Celtiis">Celtiis Cash</option>
-                        <option value="Orange Money">Orange Money</option>
-                      </select>
+                        options={OPERATOR_OPTIONS}
+                      />
                     </div>
 
                     <div>
@@ -782,7 +811,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setMm1((prev) => ({ ...prev, number: e.target.value }))
                         }
                         placeholder="+229 97 00 11 22"
-                        className="h-10 w-full rounded-xl border border-white/15 bg-black px-3 text-xs text-white outline-none focus:border-white/40 font-mono"
+                        className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white outline-none focus:border-white/40 font-mono"
                       />
                     </div>
 
@@ -797,7 +826,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setMm1((prev) => ({ ...prev, name: e.target.value }))
                         }
                         placeholder="ex: Koffi Mensah"
-                        className="h-10 w-full rounded-xl border border-white/15 bg-black px-3 text-xs text-white outline-none focus:border-white/40"
+                        className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white outline-none focus:border-white/40"
                       />
                     </div>
                   </div>
@@ -817,22 +846,16 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                       <label className="block text-xs font-medium text-zinc-400 mb-1">
                         Opérateur
                       </label>
-                      <select
+                      <CustomSelect
                         value={mm2.provider}
-                        onChange={(e) =>
+                        onChange={(val) =>
                           setMm2((prev) => ({
                             ...prev,
-                            provider: e.target.value as any,
+                            provider: val as any,
                           }))
                         }
-                        className="h-10 w-full rounded-xl border border-white/15 bg-black px-3 text-xs text-white outline-none focus:border-white/40"
-                      >
-                        <option value="Moov Money">Moov Money</option>
-                        <option value="MTN MoMo">MTN Mobile Money</option>
-                        <option value="Wave">Wave</option>
-                        <option value="Celtiis">Celtiis Cash</option>
-                        <option value="Orange Money">Orange Money</option>
-                      </select>
+                        options={OPERATOR_OPTIONS}
+                      />
                     </div>
 
                     <div>
@@ -846,7 +869,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setMm2((prev) => ({ ...prev, number: e.target.value }))
                         }
                         placeholder="+229 95 33 44 55"
-                        className="h-10 w-full rounded-xl border border-white/15 bg-black px-3 text-xs text-white outline-none focus:border-white/40 font-mono"
+                        className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white outline-none focus:border-white/40 font-mono"
                       />
                     </div>
 
@@ -861,7 +884,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setMm2((prev) => ({ ...prev, name: e.target.value }))
                         }
                         placeholder="ex: Atelier Koffi"
-                        className="h-10 w-full rounded-xl border border-white/15 bg-black px-3 text-xs text-white outline-none focus:border-white/40"
+                        className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white outline-none focus:border-white/40"
                       />
                     </div>
                   </div>
