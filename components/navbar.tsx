@@ -152,37 +152,47 @@ export default function NavBar() {
         }}
       >
         <div className="flex items-center justify-between h-full px-4 sm:px-5">
-          {/* Logo — grand, lisible, sur fond blanc aux coins arrondis, sans texte redondant */}
+          {/* Logo — image seule (déjà fond noir + Z blanc), plus de cadre blanc, + wordmark ZAP */}
           <Link
             href="/"
-            className="flex items-center flex-shrink-0 transition-opacity hover:opacity-90"
+            className="flex items-center flex-shrink-0 gap-2.5 transition-opacity hover:opacity-90"
             style={{ textDecoration: "none" }}
             aria-label="Accueil ZAP"
           >
             <div
               style={{
                 position: "relative",
-                width: "40px",
-                height: "40px",
-                background: "#FFFFFF",
-                borderRadius: "10px",
+                width: "36px",
+                height: "36px",
+                borderRadius: "9px",
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.35)",
-                padding: "2px",
+                flexShrink: 0,
               }}
             >
               <Image
-                src="/logo.png"
+                src="/log.jpg"
                 alt="ZAP"
-                width={38}
-                height={38}
+                width={36}
+                height={36}
                 priority
-                style={{ objectFit: "contain", width: "100%", height: "100%" }}
+                style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />
             </div>
+            <span
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "17px",
+                fontWeight: 700,
+                color: "#FFFFFF",
+                letterSpacing: "0.01em",
+                lineHeight: 1,
+              }}
+            >
+              ZAP
+            </span>
           </Link>
 
           {/* Center nav — desktop */}
