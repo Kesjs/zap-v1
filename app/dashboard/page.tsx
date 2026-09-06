@@ -20,7 +20,7 @@ function DashboardMainContent() {
   const { isCollapsed } = useSidebar();
 
   const [isReady, setIsReady] = useState(false);
-  const [currentView, setCurrentView] = useState<DashboardView>("registry");
+  const [currentView, setCurrentView] = useState<DashboardView>("home");
   const [documentCount, setDocumentCount] = useState(3);
   const maxDocuments = 8;
 
@@ -42,10 +42,12 @@ function DashboardMainContent() {
   }
 
   const viewTitles: Record<DashboardView, string> = {
+    home: "Cockpit — Vue d'ensemble",
+    documents: "Tableau de bord — Documents",
     registry: "Tableau de bord — Documents",
     new: "Éditeur 1-clic — Nouveau document",
     catalog: "Prestations & Services",
-    settings: "Mon Atelier — Coordonnées & Tampon",
+    settings: "Paramètres de l'Atelier",
     "pdf-preview": "Aperçu PDF",
   };
 
@@ -110,9 +112,21 @@ function DashboardMainContent() {
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
             >
-              {currentView === "registry" && (
+              {currentView === "home" && (
                 <SalesRegistry
+                  mode="home"
                   onCreateDocument={() => setCurrentView("new")}
+                  onNavigateDocuments={() => setCurrentView("documents")}
+                  onDuplicateDocument={handleDuplicate}
+                  onNavigateSettings={() => setCurrentView("settings")}
+                />
+              )}
+
+              {(currentView === "documents" || currentView === "registry") && (
+                <SalesRegistry
+                  mode="documents"
+                  onCreateDocument={() => setCurrentView("new")}
+                  onNavigateDocuments={() => setCurrentView("documents")}
                   onDuplicateDocument={handleDuplicate}
                   onNavigateSettings={() => setCurrentView("settings")}
                 />
@@ -126,7 +140,7 @@ function DashboardMainContent() {
                   onSuccess={() => {
                     setDocumentCount((prev) => Math.min(prev + 1, maxDocuments));
                     setPrefilledItems(undefined);
-                    setCurrentView("registry");
+                    setCurrentView("documents");
                   }}
                 />
               )}

@@ -63,12 +63,16 @@ interface SalesRegistryProps {
   onCreateDocument: () => void;
   onDuplicateDocument?: (doc: DocumentItem) => void;
   onNavigateSettings?: () => void;
+  onNavigateDocuments?: () => void;
+  mode?: "home" | "documents";
 }
 
 export default function SalesRegistry({
   onCreateDocument,
   onDuplicateDocument,
   onNavigateSettings,
+  onNavigateDocuments,
+  mode = "documents",
 }: SalesRegistryProps) {
   const [documents, setDocuments] = useState<DocumentItem[]>(initialDocuments);
   const [searchTerm, setSearchTerm] = useState("");
@@ -109,6 +113,11 @@ export default function SalesRegistry({
       return matchSearch && matchType && matchStatus;
     });
   }, [documents, searchTerm, selectedType, selectedStatus]);
+
+  // Displayed documents (limit to 3 recent items if in home cockpit mode)
+  const displayedDocuments = useMemo(() => {
+    return mode === "home" ? filteredDocuments.slice(0, 3) : filteredDocuments;
+  }, [filteredDocuments, mode]);
 
   // Handle encaissement action
   const handleOpenEncaisser = (doc: DocumentItem) => {
@@ -171,7 +180,7 @@ export default function SalesRegistry({
             bottom: "24px",
             right: "24px",
             background: "#171717",
-            border: "1px solid #D4AF37",
+            border: "1px solid rgba(255, 255, 255, 0.15)",
             borderRadius: "12px",
             padding: "12px 20px",
             color: "#F4F4F5",
@@ -183,7 +192,7 @@ export default function SalesRegistry({
             fontSize: "14px",
           }}
         >
-          <CheckBadgeIcon style={{ width: 18, height: 18, color: "#D4AF37" }} />
+          <CheckBadgeIcon style={{ width: 18, height: 18, color: "#FFFFFF" }} />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -193,7 +202,7 @@ export default function SalesRegistry({
         <div
           style={{
             background: "#171717",
-            border: "1px solid #262626",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
             borderRadius: "16px",
             padding: "20px",
             position: "relative",
@@ -270,7 +279,7 @@ export default function SalesRegistry({
         <div
           style={{
             background: "#171717",
-            border: "1px solid #262626",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
             borderRadius: "16px",
             padding: "24px",
             display: "flex",
@@ -308,7 +317,7 @@ export default function SalesRegistry({
         <div
           style={{
             background: "#171717",
-            border: "1px solid #262626",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
             borderRadius: "16px",
             padding: "24px",
             display: "flex",
@@ -317,7 +326,7 @@ export default function SalesRegistry({
           }}
         >
           <div className="flex items-center gap-2">
-            <ClockIcon style={{ width: 18, height: 18, color: "#D6A85C" }} />
+            <ClockIcon style={{ width: 18, height: 18, color: "#A1A1AA" }} />
             <span
               style={{
                 fontFamily: "'DM Sans', sans-serif",
@@ -334,7 +343,7 @@ export default function SalesRegistry({
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "32px",
               fontWeight: 500,
-              color: "#D4AF37",
+              color: "#FFFFFF",
               fontVariantNumeric: "tabular-nums",
             }}
           >
@@ -344,109 +353,138 @@ export default function SalesRegistry({
       </div>
 
       {/* Action CTA & Search / Filter Controls */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        {/* Search Bar */}
-        <div
-          style={{
-            position: "relative",
-            flex: "1 1 300px",
-          }}
-        >
-          <MagnifyingGlassIcon
-            style={{
-              position: "absolute",
-              left: "14px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              width: "18px",
-              height: "18px",
-              color: "#A1A1AA",
-            }}
-          />
-          <input
-            type="text"
-            placeholder="Rechercher par client ou N° de pièce..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: "100%",
-              height: "44px",
-              background: "#171717",
-              border: "1px solid #262626",
-              borderRadius: "12px",
-              padding: "0 14px 0 42px",
-              color: "#F4F4F5",
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "13.5px",
-              outline: "none",
-            }}
-          />
+      {mode === "home" ? (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+          <div>
+            <h2 className="text-sm font-semibold text-white">Documents récents</h2>
+            <p className="text-xs text-zinc-400">Les 3 dernières pièces enregistrées dans l&apos;atelier</p>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={onCreateDocument}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white text-black text-xs font-semibold hover:bg-zinc-200 transition-colors cursor-pointer"
+            >
+              <PlusIcon className="w-4 h-4" />
+              <span>Créer</span>
+            </button>
+            {onNavigateDocuments && (
+              <button
+                type="button"
+                onClick={onNavigateDocuments}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/10 border border-white/10 text-xs font-medium text-zinc-300 hover:text-white transition-colors cursor-pointer"
+              >
+                <span>Voir tous les documents ({documents.length})</span>
+                <span>→</span>
+              </button>
+            )}
+          </div>
         </div>
-
-        {/* Filters */}
-        <div className="flex items-center gap-2">
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
+      ) : (
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          {/* Search Bar */}
+          <div
             style={{
-              height: "44px",
-              background: "#171717",
-              border: "1px solid #262626",
-              borderRadius: "12px",
-              padding: "0 14px",
-              color: "#F4F4F5",
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "13px",
-              outline: "none",
-              cursor: "pointer",
+              position: "relative",
+              flex: "1 1 300px",
             }}
           >
-            <option value="all">Tous les types</option>
-            <option value="recu">Reçus</option>
-            <option value="facture">Factures</option>
-            <option value="devis">Devis</option>
-          </select>
+            <MagnifyingGlassIcon
+              style={{
+                position: "absolute",
+                left: "14px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: "18px",
+                height: "18px",
+                color: "#A1A1AA",
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Rechercher par client ou N° de pièce..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: "100%",
+                height: "44px",
+                background: "#171717",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                padding: "0 14px 0 42px",
+                color: "#F4F4F5",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "13.5px",
+                outline: "none",
+              }}
+            />
+          </div>
 
-          {/* Primary CTA (Sticky on Mobile) */}
-          <button
-            type="button"
-            onClick={onCreateDocument}
-            style={{
-              height: "44px",
-              background: "linear-gradient(135deg, #D4AF37 0%, #E2B170 100%)",
-              border: "none",
-              borderRadius: "12px",
-              padding: "0 20px",
-              color: "#000000",
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "14px",
-              fontWeight: 500,
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-            }}
-          >
-            <PlusIcon style={{ width: 18, height: 18 }} />
-            <span>+ Créer un document</span>
-          </button>
+          {/* Filters */}
+          <div className="flex items-center gap-2">
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              style={{
+                height: "44px",
+                background: "#171717",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                padding: "0 14px",
+                color: "#F4F4F5",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "13px",
+                outline: "none",
+                cursor: "pointer",
+              }}
+            >
+              <option value="all">Tous les types</option>
+              <option value="recu">Reçus</option>
+              <option value="facture">Factures</option>
+              <option value="devis">Devis</option>
+            </select>
+
+            {/* Primary CTA */}
+            <button
+              type="button"
+              onClick={onCreateDocument}
+              style={{
+                height: "44px",
+                background: "#FFFFFF",
+                border: "none",
+                borderRadius: "12px",
+                padding: "0 20px",
+                color: "#000000",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "14px",
+                fontWeight: 600,
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <PlusIcon style={{ width: 18, height: 18 }} />
+              <span>Créer un document</span>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Desktop Table View */}
       <div
         className="hidden sm:block"
         style={{
           background: "#171717",
-          border: "1px solid #262626",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
           borderRadius: "16px",
           overflow: "hidden",
         }}
       >
         <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
           <thead>
-            <tr style={{ borderBottom: "1px solid #262626" }}>
+            <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}>
               <th style={{ padding: "16px 20px", fontSize: "12px", color: "#A1A1AA", fontWeight: 500 }}>
                 N° &amp; DATE
               </th>
@@ -465,10 +503,10 @@ export default function SalesRegistry({
             </tr>
           </thead>
           <tbody>
-            {filteredDocuments.map((doc) => {
+            {displayedDocuments.map((doc) => {
               const badge = getTypeBadgeStyle(doc.type);
               return (
-                <tr key={doc.id} style={{ borderBottom: "1px solid #222" }}>
+                <tr key={doc.id} style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)" }}>
                   <td style={{ padding: "16px 20px" }}>
                     <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13.5px", color: "#F4F4F5", margin: 0, fontWeight: 500 }}>
                       {doc.number}
@@ -521,11 +559,11 @@ export default function SalesRegistry({
                           type="button"
                           onClick={() => handleOpenEncaisser(doc)}
                           style={{
-                            background: "rgba(212, 175, 55, 0.12)",
-                            border: "1px solid rgba(212, 175, 55, 0.3)",
+                            background: "rgba(255, 255, 255, 0.08)",
+                            border: "1px solid rgba(255, 255, 255, 0.2)",
                             borderRadius: "8px",
                             padding: "6px 12px",
-                            color: "#D4AF37",
+                            color: "#FFFFFF",
                             fontFamily: "'DM Sans', sans-serif",
                             fontSize: "12.5px",
                             fontWeight: 500,
@@ -542,7 +580,7 @@ export default function SalesRegistry({
                         title="Dupliquer le document"
                         style={{
                           background: "transparent",
-                          border: "1px solid #262626",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
                           borderRadius: "8px",
                           padding: "6px 8px",
                           color: "#A1A1AA",
@@ -562,14 +600,14 @@ export default function SalesRegistry({
 
       {/* Mobile Cards View (<640px) */}
       <div className="sm:hidden flex flex-col gap-3">
-        {filteredDocuments.map((doc) => {
+        {displayedDocuments.map((doc) => {
           const badge = getTypeBadgeStyle(doc.type);
           return (
             <div
               key={doc.id}
               style={{
                 background: "#171717",
-                border: "1px solid #262626",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
                 borderRadius: "14px",
                 padding: "16px",
                 display: "flex",
@@ -610,7 +648,7 @@ export default function SalesRegistry({
                 </span>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-[#262626]">
+              <div className="flex items-center justify-between pt-2 border-t border-white/10">
                 <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "11px", color: "#A1A1AA" }}>
                   {doc.number} · {doc.date}
                 </span>
@@ -621,13 +659,13 @@ export default function SalesRegistry({
                       type="button"
                       onClick={() => handleOpenEncaisser(doc)}
                       style={{
-                        background: "#D4AF37",
+                        background: "#FFFFFF",
                         color: "#000000",
                         border: "none",
                         borderRadius: "8px",
                         padding: "6px 12px",
                         fontSize: "12px",
-                        fontWeight: 500,
+                        fontWeight: 600,
                         cursor: "pointer",
                       }}
                     >
@@ -639,7 +677,7 @@ export default function SalesRegistry({
                     onClick={() => onDuplicateDocument?.(doc)}
                     style={{
                       background: "transparent",
-                      border: "1px solid #262626",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
                       borderRadius: "8px",
                       padding: "6px",
                       color: "#A1A1AA",
@@ -674,7 +712,7 @@ export default function SalesRegistry({
               width: "100%",
               maxWidth: "420px",
               background: "#171717",
-              border: "1px solid #262626",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
               borderRadius: "18px",
               padding: "24px",
             }}
@@ -717,9 +755,9 @@ export default function SalesRegistry({
                     style={{
                       height: "38px",
                       borderRadius: "10px",
-                      background: paymentMode === mode ? "rgba(212, 175, 55, 0.15)" : "#000000",
-                      border: paymentMode === mode ? "1.5px solid #D4AF37" : "1px solid #262626",
-                      color: paymentMode === mode ? "#D4AF37" : "#F4F4F5",
+                      background: paymentMode === mode ? "rgba(255, 255, 255, 0.15)" : "#000000",
+                      border: paymentMode === mode ? "1.5px solid #FFFFFF" : "1px solid rgba(255, 255, 255, 0.1)",
+                      color: paymentMode === mode ? "#FFFFFF" : "#A1A1AA",
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: "13px",
                       fontWeight: 500,
@@ -745,7 +783,7 @@ export default function SalesRegistry({
                   width: "100%",
                   height: "44px",
                   background: "#000000",
-                  border: "1px solid #262626",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
                   borderRadius: "10px",
                   padding: "0 14px",
                   color: "#F4F4F5",
@@ -766,7 +804,7 @@ export default function SalesRegistry({
                   flex: 1,
                   height: "44px",
                   background: "transparent",
-                  border: "1px solid #262626",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
                   borderRadius: "10px",
                   color: "#F4F4F5",
                   fontSize: "14px",
@@ -782,12 +820,12 @@ export default function SalesRegistry({
                 style={{
                   flex: 1,
                   height: "44px",
-                  background: "linear-gradient(135deg, #D4AF37 0%, #E2B170 100%)",
+                  background: "#FFFFFF",
                   border: "none",
                   borderRadius: "10px",
                   color: "#000000",
                   fontSize: "14px",
-                  fontWeight: 500,
+                  fontWeight: 600,
                   cursor: "pointer",
                 }}
               >

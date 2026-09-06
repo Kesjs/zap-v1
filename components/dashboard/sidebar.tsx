@@ -5,7 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Squares2X2Icon,
+  HomeIcon,
+  DocumentTextIcon,
   PlusCircleIcon,
   TagIcon,
   Cog6ToothIcon,
@@ -17,7 +18,14 @@ import {
 import { useSidebar } from "./sidebar-context";
 import { useWorkshop } from "./workshop-context";
 
-export type DashboardView = "registry" | "new" | "catalog" | "settings" | "pdf-preview";
+export type DashboardView =
+  | "home"
+  | "new"
+  | "documents"
+  | "catalog"
+  | "settings"
+  | "registry"
+  | "pdf-preview";
 
 interface SidebarProps {
   currentView: DashboardView;
@@ -39,17 +47,22 @@ export default function Sidebar({
 
   const navItems = [
     {
-      id: "registry" as DashboardView,
-      label: "Documents",
-      shortLabel: "Docs",
-      icon: Squares2X2Icon,
+      id: "home" as DashboardView,
+      label: "Accueil",
+      shortLabel: "Accueil",
+      icon: HomeIcon,
     },
     {
       id: "new" as DashboardView,
       label: "Créer un document",
       shortLabel: "Créer",
       icon: PlusCircleIcon,
-      highlight: true,
+    },
+    {
+      id: "documents" as DashboardView,
+      label: "Mes documents",
+      shortLabel: "Documents",
+      icon: DocumentTextIcon,
     },
     {
       id: "catalog" as DashboardView,
@@ -59,8 +72,8 @@ export default function Sidebar({
     },
     {
       id: "settings" as DashboardView,
-      label: "Mon Atelier",
-      shortLabel: "Atelier",
+      label: "Paramètres",
+      shortLabel: "Paramètres",
       icon: Cog6ToothIcon,
     },
   ];
@@ -127,7 +140,9 @@ export default function Sidebar({
           {/* Navigation Items */}
           <nav className="p-2 space-y-1 mt-2">
             {navItems.map((item) => {
-              const isActive = currentView === item.id;
+              const isActive =
+                currentView === item.id ||
+                (item.id === "documents" && currentView === "registry");
               const Icon = item.icon;
 
               return (
@@ -154,12 +169,6 @@ export default function Sidebar({
 
                   {!isCollapsed && (
                     <span className="truncate flex-1 text-left">{item.label}</span>
-                  )}
-
-                  {!isCollapsed && item.highlight && (
-                    <span className="text-[9px] font-mono font-medium px-1.5 py-0.5 rounded bg-white/10 text-white border border-white/15">
-                      +1
-                    </span>
                   )}
                 </button>
               );
@@ -324,7 +333,9 @@ export default function Sidebar({
                 {/* Mobile Nav Links */}
                 <nav className="space-y-1.5">
                   {navItems.map((item) => {
-                    const isActive = currentView === item.id;
+                    const isActive =
+                      currentView === item.id ||
+                      (item.id === "documents" && currentView === "registry");
                     const Icon = item.icon;
 
                     return (

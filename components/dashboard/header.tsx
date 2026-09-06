@@ -34,10 +34,12 @@ export default function DashboardHeader({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const viewTitles: Record<DashboardView, { section: string; page: string }> = {
-    registry: { section: "Cockpit", page: "Documents" },
-    new: { section: "Facturation", page: "Nouveau document" },
+    home: { section: "Cockpit", page: "Accueil" },
+    documents: { section: "Cockpit", page: "Mes documents" },
+    registry: { section: "Cockpit", page: "Mes documents" },
+    new: { section: "Facturation", page: "Créer un document" },
     catalog: { section: "Atelier", page: "Services" },
-    settings: { section: "Configuration", page: "Paramètres de l'Atelier" },
+    settings: { section: "Configuration", page: "Paramètres" },
     "pdf-preview": { section: "Test", page: "Aperçu PDF" },
   };
 
