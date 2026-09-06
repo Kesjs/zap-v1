@@ -12,8 +12,8 @@ import ReceiptPdf from "@/components/documents/receipt-pdf";
 const PDFViewer = dynamic(() => import("@react-pdf/renderer").then((m) => m.PDFViewer), {
   ssr: false,
   loading: () => (
-    <div className="h-[600px] flex items-center justify-center text-xs text-neutral-500">
-      Chargement de l&apos;aperçu PDF…
+    <div className="h-[600px] flex items-center justify-center">
+      <div className="h-6 w-6 rounded-full border-2 border-white/20 border-t-white animate-spin" />
     </div>
   ),
 });
@@ -27,9 +27,9 @@ export default function PdfPreview() {
 
   return (
     <div className="flex flex-col gap-6 max-w-5xl mx-auto pb-16">
-      {/* Bandeau explicatif : c'est un espace de test, pas la vraie génération finale */}
-      <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#171717] border border-[#D4AF37]/30">
-        <BeakerIcon className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" />
+      {/* Bandeau explicatif */}
+      <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#121215] border border-white/15">
+        <BeakerIcon className="w-5 h-5 text-zinc-300 shrink-0 mt-0.5" />
         <div>
           <h2 style={{ fontFamily: "'DM Serif Display', serif" }} className="text-base text-white">
             Aperçu PDF — Mode test (données factices)

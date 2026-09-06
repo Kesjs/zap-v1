@@ -26,33 +26,47 @@ export default function Footer() {
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             <Link
               href="/"
-              className="flex items-center transition-opacity hover:opacity-90 mb-4"
+              className="flex items-center gap-2.5 transition-opacity hover:opacity-90 group"
               style={{ textDecoration: "none", width: "fit-content" }}
               aria-label="Accueil ZAP"
             >
               <div
                 style={{
                   position: "relative",
-                  width: "44px",
-                  height: "44px",
-                  background: "#FFFFFF",
+                  width: "42px",
+                  height: "42px",
+                  background: "#000000",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
                   borderRadius: "10px",
                   overflow: "hidden",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.4)",
-                  padding: "2px",
+                  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.6)",
+                  flexShrink: 0,
                 }}
               >
                 <Image
-                  src="/logo.png"
+                  src="/log.jpg"
                   alt="ZAP"
                   width={42}
                   height={42}
-                  style={{ objectFit: "contain", width: "100%", height: "100%" }}
+                  style={{ objectFit: "cover", width: "100%", height: "100%" }}
                 />
               </div>
+
+              <span
+                style={{
+                  fontFamily: "var(--font-space-grotesk), sans-serif",
+                  fontSize: "21px",
+                  fontWeight: 700,
+                  letterSpacing: "-0.03em",
+                  color: "#FFFFFF",
+                  lineHeight: 1,
+                }}
+              >
+                ZAP
+              </span>
             </Link>
 
             <p

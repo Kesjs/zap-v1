@@ -276,10 +276,21 @@ export default async function SolutionPage({
             <span>Retour à l&apos;accueil ZAP</span>
           </Link>
 
-          <Link href="/" className="flex items-center text-decoration-none transition-opacity hover:opacity-90" aria-label="Accueil ZAP">
-            <div className="relative w-8 h-8 rounded-lg bg-white p-0.5 overflow-hidden flex items-center justify-center shadow-sm">
-              <Image src="/logo.png" alt="ZAP" width={30} height={30} style={{ objectFit: "contain", width: "100%", height: "100%" }} />
+          <Link href="/" className="flex items-center gap-2 text-decoration-none transition-opacity hover:opacity-90 group" aria-label="Accueil ZAP">
+            <div className="relative w-8 h-8 rounded-lg bg-black border border-white/20 overflow-hidden flex items-center justify-center shadow-sm">
+              <Image src="/log.jpg" alt="ZAP" width={32} height={32} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
             </div>
+            <span
+              style={{
+                fontFamily: "var(--font-space-grotesk), sans-serif",
+                fontSize: "17px",
+                fontWeight: 700,
+                letterSpacing: "-0.03em",
+                color: "#FFFFFF",
+              }}
+            >
+              ZAP
+            </span>
           </Link>
 
           <Link

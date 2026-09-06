@@ -132,37 +132,52 @@ export default function NavBar() {
         }}
       >
         <div className="flex items-center justify-between h-full px-4 sm:px-5">
-          {/* Logo — grand, lisible, sur fond blanc aux coins arrondis, sans texte redondant */}
+          {/* Logo & Marque — Logo agrandi, net, accompagné du mot-symbole ZAP dans une typographie distinctive */}
           <Link
             href="/"
-            className="flex items-center flex-shrink-0 transition-opacity hover:opacity-90"
+            className="flex items-center flex-shrink-0 transition-opacity hover:opacity-90 group"
             style={{ textDecoration: "none" }}
             aria-label="Accueil ZAP"
           >
             <div
               style={{
                 position: "relative",
-                width: "40px",
-                height: "40px",
-                background: "#FFFFFF",
+                width: "38px",
+                height: "38px",
+                background: "#000000",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
                 borderRadius: "10px",
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.35)",
-                padding: "2px",
+                boxShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
+                flexShrink: 0,
               }}
             >
               <Image
-                src="/logo.png"
+                src="/log.jpg"
                 alt="ZAP"
                 width={38}
                 height={38}
                 priority
-                style={{ objectFit: "contain", width: "100%", height: "100%" }}
+                style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />
             </div>
+
+            <span
+              style={{
+                fontFamily: "var(--font-space-grotesk), sans-serif",
+                fontSize: "19px",
+                fontWeight: 700,
+                letterSpacing: "-0.03em",
+                color: "#FFFFFF",
+                marginLeft: "10px",
+                lineHeight: 1,
+              }}
+            >
+              ZAP
+            </span>
           </Link>
 
           {/* Center nav — desktop */}

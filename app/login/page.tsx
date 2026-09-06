@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/lib/supabase/client";
+import Spinner from "@/components/ui/spinner";
 import AnimatedButton from "@/components/ui/animated-button";
 import {
   InputOTP,
@@ -34,8 +35,8 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-black flex items-center justify-center text-white">
-          Chargement de l'atelier...
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <Spinner size="md" />
         </div>
       }
     >
@@ -375,19 +376,31 @@ function LoginPageInner() {
             <div className="flex items-center justify-between mb-8">
               <Link
                 href="/"
-                className="transition-transform hover:scale-[1.03]"
+                className="inline-flex items-center gap-2.5 transition-transform hover:scale-[1.02] group"
                 aria-label="Accueil ZAP"
               >
-                <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-white p-1 shadow-md border border-white/20">
+                <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-black shadow-md border border-white/20 overflow-hidden shrink-0">
                   <Image
-                    src="/logo.png"
+                    src="/log.jpg"
                     alt="ZAP"
-                    width={40}
-                    height={40}
+                    width={44}
+                    height={44}
                     priority
-                    className="h-full w-full object-contain"
+                    className="h-full w-full object-cover"
                   />
                 </div>
+                <span
+                  style={{
+                    fontFamily: "var(--font-space-grotesk), sans-serif",
+                    fontSize: "22px",
+                    fontWeight: 700,
+                    letterSpacing: "-0.03em",
+                    color: "#FFFFFF",
+                    lineHeight: 1,
+                  }}
+                >
+                  ZAP
+                </span>
               </Link>
 
               {activeTab === "forgot" && (

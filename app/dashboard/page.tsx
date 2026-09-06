@@ -10,6 +10,7 @@ import DocumentEditor, { LineItem } from "@/components/dashboard/document-editor
 import SettingsStamp from "@/components/dashboard/settings-stamp";
 import CatalogView, { CatalogItem } from "@/components/dashboard/catalog-view";
 import PdfPreview from "@/components/dashboard/pdf-preview";
+import Spinner from "@/components/ui/spinner";
 import { createClient } from "@/lib/supabase/client";
 
 const supabase = createClient();
@@ -34,7 +35,7 @@ function DashboardMainContent() {
   if (!isReady) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="h-6 w-6 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+        <Spinner size="md" />
       </div>
     );
   }

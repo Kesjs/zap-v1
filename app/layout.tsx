@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, DM_Serif_Display } from "next/font/google";
+import { DM_Sans, DM_Serif_Display, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/navbar";
 import TopLoader from "@/components/ui/top-loader";
@@ -17,6 +17,13 @@ const dmSerif = DM_Serif_Display({
   weight: "400",
   style: ["normal", "italic"],
   variable: "--font-dm-serif",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
@@ -52,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`dark ${dmSans.variable} ${dmSerif.variable}`}
+      className={`dark ${dmSans.variable} ${dmSerif.variable} ${spaceGrotesk.variable}`}
       suppressHydrationWarning
     >
       <body className={`${dmSans.className} antialiased`} style={{ background: "#000000" }}>

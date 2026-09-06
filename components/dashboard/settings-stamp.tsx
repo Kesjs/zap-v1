@@ -355,7 +355,7 @@ export default function SettingsStamp() {
           >
             {isProcessingStamp ? (
               <div className="flex flex-col items-center gap-2">
-                <ArrowPathIcon className="animate-spin text-[#D4AF37]" style={{ width: 24, height: 24 }} />
+                <ArrowPathIcon className="animate-spin text-white" style={{ width: 24, height: 24 }} />
                 <span style={{ fontSize: "12px", color: "#A1A1AA" }}>Détourage en cours...</span>
               </div>
             ) : stampPreview ? (

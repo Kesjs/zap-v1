@@ -98,27 +98,36 @@ export default function Sidebar({
                 dans le header (un seul déclencheur pour éviter le doublon). */}
             <Link
               href="/"
-              className="flex items-center gap-3 no-underline group overflow-hidden"
+              className="flex items-center gap-2.5 no-underline group overflow-hidden"
               title="ZAP — Retour à l'accueil"
             >
-              <div className="relative w-9 h-9 rounded-lg bg-white p-1 overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
+              <div className="relative w-9 h-9 rounded-lg bg-black border border-white/20 overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
                 <Image
-                  src="/logo.png"
+                  src="/log.jpg"
                   alt="ZAP"
-                  width={34}
-                  height={34}
-                  className="w-full h-full object-contain"
+                  width={36}
+                  height={36}
+                  className="w-full h-full object-cover"
                   priority
                 />
               </div>
 
               {!isCollapsed && (
-                <div className="flex flex-col leading-none overflow-hidden">
-                  <span className="text-xs font-semibold text-white tracking-wide">
-                    ATELIER PRO
+                <div className="flex items-center gap-1.5 overflow-hidden">
+                  <span
+                    style={{
+                      fontFamily: "var(--font-space-grotesk), sans-serif",
+                      fontSize: "18px",
+                      fontWeight: 700,
+                      letterSpacing: "-0.03em",
+                      color: "#FFFFFF",
+                      lineHeight: 1,
+                    }}
+                  >
+                    ZAP
                   </span>
-                  <span className="text-[10px] text-zinc-400 font-mono tracking-wider mt-1">
-                    COCKPIT
+                  <span className="text-[9px] text-zinc-400 font-mono tracking-wider bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
+                    PRO
                   </span>
                 </div>
               )}
@@ -275,18 +284,26 @@ export default function Sidebar({
               <div>
                 {/* Mobile Drawer Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-[#262626] mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="relative w-9 h-9 rounded-lg bg-white p-1 overflow-hidden shadow-sm flex items-center justify-center">
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative w-9 h-9 rounded-lg bg-black border border-white/20 overflow-hidden shadow-sm flex items-center justify-center">
                       <Image
-                        src="/logo.png"
+                        src="/log.jpg"
                         alt="ZAP"
-                        width={34}
-                        height={34}
-                        className="w-full h-full object-contain"
+                        width={36}
+                        height={36}
+                        className="w-full h-full object-cover"
                       />
                     </div>
-                    <span className="text-sm font-semibold text-white tracking-wide">
-                      ATELIER PRO
+                    <span
+                      style={{
+                        fontFamily: "var(--font-space-grotesk), sans-serif",
+                        fontSize: "18px",
+                        fontWeight: 700,
+                        letterSpacing: "-0.03em",
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      ZAP
                     </span>
                   </div>
 
