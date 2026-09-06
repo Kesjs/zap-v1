@@ -5,7 +5,6 @@ const CraftsMarquee = dynamic(() => import("@/components/crafts-marquee"));
 const FeaturesBento = dynamic(() => import("@/components/features-bento"));
 const HowItWorks = dynamic(() => import("@/components/how-it-works"));
 const Testimonials = dynamic(() => import("@/components/testimonials"));
-const TrustBanner = dynamic(() => import("@/components/trust-banner"));
 const Pricing = dynamic(() => import("@/components/pricing"));
 const Faq = dynamic(() => import("@/components/faq"));
 const FinalCta = dynamic(() => import("@/components/final-cta"));
@@ -27,7 +26,6 @@ export default function Home() {
         <FeaturesBento />
         <HowItWorks />
         <Testimonials />
-        <TrustBanner />
         <Pricing />
         <Faq />
         <FinalCta />

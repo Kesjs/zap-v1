@@ -277,7 +277,7 @@ export default async function SolutionPage({
           </Link>
 
           <Link href="/" className="flex items-center gap-2 text-decoration-none transition-opacity hover:opacity-90 group" aria-label="Accueil ZAP">
-            <div className="relative w-8 h-8 rounded-lg bg-black border border-white/20 overflow-hidden flex items-center justify-center shadow-sm">
+            <div className="relative w-8 h-8 rounded-lg bg-black overflow-hidden flex items-center justify-center shadow-sm">
               <Image src="/log.jpg" alt="ZAP" width={32} height={32} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
             </div>
             <span

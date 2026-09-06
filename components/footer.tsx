@@ -36,7 +36,6 @@ export default function Footer() {
                   width: "42px",
                   height: "42px",
                   background: "#000000",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
                   borderRadius: "10px",
                   overflow: "hidden",
                   display: "flex",

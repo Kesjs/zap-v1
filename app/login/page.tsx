@@ -379,7 +379,7 @@ function LoginPageInner() {
                 className="inline-flex items-center gap-2.5 transition-transform hover:scale-[1.02] group"
                 aria-label="Accueil ZAP"
               >
-                <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-black shadow-md border border-white/20 overflow-hidden shrink-0">
+                <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-black shadow-md overflow-hidden shrink-0">
                   <Image
                     src="/log.jpg"
                     alt="ZAP"
@@ -800,7 +800,7 @@ function LoginPageInner() {
           {/* ─────────────────────────────────────────────────────────────
               RIGHT PANEL : GrainGradient WebGL Shader + Value Proposition
              ───────────────────────────────────────────────────────────── */}
-          <div className="relative flex min-h-[560px] flex-col justify-between overflow-hidden rounded-xl bg-black p-8 text-white sm:p-12 lg:min-h-0 lg:p-14">
+          <div className="relative flex min-h-[560px] flex-col justify-center overflow-hidden rounded-xl bg-black p-8 text-white sm:p-12 lg:min-h-0 lg:p-14">
             {/* The Dynamic WebGL GrainGradient Shader */}
             <GrainGradientShader />
 
@@ -809,14 +809,6 @@ function LoginPageInner() {
               className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/60"
               aria-hidden="true"
             />
-
-            {/* Top Badge */}
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-md">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Plateforme officielle des entrepreneurs</span>
-              </div>
-            </div>
 
             {/* Center Content */}
             <div className="relative z-10 my-auto py-8">
@@ -829,48 +821,6 @@ function LoginPageInner() {
                 Partage direct sur WhatsApp en 1 clic. Signature tactile et calcul
                 automatique d'acompte & solde pour chaque commande.
               </p>
-            </div>
-
-            {/* Bottom Social Proof Bar */}
-            <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-white/15 bg-black/50 p-4 backdrop-blur-md">
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2 overflow-hidden">
-                  {["#27272A", "#3F3F46", "#52525B", "#71717A", "#A1A1AA"].map(
-                    (bg, i) => (
-                      <div
-                        key={i}
-                        className="inline-block h-8 w-8 rounded-full ring-2 ring-black flex items-center justify-center text-[10px] font-bold text-white"
-                        style={{ backgroundColor: bg }}
-                      >
-                        {["KM", "AT", "OD", "AS", "YB"][i]}
-                      </div>
-                    )
-                  )}
-                </div>
-                <div>
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg
-                        key={star}
-                        className="w-3.5 h-3.5 text-[#FBBF24] fill-current"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                    <span className="text-xs font-semibold text-white ml-1">
-                      4.9/5
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-zinc-400">
-                    Plus de 150 ateliers et indépendants formalisés
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5 text-xs text-zinc-300">
-                <span className="font-semibold text-white">Bénin · Côte d'Ivoire</span>
-              </div>
             </div>
           </div>
         </div>

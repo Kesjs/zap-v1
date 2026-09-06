@@ -145,7 +145,6 @@ export default function NavBar() {
                 width: "38px",
                 height: "38px",
                 background: "#000000",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
                 borderRadius: "10px",
                 overflow: "hidden",
                 display: "flex",

@@ -101,7 +101,7 @@ export default function Sidebar({
               className="flex items-center gap-2.5 no-underline group overflow-hidden"
               title="ZAP — Retour à l'accueil"
             >
-              <div className="relative w-9 h-9 rounded-lg bg-black border border-white/20 overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
+              <div className="relative w-9 h-9 rounded-lg bg-black overflow-hidden shrink-0 shadow-sm flex items-center justify-center">
                 <Image
                   src="/log.jpg"
                   alt="ZAP"
@@ -285,7 +285,7 @@ export default function Sidebar({
                 {/* Mobile Drawer Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-[#262626] mb-4">
                   <div className="flex items-center gap-2.5">
-                    <div className="relative w-9 h-9 rounded-lg bg-black border border-white/20 overflow-hidden shadow-sm flex items-center justify-center">
+                    <div className="relative w-9 h-9 rounded-lg bg-black overflow-hidden shadow-sm flex items-center justify-center">
                       <Image
                         src="/log.jpg"
                         alt="ZAP"
