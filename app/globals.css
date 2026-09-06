@@ -266,6 +266,21 @@
   padding-bottom: 96px;
 }
 
+/* Mobile nav accordion (Produit / Solutions) */
+.nav-accordion summary {
+  list-style: none;
+  cursor: pointer;
+}
+.nav-accordion summary::-webkit-details-marker {
+  display: none;
+}
+.nav-accordion-icon {
+  transition: transform 0.2s ease;
+}
+.nav-accordion[open] .nav-accordion-icon {
+  transform: rotate(180deg);
+}
+
 /* Small-caps label (NOT all caps) */
 .label-tracked {
   font-family: var(--font-dm-sans), "DM Sans", sans-serif;

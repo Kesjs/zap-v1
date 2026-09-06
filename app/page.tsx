@@ -24,11 +24,13 @@ export default function Home() {
     >
       <Hero />
       <div className="below-fold">
-        <CraftsMarquee />
-        <SignatureSeal />
+        <div id="fonctionnalites">
+          <CraftsMarquee />
+          <SignatureSeal />
+          <CatalogRegistry />
+        </div>
         <HowItWorks />
         <Testimonials />
-        <CatalogRegistry />
         <TrustBanner />
         <Pricing />
         <Faq />
