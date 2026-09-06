@@ -45,15 +45,15 @@
   /* Core palette */
   --background: #000000;
   --foreground: #F4F4F5;
-  --surface: #121215;
+  --surface: #000000;
   --border: #262626;
   --accent: #FFFFFF;
   --accent-warm: #A1A1AA;
 
   /* shadcn compat — mapped to ZAP monochrome palette */
-  --card: #121215;
+  --card: #000000;
   --card-foreground: #F4F4F5;
-  --popover: #121215;
+  --popover: #000000;
   --popover-foreground: #F4F4F5;
   --primary: #FFFFFF;
   --primary-foreground: #000000;
@@ -243,9 +243,9 @@
   font-family: var(--font-dm-sans), "DM Sans", sans-serif;
 }
 
-/* Gold gradient text */
+/* Accent gradient text (monochrome) */
 .text-gold-gradient {
-  background: linear-gradient(135deg, #D4AF37 0%, #E2B170 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #A1A1AA 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -265,7 +265,7 @@
 
 /* Hairline top border accent */
 .border-top-accent {
-  border-top: 3px solid #D4AF37;
+  border-top: 3px solid #FFFFFF;
 }
 
 /* Edge mask for marquees */
