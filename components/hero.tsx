@@ -85,7 +85,7 @@ function HeroBadge() {
             borderRadius: "100px",
           }}
         >
-          NOUVEAU
+          NÉO
         </span>
         <span
           style={{
@@ -139,7 +139,7 @@ function HeroSocialProof() {
 
       {/* Trust text */}
       <p className="text-xs text-zinc-400 text-center font-normal">
-        Recommandé par plus de <span className="text-zinc-200 font-medium">1 200 artisans & indépendants</span>
+        Recommandé par plus de <span className="text-zinc-200 font-medium">150 artisans & indépendants</span>
       </p>
 
       {/* 3 Value pills with Heroicons */}

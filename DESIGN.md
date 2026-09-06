@@ -1,69 +1,67 @@
-# Design System — ZAP
+# Design System — ZAP (Charte Officielle)
 
-> Document de référence généré selon les directives de design Impeccable (`/impeccable document`).
-> Toute modification ultérieure doit respecter ce document pour maintenir l'identité visuelle "Luxe & Premium".
+> Document de référence officiel régissant l'identité visuelle de **ZAP**.
+> **Règle absolue** : Toute page actuelle ou future (Landing page, Dashboard, Login, Éditeur de documents, Pages solutions) doit se conformer strictement aux directives de ce document.
 
 ---
 
 ## 1. Direction Artistique & Ambiance
 
-- **Positionnement** : Application de gestion de documents officiels (reçus, devis, factures) pour les artisans et indépendants d'Afrique de l'Ouest.
-- **Thème** : Dark Mode "Luxe & Premium" exclusif.
-- **Atmosphère** : Précision artisanale, sobriété, orfèvrerie numérique, zéro fioriture superflue.
+- **Positionnement** : Application SaaS de création et gestion de documents officiels (devis, factures, reçus, signature tactile et cachet numérique) pour les artisans et indépendants.
+- **Thème officiel** : **Monochrome Luxe & Précision Artisanale (Noir, Blanc, Gris)**.
+- **Atmosphère** : Sobriété radicale, orfèvrerie numérique, contrastes francs et haute lisibilité. Zéro fioriture inutile.
 
 ---
 
-## 2. Palette de Couleurs
+## 2. Palette de Couleurs Officielle
 
-| Rôle | Token CSS / HEX | Utilisation |
+| Rôle | Token / Valeur CSS | Utilisation |
 |---|---|---|
-| **Background Principal** | `--color-bg` / `#0C0C0C` | Fond pleine page, noir chaud et profond |
-| **Surfaces & Cartes** | `--color-surface` / `#171717` | Cartes Bento, conteneurs, cards pricing |
-| **Bordures Subtiles** | `--color-border` / `#262626` | Séparateurs, bordures au repos (1px) |
-| **Texte Primaire** | `--color-text` / `#F4F4F5` | Titres, données chiffrées, texte fort |
-| **Texte Secondaire** | `--color-text-muted` / `#A1A1AA` | Sous-titres, descriptions, métadonnées |
-| **Accent Or Impérial** | `--color-accent` / `#D4AF37` | Badges, CTA primaire, bordures actives, icônes |
-| **Accent Or Chaud** | `--color-accent-warm` / `#E2B170` | Dégradés subtils sur les halos et hover |
+| **Fond Hero (WebGL)** | `#000000` | Noir pur absolu avec animation 3D Beams |
+| **Fond Global Page** | `#09090B` | Fond unifié de l'application (Zinc-950) |
+| **Surfaces & Cartes** | `#121215` | Cartes Bento, conteneurs, cartes de prix, formulaires |
+| **Bordures par défaut** | `rgba(255, 255, 255, 0.08)` | Séparateurs, bordures de cartes au repos (1px) |
+| **Bordures actives / Hover** | `rgba(255, 255, 255, 0.25)` | Cartes sélectionnées, survol, focus d'input |
+| **Texte Primaire** | `#FFFFFF` | Titres, chiffres majeurs, boutons primaires, logos |
+| **Texte Secondaire** | `#A1A1AA` | Paragraphes explicatifs, sous-titres, liens au repos |
+| **Texte Discret (Muted)** | `#71717A` | Mentions légales, notes de bas de page, dates |
+| **Accent Notation Unique** | `#FBBF24` | **Uniquement** pour les 5 étoiles de notation des avis |
 
-### Règles d'or (Anti-patterns proscrits)
--  **Aucun dégradé violet / cyan / néon "SaaS AI".**
--  **Aucun fond blanc ou gris froid d'ordinateur.**
--  **Aucune couleur non harmonisée avec le noir et l'or.**
+### ⛔ Règles d'or & Anti-patterns strictement proscrits
+1. **ZÉRO ÉMOJI** : Aucun émoji Unicode dans l'interface. Utiliser **exclusivement** les icônes SVG de `@heroicons/react` (outline ou solid).
+2. **PLUS AUCUNE TEINTE DORÉE (`#D4AF37` / `#E2B170`)** : L'ancien thème or a été totalement banni au profit du monochrome pur (blanc / gris / noir).
+3. **AUCUN DÉGRADÉ VIOLET / CYAN / NÉON "SaaS AI"** : Conserver un aspect artisanal, authentique et officiel.
+4. **AUCUN FOND BLANC OU GRIS CLAIR EN PLEIN ÉCRAN** : L'application est exclusivement en Dark Mode haute précision.
 
 ---
 
 ## 3. Typographie
 
 - **Titres & Display (`font-serif`)** : `DM Serif Display`
-  - Utilisé pour le Logo ZAP, les H1, H2 et chiffres majeurs.
-  - Évoque le cachet d'authenticité, la signature et le sceau officiel.
-- **Corps de texte & Interface (`font-sans`)** : `DM Sans`
-  - Lisibilité optimale sur mobile et contraste net.
-  - Utilisé pour les descriptions, boutons, listes et navigation.
+  - Utilisé pour : Logo ZAP, titres de section H1/H2, sceau officiel et métriques clés.
+  - Évoque le cachet d'authenticité, le sceau légal et la signature artisanale.
+- **Interface & Textes (`font-sans`)** : `DM Sans`
+  - Utilisé pour : Descriptions, boutons CTA, tableaux, listes de fonctionnalités, navigation, formulaires.
+  - Assure une lisibilité parfaite sur smartphone.
 
 ---
 
-## 4. Composants & Effets Clés
+## 4. Composants & Standards Visuels
 
-1. **Beams (React Bits / Three.js)** :
-   - Faisceaux 3D subtils en arrière-plan du Hero.
-   - Teinte champagne/or tamisée sans éblouissement.
+### A. Faisceaux Lumineux (Beams 3D)
+- Utilisation : Arrière-plan du Hero.
+- Caractéristiques : Faisceaux blancs (`lightColor="#ffffff"`) sur fond noir (`#000000`), vitesse modérée, rotation 30°.
+- Optimisation : Gel automatique du rendu Three.js au défilement (`IntersectionObserver`) et quand l'onglet est inactif (`document.visibilityState`).
 
-2. **BorderGlow (Survol interactif)** :
-   - Halo lumineux suivant la position du curseur sur les cartes Bento et la carte Pro.
-   - Gradient radial chaud (`#D4AF37` vers `#E2B170` à faible opacité).
+### B. Navigation Flottante (Floating Pill Navbar)
+- Barre flottante en pilule (`max-w-5xl`), fond `rgba(10, 10, 10, 0.78)`, `backdrop-filter: blur(16px)`.
+- Liens en gris `#A1A1AA` transitionnant vers `#FFFFFF` au survol.
+- Logo ZAP blanc pur avec icône.
 
-3. **Crossfade Avant / Après (Cachet Numérique)** :
-   - Présentation interactive du document brut vs document officiel certifié avec sceau.
+### C. Boutons d'Action (CTA)
+- **Bouton Primaire** : Fond blanc `#FFFFFF`, texte noir `#000000`, `font-weight: 600`, bord arrondi `rounded-xl` (ou `10px`), léger halo blanc au survol (`box-shadow: 0 0 25px rgba(255,255,255,0.2)`).
+- **Bouton Secondaire** : Fond `rgba(255, 255, 255, 0.05)`, bordure `rgba(255, 255, 255, 0.12)`, texte blanc `#FFFFFF`.
 
-4. **Floating Navbar** :
-   - Pilule flottante sticky (`#0C0C0C` à 85% d'opacité avec `backdrop-blur: 16px`).
-   - Logo ZAP en or, liens sobres, CTA compact.
-
----
-
-## 5. Icônes & Éléments Graphiques
-
-- **Bibliothèque unique** : Heroicons (`@heroicons/react/24/outline` & `solid`).
-- **Images** : Photographies Unsplash authentiques d'artisans et scènes réelles.
-- **Zéro emoji** dans l'interface professionnelle.
+### D. Cartes Bento & Conteneurs
+- Fond `#121215`, bordure `1px solid rgba(255, 255, 255, 0.08)`, angles arrondis `rounded-2xl`.
+- Encart d'icône : carré arrondi (`rounded-xl`) en `bg-white/[0.06]` avec icône blanche.
