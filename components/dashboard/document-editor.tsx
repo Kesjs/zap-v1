@@ -8,7 +8,7 @@ import {
   ShareIcon,
   XMarkIcon,
   BanknotesIcon,
-  BookmarkSquareIcon,
+  BookmarkIcon,
   SparklesIcon,
   ArrowPathIcon,
   DocumentTextIcon,
@@ -367,7 +367,7 @@ export default function DocumentEditor({
               className="py-1.5 px-3 rounded-lg bg-[#262626] hover:bg-[#333] border border-[#333] text-xs font-medium text-[#D4AF37] transition-colors cursor-pointer flex items-center gap-1.5"
               title="Enregistrer la configuration actuelle comme modèle d'atelier réutilisable"
             >
-              <BookmarkSquareIcon className="w-3.5 h-3.5" />
+              <BookmarkIcon className="w-3.5 h-3.5" />
               <span>⭐ Sauvegarder comme mon modèle</span>
             </button>
           </div>
