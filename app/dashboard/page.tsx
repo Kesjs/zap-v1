@@ -41,11 +41,11 @@ function DashboardMainContent() {
   }
 
   const viewTitles: Record<DashboardView, string> = {
-    registry: "Tableau de bord — Registre des ventes",
+    registry: "Tableau de bord — Documents",
     new: "Éditeur 1-clic — Nouveau document",
-    catalog: "Catalogue & Modèles de prix",
-    settings: "Paramètres & Empreinte d'atelier",
-    "pdf-preview": "Aperçu PDF — Mode test (données factices)",
+    catalog: "Prestations & Services",
+    settings: "Mon Atelier — Coordonnées & Tampon",
+    "pdf-preview": "Aperçu PDF",
   };
 
   const handleDuplicate = (doc: DocumentItem) => {

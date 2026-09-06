@@ -31,28 +31,26 @@ export default function DashboardHeader({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const viewTitles: Record<DashboardView, { section: string; page: string }> = {
-    registry: { section: "Cockpit", page: "Registre des ventes" },
+    registry: { section: "Cockpit", page: "Documents" },
     new: { section: "Facturation", page: "Nouveau document" },
-    catalog: { section: "Gestion", page: "Catalogue d'articles" },
-    settings: { section: "Configuration", page: "Profil & Cachet" },
-    "pdf-preview": { section: "Test", page: "Aperçu PDF (données factices)" },
+    catalog: { section: "Atelier", page: "Services" },
+    settings: { section: "Configuration", page: "Mon Atelier" },
+    "pdf-preview": { section: "Test", page: "Aperçu PDF" },
   };
 
   const breadcrumb = viewTitles[currentView] || { section: "Cockpit", page: title };
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-[#000000] border-b border-[#262626] px-4 sm:px-6 flex items-center justify-between transition-all select-none">
+    <header className="sticky top-0 z-30 h-16 bg-[#000000] border-b border-white/10 px-4 sm:px-6 flex items-center justify-between transition-all select-none">
       {/* ──────────────────────────────────────────────────────────────────────────
           GAUCHE : Sidebar Trigger + Breadcrumbs
-          (Seul et unique déclencheur de collapse/expand de la sidebar — celui qui
-          existait aussi dans sidebar.tsx a été retiré pour éviter le doublon.)
       ────────────────────────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-3">
         {/* Mobile Hamburger */}
         <button
           type="button"
           onClick={toggleMobile}
-          className="md:hidden p-2 rounded-lg text-neutral-300 hover:text-white hover:bg-[#171717] border border-[#262626] transition-colors cursor-pointer"
+          className="md:hidden p-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/10 border border-white/10 transition-colors cursor-pointer"
           title="Menu de navigation"
         >
           <Bars3Icon className="w-5 h-5" />
@@ -62,7 +60,7 @@ export default function DashboardHeader({
         <button
           type="button"
           onClick={toggleSidebar}
-          className="hidden md:flex items-center justify-center w-9 h-9 rounded-xl text-neutral-400 hover:text-[#D4AF37] bg-[#171717] hover:bg-[#1d1d1d] border border-[#262626] hover:border-[#D4AF37]/40 transition-all cursor-pointer active:scale-95"
+          className="hidden md:flex items-center justify-center w-9 h-9 rounded-xl text-zinc-400 hover:text-white bg-white/[0.04] hover:bg-white/10 border border-white/10 transition-all cursor-pointer active:scale-95"
           title={isCollapsed ? "Déplier la barre latérale" : "Replier la barre latérale"}
         >
           <motion.span
@@ -76,14 +74,14 @@ export default function DashboardHeader({
         </button>
 
         {/* Separator */}
-        <div className="hidden sm:block h-5 w-[1px] bg-[#262626]" />
+        <div className="hidden sm:block h-5 w-[1px] bg-white/10" />
 
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center gap-2 text-xs font-medium">
-          <span className="text-neutral-500 hidden sm:inline-block">
+          <span className="text-zinc-500 hidden sm:inline-block">
             {breadcrumb.section}
           </span>
-          <span className="text-neutral-600 hidden sm:inline-block">/</span>
+          <span className="text-zinc-600 hidden sm:inline-block">/</span>
           <span
             style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -112,7 +110,7 @@ export default function DashboardHeader({
           <button
             type="button"
             onClick={() => onViewChange("new")}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#D4AF37] hover:bg-[#e2b170] text-[#000000] text-xs font-semibold transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-semibold transition-colors cursor-pointer shadow-sm"
           >
             <PlusIcon className="w-4 h-4" />
             <span className="hidden sm:inline">Créer un document</span>
@@ -125,10 +123,10 @@ export default function DashboardHeader({
           <button
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 p-1.5 rounded-xl border border-[#262626] bg-[#171717] hover:border-neutral-700 transition-colors cursor-pointer"
+            className="flex items-center gap-2 p-1.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/20 transition-colors cursor-pointer"
             title="Menu profil"
           >
-            <div className="w-7 h-7 rounded-lg bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-semibold flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-semibold flex items-center justify-center">
               KM
             </div>
           </button>
@@ -142,11 +140,11 @@ export default function DashboardHeader({
                 onClick={() => setIsDropdownOpen(false)}
               />
 
-              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-[#171717] border border-[#262626] p-2 z-50 text-xs">
+              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-black/95 backdrop-blur-md border border-white/10 p-2 z-50 text-xs shadow-2xl">
                 {/* User details */}
-                <div className="px-3 py-2 border-b border-[#262626] mb-1">
+                <div className="px-3 py-2 border-b border-white/10 mb-1">
                   <p className="font-medium text-white truncate">Koffi Mensah</p>
-                  <p className="text-[11px] text-neutral-400 truncate">Atelier Teck & Or</p>
+                  <p className="text-[11px] text-zinc-400 truncate">Atelier Bois & Métal</p>
                 </div>
 
                 <button
@@ -155,10 +153,10 @@ export default function DashboardHeader({
                     onViewChange("settings");
                     setIsDropdownOpen(false);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-neutral-300 hover:text-white hover:bg-[#262626] transition-colors text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/10 transition-colors text-left"
                 >
-                  <Cog6ToothIcon className="w-4 h-4 text-neutral-400" />
-                  <span>Profil & Cachet fiscal</span>
+                  <Cog6ToothIcon className="w-4 h-4 text-zinc-400" />
+                  <span>Mon Atelier</span>
                 </button>
 
                 <button
@@ -167,13 +165,13 @@ export default function DashboardHeader({
                     onViewChange("catalog");
                     setIsDropdownOpen(false);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-neutral-300 hover:text-white hover:bg-[#262626] transition-colors text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/10 transition-colors text-left"
                 >
-                  <CheckBadgeIcon className="w-4 h-4 text-neutral-400" />
-                  <span>Mes prestations & prix</span>
+                  <CheckBadgeIcon className="w-4 h-4 text-zinc-400" />
+                  <span>Services</span>
                 </button>
 
-                <div className="border-t border-[#262626] my-1" />
+                <div className="border-t border-white/10 my-1" />
 
                 <button
                   type="button"
