@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
@@ -7,7 +7,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { ArrowLeftIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/lib/supabase/client";
-import TanStackLoader from "@/components/auth/tanstack-loader";
 
 const supabase = createClient();
 
@@ -61,9 +60,8 @@ function LoginPageInner() {
   const [password, setPassword] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(true);
 
-  // Loading and TanStack states
+  // Loading state
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showTanStackLoader, setShowTanStackLoader] = useState(false);
 
   useEffect(() => {
     if (queryTab === "register") setActiveTab("register");
@@ -122,21 +120,18 @@ function LoginPageInner() {
         }
       }
 
-      toast.success("Connexion autorisée", {
-        description: "Préparation de votre registre d'atelier...",
-        duration: 2500,
+      toast.success("Connexion réussie", {
+        description: "Accès à votre cockpit d'atelier...",
+        duration: 2000,
       });
 
-      // Trigger TanStack loader before dashboard
-      setShowTanStackLoader(true);
+      router.push("/dashboard");
     } catch {
       // Graceful fallback for local demo
       toast.success("Bienvenue dans votre atelier", {
         description: "Accès autorisé au cockpit ZAP.",
       });
-      setShowTanStackLoader(true);
-    } finally {
-      setIsSubmitting(false);
+      router.push("/dashboard");
     }
   };
 
@@ -198,16 +193,15 @@ function LoginPageInner() {
 
       toast.success("Atelier créé avec succès !", {
         description: "8 documents gratuits activés. Bienvenue sur ZAP !",
-        duration: 3000,
+        duration: 2500,
       });
 
-      // Trigger TanStack transition loader
-      setShowTanStackLoader(true);
+      router.push("/dashboard");
     } catch {
       toast.success("Atelier prêt !", {
         description: "Bienvenue dans votre nouvel espace ZAP.",
       });
-      setShowTanStackLoader(true);
+      router.push("/dashboard");
     } finally {
       setIsSubmitting(false);
     }
@@ -252,17 +246,7 @@ function LoginPageInner() {
   };
 
   return (
-    <>
-      {/* TanStack transition loader */}
-      {showTanStackLoader && (
-        <TanStackLoader
-          onFinished={() => {
-            router.push("/dashboard");
-          }}
-        />
-      )}
-
-      <section className="min-h-screen bg-[#050505] p-3 text-white antialiased">
+    <section className="min-h-screen bg-[#050505] p-3 text-white antialiased">
         <div className="grid min-h-[calc(100vh-1.5rem)] gap-4 lg:grid-cols-[0.98fr_1.02fr] xl:gap-6">
           {/* ─────────────────────────────────────────────────────────────
               LEFT PANEL : Authentication Form
@@ -467,11 +451,16 @@ function LoginPageInner() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="mt-6 flex h-12 w-full items-center justify-center rounded-[10px] bg-white text-base font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] disabled:opacity-50"
+                    className="mt-6 flex h-12 w-full items-center justify-center gap-2.5 rounded-[10px] bg-white text-base font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] disabled:opacity-50"
                   >
-                    {isSubmitting
-                      ? "Création en cours..."
-                      : "Créer mon atelier gratuitement"}
+                    {isSubmitting ? (
+                      <>
+                        <span className="h-4 w-4 rounded-full border-2 border-black border-t-transparent animate-spin" />
+                        <span>Création en cours...</span>
+                      </>
+                    ) : (
+                      "Créer mon atelier gratuitement"
+                    )}
                   </button>
 
                   <p className="text-center text-xs text-zinc-400 mt-4">
@@ -524,11 +513,16 @@ function LoginPageInner() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="mt-6 flex h-12 w-full items-center justify-center rounded-[10px] bg-white text-base font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] disabled:opacity-50"
+                    className="mt-6 flex h-12 w-full items-center justify-center gap-2.5 rounded-[10px] bg-white text-base font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] disabled:opacity-50"
                   >
-                    {isSubmitting
-                      ? "Vérification..."
-                      : "Se connecter au cockpit"}
+                    {isSubmitting ? (
+                      <>
+                        <span className="h-4 w-4 rounded-full border-2 border-black border-t-transparent animate-spin" />
+                        <span>Connexion en cours...</span>
+                      </>
+                    ) : (
+                      "Se connecter au cockpit"
+                    )}
                   </button>
 
                   <p className="text-center text-xs text-zinc-400 mt-4">
@@ -561,11 +555,16 @@ function LoginPageInner() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="mt-6 flex h-12 w-full items-center justify-center rounded-[10px] bg-white text-base font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] disabled:opacity-50"
+                    className="mt-6 flex h-12 w-full items-center justify-center gap-2.5 rounded-[10px] bg-white text-base font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] disabled:opacity-50"
                   >
-                    {isSubmitting
-                      ? "Envoi du lien..."
-                      : "Recevoir le lien de réinitialisation"}
+                    {isSubmitting ? (
+                      <>
+                        <span className="h-4 w-4 rounded-full border-2 border-black border-t-transparent animate-spin" />
+                        <span>Envoi en cours...</span>
+                      </>
+                    ) : (
+                      "Recevoir le lien de réinitialisation"
+                    )}
                   </button>
                 </form>
               )}
@@ -663,7 +662,6 @@ function LoginPageInner() {
           </div>
         </div>
       </section>
-    </>
   );
 }
 
