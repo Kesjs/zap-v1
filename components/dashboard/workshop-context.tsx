@@ -110,9 +110,29 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
       setIsCloudSynced(true);
 
       const cloudWorkshop = user.user_metadata?.workshop as Partial<WorkshopProfile> | undefined;
-      if (cloudWorkshop && typeof cloudWorkshop === "object") {
+
+      // Also read from public.profiles table in Supabase
+      const profileUpdates: Partial<WorkshopProfile> = {};
+      try {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name, city, phone_number, avatar_url")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (profile) {
+          if (profile.full_name) profileUpdates.name = profile.full_name;
+          if (profile.city) profileUpdates.city = profile.city;
+          if (profile.phone_number) profileUpdates.whatsapp = profile.phone_number;
+          if (profile.avatar_url && !cloudWorkshop?.logoUrl) profileUpdates.logoUrl = profile.avatar_url;
+        }
+      } catch {
+        // Table fallback
+      }
+
+      if (cloudWorkshop || Object.keys(profileUpdates).length > 0) {
         setWorkshop((prev) => {
-          const merged = { ...prev, ...cloudWorkshop };
+          const merged = { ...prev, ...profileUpdates, ...(cloudWorkshop || {}) };
           try {
             localStorage.setItem("zap:workshop_profile", JSON.stringify(merged));
           } catch {
@@ -163,12 +183,29 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
         setUserEmail(user.email ?? null);
         setUserId(user.id);
 
+        // 1. Sync full rich metadata to Supabase Auth user_metadata
         const { error } = await supabase.auth.updateUser({
           data: {
             workshop: nextProfile,
             updated_at: new Date().toISOString(),
           },
         });
+
+        // 2. Sync core identity fields to public.profiles SQL table
+        try {
+          await supabase
+            .from("profiles")
+            .update({
+              full_name: nextProfile.name,
+              city: nextProfile.city,
+              phone_number: nextProfile.whatsapp,
+              avatar_url: nextProfile.logoUrl,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", user.id);
+        } catch {
+          // Ignore if profile row not created yet
+        }
 
         if (!error) {
           setIsCloudSynced(true);
