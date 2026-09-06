@@ -1,10 +1,39 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import dynamic from "next/dynamic";
+import {
+  StarIcon,
+  BoltIcon,
+  PaperAirplaneIcon,
+  ShieldCheckIcon,
+} from "@heroicons/react/24/solid";
 
-const HeroVisualDocument = dynamic(() => import("@/components/hero-visual"));
 const Beams = dynamic(() => import("@/components/ui/Beams"), { ssr: false });
+
+const avatars = [
+  {
+    name: "Moussa Diop - Menuisier",
+    src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80",
+  },
+  {
+    name: "Amina Touré - Couture & Mode",
+    src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+  },
+  {
+    name: "Koffi Mensah - Mécanique Auto",
+    src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80",
+  },
+  {
+    name: "Fatou Sow - Créatrice d'Atelier",
+    src: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80",
+  },
+  {
+    name: "Ibrahim Koné - Électricien BTP",
+    src: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=80",
+  },
+];
 
 function HeroBadge() {
   return (
@@ -56,7 +85,7 @@ function HeroBadge() {
             borderRadius: "100px",
           }}
         >
-          NEW
+          NOUVEAU
         </span>
         <span
           style={{
@@ -73,18 +102,77 @@ function HeroBadge() {
   );
 }
 
+function HeroSocialProof() {
+  return (
+    <div className="flex flex-col items-center gap-4 mt-8 pt-6 border-t border-white/10 w-full max-w-lg">
+      {/* Avatars & Ratings */}
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        {/* Avatars stack */}
+        <div className="flex items-center -space-x-2.5">
+          {avatars.map((avatar, idx) => (
+            <div
+              key={idx}
+              className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-black"
+              style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.5)" }}
+            >
+              <Image
+                src={avatar.src}
+                alt={avatar.name}
+                fill
+                sizes="32px"
+                className="object-cover"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Stars and score */}
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <StarIcon key={i} className="w-4 h-4 text-amber-400" />
+            ))}
+          </div>
+          <span className="text-white text-xs font-semibold tracking-tight">4.9/5</span>
+        </div>
+      </div>
+
+      {/* Trust text */}
+      <p className="text-xs text-zinc-400 text-center font-normal">
+        Recommandé par plus de <span className="text-zinc-200 font-medium">1 200 artisans & indépendants</span>
+      </p>
+
+      {/* 3 Value pills with Heroicons */}
+      <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] text-zinc-300">
+          <BoltIcon className="w-3.5 h-3.5 text-zinc-300" />
+          <span>Prêt en 30 secondes</span>
+        </div>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] text-zinc-300">
+          <PaperAirplaneIcon className="w-3.5 h-3.5 text-zinc-300" />
+          <span>Partage direct WhatsApp</span>
+        </div>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] text-zinc-300">
+          <ShieldCheckIcon className="w-3.5 h-3.5 text-zinc-300" />
+          <span>8 documents offerts</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Hero() {
   return (
     <section
       style={{
         position: "relative",
-        minHeight: "100vh",
+        minHeight: "92vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
-        paddingTop: "120px",
-        paddingBottom: "90px",
+        paddingTop: "115px",
+        paddingBottom: "60px",
         background: "#000000",
       }}
     >
@@ -113,7 +201,7 @@ export default function Hero() {
           beamColor="#000000"
           backgroundColor="#000000"
         />
-        {/* Soft radial vignette overlay to blend edges */}
+        {/* Soft radial vignette overlay */}
         <div
           style={{
             position: "absolute",
@@ -130,7 +218,7 @@ export default function Hero() {
           position: "relative",
           zIndex: 1,
           width: "100%",
-          maxWidth: "720px",
+          maxWidth: "760px",
           margin: "0 auto",
           padding: "0 24px",
           textAlign: "center",
@@ -144,11 +232,11 @@ export default function Hero() {
         <h1
           style={{
             fontFamily: "'DM Serif Display', serif",
-            fontSize: "clamp(34px, 6vw, 48px)",
+            fontSize: "clamp(34px, 6vw, 50px)",
             lineHeight: 1.12,
             letterSpacing: "-0.025em",
             color: "#FFFFFF",
-            marginBottom: "20px",
+            marginBottom: "18px",
           }}
         >
           Créez vos devis, factures et reçus
@@ -172,15 +260,15 @@ export default function Hero() {
             fontSize: "15.5px",
             fontWeight: 300,
             color: "#A1A1AA",
-            maxWidth: "460px",
+            maxWidth: "480px",
             lineHeight: 1.65,
-            marginBottom: "32px",
+            marginBottom: "30px",
           }}
         >
-          Vos informations, votre signature et votre cachet, réunis sur chaque document.
+          Vos informations, votre signature et votre cachet officiel, réunis sur chaque document.
         </p>
 
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-2.5">
           <Link
             href="/login?tab=register"
             className="hero-cta transition-transform hover:scale-105"
@@ -193,7 +281,7 @@ export default function Hero() {
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "14px",
               fontWeight: 600,
-              padding: "13px 24px",
+              padding: "13px 26px",
               borderRadius: "10px",
               textDecoration: "none",
               cursor: "pointer",
@@ -210,11 +298,12 @@ export default function Hero() {
               color: "rgba(255, 255, 255, 0.5)",
             }}
           >
-            8 documents gratuits pour commencer
+            8 documents gratuits pour commencer sans engagement
           </p>
         </div>
 
-        <HeroVisualDocument />
+        {/* Social proof replacing the mockup */}
+        <HeroSocialProof />
       </div>
     </section>
   );

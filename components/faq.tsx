@@ -135,7 +135,7 @@ export default function Faq() {
                     style={{
                       fontFamily: "'DM Serif Display', serif",
                       fontSize: "18px",
-                      color: isOpen ? "#D4AF37" : "#F4F4F5",
+                      color: isOpen ? "#FFFFFF" : "#F4F4F5",
                       transition: "color 0.2s ease",
                     }}
                   >
@@ -151,7 +151,7 @@ export default function Faq() {
                       style={{
                         width: 20,
                         height: 20,
-                        color: isOpen ? "#D4AF37" : "rgba(244,244,245,0.45)",
+                        color: isOpen ? "#FFFFFF" : "rgba(244,244,245,0.45)",
                       }}
                     />
                   </motion.div>

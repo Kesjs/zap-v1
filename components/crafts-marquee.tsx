@@ -71,9 +71,10 @@ export default function CraftsMarquee() {
               >
                 <Icon
                   style={{
-                    width: 18,
-                    height: 18,
-                    color: "#D4AF37",
+                    width: 20,
+                    height: 20,
+                    color: "#FFFFFF",
+                    opacity: 0.85,
                     flexShrink: 0,
                   }}
                 />

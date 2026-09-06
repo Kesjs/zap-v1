@@ -7,8 +7,8 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: "#000000",
-        borderTop: "1px solid #1a1a1a",
+        background: "#09090B",
+        borderTop: "1px solid rgba(255, 255, 255, 0.08)",
         padding: "64px 24px 36px",
       }}
     >
@@ -22,7 +22,7 @@ export default function Footer() {
             marginBottom: "52px",
           }}
         >
-          {/* Col 1: Brand with new logo + tagline */}
+          {/* Col 1: Brand */}
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             <Link
               href="/"
@@ -50,7 +50,7 @@ export default function Footer() {
                 style={{
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: "22px",
-                  color: "#D4AF37",
+                  color: "#FFFFFF",
                   letterSpacing: "-0.02em",
                 }}
               >
@@ -63,14 +63,13 @@ export default function Footer() {
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13px",
                 fontWeight: 300,
-                color: "rgba(244, 244, 245, 0.50)",
+                color: "#A1A1AA",
                 lineHeight: 1.65,
                 maxWidth: "280px",
                 margin: 0,
               }}
             >
-              Le carnet de reçus, devis et factures officiel et numérique pour
-              les entrepreneurs et indépendants africains.
+              Le carnet de reçus, devis et factures officiel et numérique pour les entrepreneurs et indépendants africains.
             </p>
           </div>
 
@@ -80,10 +79,10 @@ export default function Footer() {
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "11px",
-                fontWeight: 500,
+                fontWeight: 600,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: "rgba(244, 244, 245, 0.40)",
+                color: "#FFFFFF",
                 marginBottom: "16px",
               }}
             >
@@ -91,8 +90,9 @@ export default function Footer() {
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
-                { label: "Produit", href: "#produit" },
+                { label: "Fonctionnalités", href: "#fonctionnalites" },
                 { label: "Tarifs", href: "#pricing" },
+                { label: "Comment ça marche", href: "#comment-ca-marche" },
                 { label: "FAQ", href: "#faq" },
               ].map((link) => (
                 <li key={link.label}>
@@ -101,16 +101,15 @@ export default function Footer() {
                     style={{
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: "13.5px",
-                      color: "rgba(244, 244, 245, 0.60)",
+                      color: "#A1A1AA",
                       textDecoration: "none",
                       transition: "color 0.2s ease",
                     }}
                     onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                      (e.target as HTMLElement).style.color = "#D4AF37";
+                      (e.target as HTMLElement).style.color = "#FFFFFF";
                     }}
                     onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                      (e.target as HTMLElement).style.color =
-                        "rgba(244, 244, 245, 0.60)";
+                      (e.target as HTMLElement).style.color = "#A1A1AA";
                     }}
                   >
                     {link.label}
@@ -126,19 +125,19 @@ export default function Footer() {
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "11px",
-                fontWeight: 500,
+                fontWeight: 600,
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: "rgba(244, 244, 245, 0.40)",
+                color: "#FFFFFF",
                 marginBottom: "16px",
               }}
             >
-              Support
+              Support &amp; Contact
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
-                { label: "Contact", href: "mailto:contact@zap.africa" },
-                { label: "WhatsApp", href: "https://wa.me/22900000000" },
+                { label: "Support WhatsApp", href: "https://wa.me/22900000000" },
+                { label: "Email : contact@zap.africa", href: "mailto:contact@zap.africa" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link
@@ -146,16 +145,15 @@ export default function Footer() {
                     style={{
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: "13.5px",
-                      color: "rgba(244, 244, 245, 0.60)",
+                      color: "#A1A1AA",
                       textDecoration: "none",
                       transition: "color 0.2s ease",
                     }}
                     onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                      (e.target as HTMLElement).style.color = "#D4AF37";
+                      (e.target as HTMLElement).style.color = "#FFFFFF";
                     }}
                     onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                      (e.target as HTMLElement).style.color =
-                        "rgba(244, 244, 245, 0.60)";
+                      (e.target as HTMLElement).style.color = "#A1A1AA";
                     }}
                   >
                     {link.label}
@@ -169,7 +167,7 @@ export default function Footer() {
         {/* Bottom Line */}
         <div
           style={{
-            borderTop: "1px solid #262626",
+            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
             paddingTop: "24px",
             display: "flex",
             justifyContent: "space-between",
@@ -181,12 +179,12 @@ export default function Footer() {
           <p
             style={{
               fontFamily: "'DM Sans', sans-serif",
-              fontSize: "11px",
-              color: "rgba(244, 244, 245, 0.50)",
+              fontSize: "12px",
+              color: "rgba(255, 255, 255, 0.45)",
               margin: 0,
             }}
           >
-            © 2025 ZAP
+            © {new Date().getFullYear()} ZAP. Tous droits réservés.
           </p>
 
           <div className="flex items-center gap-4">
@@ -194,20 +192,20 @@ export default function Footer() {
               href="#"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: "11px",
-                color: "rgba(244, 244, 245, 0.50)",
+                fontSize: "12px",
+                color: "rgba(255, 255, 255, 0.45)",
                 textDecoration: "none",
               }}
             >
               Mentions légales
             </Link>
-            <span style={{ color: "rgba(244, 244, 245, 0.25)" }}>·</span>
+            <span style={{ color: "rgba(255, 255, 255, 0.2)" }}>·</span>
             <Link
               href="#"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: "11px",
-                color: "rgba(244, 244, 245, 0.50)",
+                fontSize: "12px",
+                color: "rgba(255, 255, 255, 0.45)",
                 textDecoration: "none",
               }}
             >

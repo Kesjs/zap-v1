@@ -99,7 +99,8 @@ export default function HowItWorks() {
                 style={{
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: "24px",
-                  color: "#D4AF37",
+                  color: "#FFFFFF",
+                  opacity: 0.8,
                 }}
               >
                 {item.step}

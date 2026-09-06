@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckIcon } from "@heroicons/react/24/solid";
 
-// ─── BorderGlow Card ─────────────────────────────────────────────────────────
 function BorderGlowCard({
   children,
   featured = false,
@@ -17,18 +16,19 @@ function BorderGlowCard({
     <div
       style={{
         position: "relative",
-        background: "#171717",
+        background: "#121215",
         border: featured
-          ? "1px solid rgba(212,175,55,0.55)"
-          : "1px solid #262626",
+          ? "1px solid rgba(255, 255, 255, 0.35)"
+          : "1px solid rgba(255, 255, 255, 0.08)",
         borderRadius: "16px",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        transition: "border-color 0.2s ease",
+        transition: "all 0.2s ease",
+        boxShadow: featured ? "0 0 35px rgba(255, 255, 255, 0.05)" : "none",
       }}
-      className="hover:border-neutral-700"
+      className="hover:border-zinc-500"
     >
       {/* Featured Top Highlight Bar */}
       {featured && (
@@ -41,7 +41,7 @@ function BorderGlowCard({
             right: 0,
             height: "2px",
             background:
-              "linear-gradient(90deg, transparent, #D4AF37, #E2B170, transparent)",
+              "linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent)",
           }}
         />
       )}
@@ -62,9 +62,6 @@ function BorderGlowCard({
   );
 }
 
-// ─── Plan Data ───────────────────────────────────────────────────────────────
-// Le quota ne change JAMAIS avec le toggle Mensuel/Annuel : seul le prix change.
-// Ça évite toute ambiguïté (contrairement à l'ancienne version 80 vs 120 docs/mois).
 type Plan = {
   key: string;
   name: string;
@@ -90,15 +87,15 @@ const plans: Plan[] = [
     features: [
       "8 documents gratuits pour démarrer",
       "Cachet numérique d'atelier",
-      "Signature manuscrite",
+      "Signature manuscrite tactile",
       "Export PDF haute définition",
-      "Partage direct WhatsApp",
+      "Partage direct WhatsApp en 1 clic",
     ],
   },
   {
     key: "standard",
     name: "Standard",
-    badge: "Populaire",
+    badge: "Recommandé",
     featured: true,
     monthly: { amount: "3 000 FCFA", suffix: "/mois" },
     annual: { amount: "27 000 FCFA", suffix: "/an (~2 250 F/mois)" },
@@ -111,7 +108,7 @@ const plans: Plan[] = [
       "Catalogue d'atelier multi-métiers",
       "Duplication 1-clic d'un document existant",
     ],
-    footnote: "Besoin de plus ce mois-ci ? +20 documents pour 2 000 FCFA, sans changer de plan.",
+    footnote: "Besoin de plus ce mois-ci ? +20 documents pour 2 000 FCFA, sans changer de formule.",
   },
   {
     key: "pro",
@@ -119,7 +116,7 @@ const plans: Plan[] = [
     featured: false,
     monthly: { amount: "6 000 FCFA", suffix: "/mois" },
     annual: { amount: "54 000 FCFA", suffix: "/an (~4 500 F/mois)" },
-    description: "Documents illimités, pour les ateliers à fort volume.",
+    description: "Documents illimités, pour les ateliers et entreprises à fort volume.",
     ctaLabel: "Passer à Pro",
     features: [
       "Documents illimités, sans compter",
@@ -138,8 +135,9 @@ export default function Pricing() {
     <section
       id="pricing"
       style={{
-        background: "#000000",
+        background: "#09090B",
         padding: "96px 24px",
+        borderTop: "1px solid rgba(255, 255, 255, 0.06)",
       }}
     >
       <div style={{ maxWidth: "980px", margin: "0 auto" }}>
@@ -153,7 +151,7 @@ export default function Pricing() {
             style={{
               fontFamily: "'DM Serif Display', serif",
               fontSize: "clamp(30px, 4.5vw, 40px)",
-              color: "#F4F4F5",
+              color: "#FFFFFF",
               lineHeight: 1.15,
               marginBottom: "14px",
             }}
@@ -170,23 +168,22 @@ export default function Pricing() {
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "15px",
               fontWeight: 300,
-              color: "rgba(244, 244, 245, 0.65)",
+              color: "#A1A1AA",
               maxWidth: "460px",
               margin: "0 auto",
             }}
           >
-            Démarrez gratuitement et passez à la vitesse supérieure quand votre
-            activité grandit.
+            Démarrez gratuitement et passez à la vitesse supérieure quand votre activité grandit.
           </motion.p>
         </div>
 
-        {/* Interactive Living Switch: Mensuel / Annuel */}
+        {/* Switch: Mensuel / Annuel */}
         <div className="flex items-center justify-center gap-3.5 mb-12">
           <span
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "14px",
-              color: !isAnnual ? "#F4F4F5" : "rgba(244, 244, 245, 0.45)",
+              color: !isAnnual ? "#FFFFFF" : "rgba(255, 255, 255, 0.45)",
               cursor: "pointer",
               transition: "color 0.2s ease",
             }}
@@ -204,7 +201,7 @@ export default function Pricing() {
               width: "48px",
               height: "26px",
               background: "#171717",
-              border: "1px solid #262626",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
               borderRadius: "100px",
               position: "relative",
               cursor: "pointer",
@@ -220,9 +217,7 @@ export default function Pricing() {
                 width: "20px",
                 height: "20px",
                 borderRadius: "50%",
-                background: isAnnual
-                  ? "linear-gradient(135deg, #D4AF37 0%, #E2B170 100%)"
-                  : "rgba(244,244,245,0.4)",
+                background: "#FFFFFF",
               }}
             />
           </button>
@@ -235,7 +230,7 @@ export default function Pricing() {
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "14px",
-                color: isAnnual ? "#F4F4F5" : "rgba(244, 244, 245, 0.45)",
+                color: isAnnual ? "#FFFFFF" : "rgba(255, 255, 255, 0.45)",
                 transition: "color 0.2s ease",
               }}
             >
@@ -250,9 +245,9 @@ export default function Pricing() {
                   exit={{ opacity: 0, scale: 0.85, x: -4 }}
                   transition={{ duration: 0.25 }}
                   style={{
-                    background: "rgba(212, 175, 55, 0.15)",
-                    border: "1px solid rgba(212, 175, 55, 0.35)",
-                    color: "#D4AF37",
+                    background: "rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    color: "#FFFFFF",
                     fontSize: "11px",
                     fontWeight: 500,
                     fontFamily: "'DM Sans', sans-serif",
@@ -267,7 +262,7 @@ export default function Pricing() {
           </div>
         </div>
 
-        {/* Pricing Cards Grid (3 paliers) */}
+        {/* Pricing Cards Grid */}
         <div
           style={{
             display: "grid",
@@ -295,7 +290,7 @@ export default function Pricing() {
                         fontWeight: plan.featured ? 600 : 500,
                         letterSpacing: "0.1em",
                         textTransform: "uppercase",
-                        color: plan.featured ? "#D4AF37" : "rgba(244, 244, 245, 0.45)",
+                        color: plan.featured ? "#FFFFFF" : "rgba(255, 255, 255, 0.45)",
                         margin: 0,
                       }}
                     >
@@ -304,9 +299,9 @@ export default function Pricing() {
                     {plan.badge && (
                       <span
                         style={{
-                          background: "rgba(212, 175, 55, 0.15)",
-                          border: "1px solid rgba(212, 175, 55, 0.35)",
-                          color: "#D4AF37",
+                          background: "rgba(255, 255, 255, 0.1)",
+                          border: "1px solid rgba(255, 255, 255, 0.25)",
+                          color: "#FFFFFF",
                           fontSize: "10px",
                           fontWeight: 500,
                           fontFamily: "'DM Sans', sans-serif",
@@ -319,7 +314,7 @@ export default function Pricing() {
                     )}
                   </div>
 
-                  {/* Animated Price */}
+                  {/* Price */}
                   <div
                     style={{
                       height: "48px",
@@ -343,7 +338,7 @@ export default function Pricing() {
                           style={{
                             fontFamily: "'DM Serif Display', serif",
                             fontSize: "36px",
-                            color: "#F4F4F5",
+                            color: "#FFFFFF",
                             lineHeight: 1,
                           }}
                         >
@@ -353,7 +348,7 @@ export default function Pricing() {
                           style={{
                             fontFamily: "'DM Sans', sans-serif",
                             fontSize: "13px",
-                            color: "rgba(244, 244, 245, 0.45)",
+                            color: "rgba(255, 255, 255, 0.45)",
                           }}
                         >
                           {price.suffix}
@@ -367,7 +362,7 @@ export default function Pricing() {
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: "13.5px",
                       fontWeight: 300,
-                      color: "rgba(244, 244, 245, 0.55)",
+                      color: "rgba(255, 255, 255, 0.6)",
                       lineHeight: 1.5,
                       margin: "0 0 24px",
                       minHeight: "42px",
@@ -378,22 +373,21 @@ export default function Pricing() {
 
                   <Link
                     href="/login?tab=register"
+                    className="transition-transform hover:scale-[1.02]"
                     style={{
                       display: "block",
                       textAlign: "center",
-                      background: plan.featured
-                        ? "linear-gradient(135deg, #D4AF37 0%, #E2B170 100%)"
-                        : "rgba(244, 244, 245, 0.08)",
-                      border: plan.featured ? "none" : "1px solid #262626",
-                      color: plan.featured ? "#0C0C0C" : "#F4F4F5",
+                      background: plan.featured ? "#FFFFFF" : "rgba(255, 255, 255, 0.05)",
+                      border: plan.featured ? "none" : "1px solid rgba(255, 255, 255, 0.12)",
+                      color: plan.featured ? "#000000" : "#FFFFFF",
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: "14px",
-                      fontWeight: 500,
+                      fontWeight: plan.featured ? 600 : 500,
                       padding: "12px",
                       borderRadius: "10px",
                       textDecoration: "none",
                       marginBottom: "28px",
-                      transition: "background 0.2s ease",
+                      boxShadow: plan.featured ? "0 0 25px rgba(255, 255, 255, 0.15)" : "none",
                     }}
                   >
                     {plan.ctaLabel}
@@ -402,8 +396,8 @@ export default function Pricing() {
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
                     {plan.features.map((item) => (
                       <li key={item} className="flex items-start gap-2.5 text-[13.5px]">
-                        <CheckIcon style={{ width: 16, height: 16, color: "#D4AF37", flexShrink: 0, marginTop: "2px" }} />
-                        <span style={{ fontFamily: "'DM Sans', sans-serif", color: "rgba(244, 244, 245, 0.70)" }}>
+                        <CheckIcon style={{ width: 16, height: 16, color: "#FFFFFF", flexShrink: 0, marginTop: "2px" }} />
+                        <span style={{ fontFamily: "'DM Sans', sans-serif", color: "rgba(255, 255, 255, 0.75)" }}>
                           {item}
                         </span>
                       </li>
@@ -415,11 +409,11 @@ export default function Pricing() {
                       style={{
                         fontFamily: "'DM Sans', sans-serif",
                         fontSize: "12px",
-                        color: "rgba(244, 244, 245, 0.45)",
+                        color: "rgba(255, 255, 255, 0.45)",
                         lineHeight: 1.5,
                         marginTop: "20px",
                         paddingTop: "16px",
-                        borderTop: "1px solid #262626",
+                        borderTop: "1px solid rgba(255, 255, 255, 0.08)",
                       }}
                     >
                       {plan.footnote}

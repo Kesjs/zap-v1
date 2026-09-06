@@ -2,10 +2,9 @@ import dynamic from "next/dynamic";
 import Hero from "@/components/hero";
 
 const CraftsMarquee = dynamic(() => import("@/components/crafts-marquee"));
-const SignatureSeal = dynamic(() => import("@/components/signature-seal"));
+const FeaturesBento = dynamic(() => import("@/components/features-bento"));
 const HowItWorks = dynamic(() => import("@/components/how-it-works"));
 const Testimonials = dynamic(() => import("@/components/testimonials"));
-const CatalogRegistry = dynamic(() => import("@/components/catalog-registry"));
 const TrustBanner = dynamic(() => import("@/components/trust-banner"));
 const Pricing = dynamic(() => import("@/components/pricing"));
 const Faq = dynamic(() => import("@/components/faq"));
@@ -19,16 +18,13 @@ export default function Home() {
         display: "flex",
         flexDirection: "column",
         minHeight: "100dvh",
-        background: "#000000",
+        background: "#09090B",
       }}
     >
       <Hero />
-      <div className="below-fold">
-        <div id="fonctionnalites">
-          <CraftsMarquee />
-          <SignatureSeal />
-          <CatalogRegistry />
-        </div>
+      <div className="below-fold" style={{ background: "#09090B" }}>
+        <CraftsMarquee />
+        <FeaturesBento />
         <HowItWorks />
         <Testimonials />
         <TrustBanner />
