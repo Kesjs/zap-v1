@@ -358,39 +358,30 @@ function LoginPageInner() {
 
   return (
     <section className="min-h-screen bg-[#000000] p-3 text-white antialiased font-['DM_Sans']">
-      <div className="grid min-h-[calc(100vh-1.5rem)] gap-4 lg:grid-cols-[0.98fr_1.02fr] xl:gap-6">
+      <div className="grid min-h-[calc(100vh-1.5rem)] gap-4 lg:grid-cols-[1.02fr_0.98fr] xl:gap-6">
         {/* ─────────────────────────────────────────────────────────────
-            LEFT PANEL : Ultra-clean Authentication Form (Lumail style)
+            FORM PANEL (Desktop: Right / Mobile: Top)
            ───────────────────────────────────────────────────────────── */}
-        <div className="flex min-h-[640px] flex-col justify-between rounded-xl border border-white/10 bg-[#000000] px-6 py-8 sm:px-10 lg:min-h-0 lg:px-14 xl:px-16">
+        <div className="order-1 lg:order-2 flex min-h-[640px] flex-col justify-between rounded-xl border border-white/10 bg-[#000000] px-6 py-8 sm:px-10 lg:min-h-0 lg:px-14 xl:px-16">
           <div className="mx-auto w-full max-w-[440px]">
-            {/* Top Logo — Grand, lisible, sur fond blanc aux coins arrondis, sans texte ZAP */}
+            {/* Top Logo — Logo seul sans fond */}
             <div className="flex items-center justify-between mb-8">
               <Link
                 href="/"
                 aria-label="Retour à l'accueil ZAP"
-                className="group relative flex h-11 w-11 items-center overflow-hidden rounded-xl border border-white/20 bg-white shadow-md transition-[width,background-color] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] hover:w-[104px] hover:bg-zinc-900"
+                className="inline-flex items-center transition-opacity hover:opacity-80"
               >
-                {/* Logo — visible au repos, glisse vers le haut en fondu au survol */}
-                <span className="absolute inset-0 flex items-center justify-center p-1 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:-translate-y-3 group-hover:opacity-0">
-                  <Image
-                    src="/logo.png"
-                    alt="ZAP"
-                    width={40}
-                    height={40}
-                    priority
-                    className="h-full w-full object-contain"
-                  />
-                </span>
-
-                {/* Bouton retour — glisse depuis le bas en fondu au survol */}
-                <span className="absolute inset-0 flex translate-y-3 items-center justify-center gap-1.5 whitespace-nowrap text-xs font-medium text-white opacity-0 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:translate-y-0 group-hover:opacity-100">
-                  <ArrowLeftIcon className="h-3.5 w-3.5 shrink-0" />
-                  Retour
-                </span>
+                <Image
+                  src="/logo.png"
+                  alt="ZAP"
+                  width={38}
+                  height={38}
+                  priority
+                  className="h-9 w-9 object-contain"
+                />
               </Link>
 
-              {activeTab === "forgot" && (
+              {activeTab === "forgot" ? (
                 <button
                   type="button"
                   onClick={() => setActiveTab("login")}
@@ -399,6 +390,14 @@ function LoginPageInner() {
                   <ArrowLeftIcon className="w-3.5 h-3.5" />
                   Retour connexion
                 </button>
+              ) : (
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white transition-colors"
+                >
+                  <ArrowLeftIcon className="w-3.5 h-3.5" />
+                  Retour à l'accueil
+                </Link>
               )}
             </div>
 
@@ -785,9 +784,9 @@ function LoginPageInner() {
         </div>
 
           {/* ─────────────────────────────────────────────────────────────
-              RIGHT PANEL : GrainGradient WebGL Shader + Value Proposition
+              VISUAL PANEL (Desktop: Left / Mobile: Bottom) : GrainGradient WebGL Shader + Value Proposition
              ───────────────────────────────────────────────────────────── */}
-          <div className="relative flex min-h-[560px] flex-col justify-between overflow-hidden rounded-xl bg-black p-8 text-white sm:p-12 lg:min-h-0 lg:p-14">
+          <div className="order-2 lg:order-1 relative flex min-h-[560px] flex-col justify-between overflow-hidden rounded-xl bg-black p-8 text-white sm:p-12 lg:min-h-0 lg:p-14">
             {/* The Dynamic WebGL GrainGradient Shader */}
             <GrainGradientShader />
 
