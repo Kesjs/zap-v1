@@ -17,11 +17,11 @@ const navLinkStyle: React.CSSProperties = {
   fontFamily: "'DM Sans', sans-serif",
   fontSize: "13.5px",
   fontWeight: 400,
-  color: "rgba(28, 43, 69, 0.75)",
+  color: "#A1A1AA",
   padding: "6px 12px",
   borderRadius: "8px",
   textDecoration: "none",
-  transition: "color 0.2s ease",
+  transition: "all 0.2s ease",
   background: "none",
   border: "none",
   cursor: "pointer",
@@ -31,10 +31,11 @@ const dropdownItemStyle: React.CSSProperties = {
   display: "block",
   fontFamily: "'DM Sans', sans-serif",
   fontSize: "13.5px",
-  color: "#1C2B45",
-  padding: "9px 10px",
+  color: "#D4D4D8",
+  padding: "9px 12px",
   borderRadius: "8px",
   textDecoration: "none",
+  transition: "all 0.15s ease",
 };
 
 // Ces liens pointent tous vers la même section pour l'instant : elle couvre déjà
@@ -47,7 +48,7 @@ const produitItems = [
   { label: "Catalogue de prestations", href: "/#fonctionnalites" },
 ];
 
-// Pages dédiées par métier — à créer, n'existent pas encore.
+// Pages dédiées par métier
 const solutionsItems = [
   { label: "Menuiserie & Bois", href: "/solutions/menuiserie-bois" },
   { label: "Couture & Mode", href: "/solutions/couture-mode" },
@@ -68,12 +69,12 @@ function NavDropdown({
         <button
           type="button"
           style={navLinkStyle}
-          className="flex items-center gap-1"
+          className="flex items-center gap-1 hover:text-white"
           onMouseEnter={(e: MouseEvent<HTMLButtonElement>) => {
-            (e.currentTarget as HTMLElement).style.color = "#B8502E";
+            (e.currentTarget as HTMLElement).style.color = "#FFFFFF";
           }}
           onMouseLeave={(e: MouseEvent<HTMLButtonElement>) => {
-            (e.currentTarget as HTMLElement).style.color = "rgba(28, 43, 69, 0.75)";
+            (e.currentTarget as HTMLElement).style.color = "#A1A1AA";
           }}
         >
           {label}
@@ -83,12 +84,12 @@ function NavDropdown({
       <DropdownMenuContent
         align="start"
         style={{
-          background: "#FFFFFF",
-          border: "1px solid rgba(28, 43, 69, 0.12)",
+          background: "#0F0F10",
+          border: "1px solid rgba(255, 255, 255, 0.12)",
           borderRadius: "12px",
           padding: "6px",
           minWidth: "230px",
-          boxShadow: "0 16px 40px rgba(28, 43, 69, 0.16)",
+          boxShadow: "0 16px 40px rgba(0, 0, 0, 0.7)",
         }}
       >
         {items.map((item) => (
@@ -97,10 +98,12 @@ function NavDropdown({
               href={item.href}
               style={dropdownItemStyle}
               onMouseEnter={(e: MouseEvent<HTMLAnchorElement>) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(28, 43, 69, 0.06)";
+                (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.08)";
+                (e.currentTarget as HTMLElement).style.color = "#FFFFFF";
               }}
               onMouseLeave={(e: MouseEvent<HTMLAnchorElement>) => {
                 (e.currentTarget as HTMLElement).style.background = "transparent";
+                (e.currentTarget as HTMLElement).style.color = "#D4D4D8";
               }}
             >
               {item.label}
@@ -127,12 +130,13 @@ export default function NavBar() {
       <nav
         className="w-full max-w-5xl"
         style={{
-          background: "rgba(255, 255, 255, 0.75)",
+          background: "rgba(10, 10, 10, 0.78)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
-          border: "1px solid rgba(28, 43, 69, 0.12)",
+          border: "1px solid rgba(255, 255, 255, 0.12)",
           borderRadius: "14px",
           height: "52px",
+          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.6)",
         }}
       >
         <div className="flex items-center justify-between h-full px-4 sm:px-5">
@@ -168,7 +172,7 @@ export default function NavBar() {
                 fontFamily: "'DM Serif Display', serif",
                 fontSize: "21px",
                 fontWeight: 400,
-                color: "#1C2B45",
+                color: "#FFFFFF",
                 letterSpacing: "-0.02em",
               }}
             >
@@ -184,10 +188,10 @@ export default function NavBar() {
               href="/#pricing"
               style={navLinkStyle}
               onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                (e.target as HTMLElement).style.color = "#B8502E";
+                (e.target as HTMLElement).style.color = "#FFFFFF";
               }}
               onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                (e.target as HTMLElement).style.color = "rgba(28, 43, 69, 0.75)";
+                (e.target as HTMLElement).style.color = "#A1A1AA";
               }}
             >
               Tarifs
@@ -198,14 +202,20 @@ export default function NavBar() {
           <div className="flex items-center gap-3">
             <Link
               href="/login?tab=login"
-              className="hidden md:flex items-center"
+              className="hidden md:flex items-center transition-colors"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13.5px",
                 fontWeight: 400,
-                color: "rgba(28, 43, 69, 0.75)",
+                color: "#A1A1AA",
                 textDecoration: "none",
                 whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                (e.target as HTMLElement).style.color = "#FFFFFF";
+              }}
+              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                (e.target as HTMLElement).style.color = "#A1A1AA";
               }}
             >
               Connexion
@@ -213,17 +223,18 @@ export default function NavBar() {
 
             <Link
               href="/login?tab=register"
-              className="hero-cta hidden md:flex items-center"
+              className="hero-cta hidden md:flex items-center transition-transform hover:scale-105"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13px",
-                fontWeight: 500,
-                color: "#F4EEE2",
-                background: "linear-gradient(135deg, #1C2B45 0%, #2C3A5C 100%)",
+                fontWeight: 600,
+                color: "#000000",
+                background: "#FFFFFF",
                 padding: "8px 16px",
                 borderRadius: "8px",
                 textDecoration: "none",
                 whiteSpace: "nowrap",
+                boxShadow: "0 0 20px rgba(255, 255, 255, 0.15)",
               }}
             >
               Commencer gratuitement
@@ -234,7 +245,7 @@ export default function NavBar() {
               className="md:hidden flex items-center justify-center"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               style={{
-                color: "rgba(28, 43, 69, 0.85)",
+                color: "#FFFFFF",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
@@ -263,14 +274,15 @@ export default function NavBar() {
         <div
           className="absolute top-16 left-4 right-4 md:hidden"
           style={{
-            background: "rgba(255, 255, 255, 0.97)",
+            background: "rgba(12, 12, 12, 0.96)",
             backdropFilter: "blur(16px)",
-            border: "1px solid rgba(28, 43, 69, 0.12)",
-            borderRadius: "12px",
-            padding: "10px 10px",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            borderRadius: "14px",
+            padding: "12px",
             display: "flex",
             flexDirection: "column",
-            gap: "2px",
+            gap: "4px",
+            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.8)",
           }}
         >
           {[
@@ -285,10 +297,11 @@ export default function NavBar() {
                   justifyContent: "space-between",
                   fontFamily: "'DM Sans', sans-serif",
                   fontSize: "15px",
-                  fontWeight: 400,
-                  color: "rgba(28, 43, 69, 0.85)",
+                  fontWeight: 500,
+                  color: "#FFFFFF",
                   padding: "10px 14px",
                   borderRadius: "8px",
+                  cursor: "pointer",
                 }}
               >
                 {group.label}
@@ -303,9 +316,9 @@ export default function NavBar() {
                     style={{
                       fontFamily: "'DM Sans', sans-serif",
                       fontSize: "14px",
-                      color: "rgba(28, 43, 69, 0.65)",
+                      color: "#A1A1AA",
                       textDecoration: "none",
-                      padding: "12px 0",
+                      padding: "10px 0",
                       minHeight: "44px",
                       display: "flex",
                       alignItems: "center",
@@ -325,8 +338,8 @@ export default function NavBar() {
               display: "block",
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "15px",
-              fontWeight: 400,
-              color: "rgba(28, 43, 69, 0.85)",
+              fontWeight: 500,
+              color: "#FFFFFF",
               padding: "10px 14px",
               borderRadius: "8px",
               textDecoration: "none",
@@ -342,8 +355,8 @@ export default function NavBar() {
               display: "block",
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "15px",
-              fontWeight: 400,
-              color: "rgba(28, 43, 69, 0.85)",
+              fontWeight: 500,
+              color: "#A1A1AA",
               padding: "10px 14px",
               borderRadius: "8px",
               textDecoration: "none",
@@ -352,7 +365,7 @@ export default function NavBar() {
             Connexion
           </Link>
 
-          <div style={{ padding: "8px 6px 2px" }}>
+          <div style={{ padding: "8px 6px 4px" }}>
             <Link
               href="/login?tab=register"
               onClick={() => setIsMenuOpen(false)}
@@ -361,12 +374,13 @@ export default function NavBar() {
                 textAlign: "center",
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "14px",
-                fontWeight: 500,
-                color: "#F4EEE2",
-                background: "linear-gradient(135deg, #1C2B45 0%, #2C3A5C 100%)",
-                padding: "10px 16px",
+                fontWeight: 600,
+                color: "#000000",
+                background: "#FFFFFF",
+                padding: "11px 16px",
                 borderRadius: "8px",
                 textDecoration: "none",
+                boxShadow: "0 0 20px rgba(255, 255, 255, 0.15)",
               }}
             >
               Commencer gratuitement

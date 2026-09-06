@@ -1,22 +1,42 @@
-/* eslint-disable react/no-unknown-property */
 "use client";
 
-import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo, useState } from 'react';
+import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo, useState, type FC, type ReactNode } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
-import { degToRad } from 'three/src/math/MathUtils.js';
 
-import './Beams.css';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type UniformValue = any;
 
-function extendMaterial(BaseMaterial, cfg) {
-  const physical = THREE.ShaderLib.physical;
+interface ExtendMaterialConfig {
+  header: string;
+  vertexHeader?: string;
+  fragmentHeader?: string;
+  material?: THREE.MeshPhysicalMaterialParameters & { fog?: boolean };
+  uniforms?: Record<string, UniformValue>;
+  vertex?: Record<string, string>;
+  fragment?: Record<string, string>;
+}
+
+function extendMaterial<T extends THREE.Material = THREE.Material>(
+  BaseMaterial: new (params?: THREE.MaterialParameters) => T,
+  cfg: ExtendMaterialConfig
+): THREE.ShaderMaterial {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const physical = (THREE as any).ShaderLib.physical;
   const { vertexShader: baseVert, fragmentShader: baseFrag, uniforms: baseUniforms } = physical;
   const baseDefines = physical.defines ?? {};
 
-  const uniforms = THREE.UniformsUtils.clone(baseUniforms);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const uniforms: Record<string, any> = THREE.UniformsUtils.clone(baseUniforms);
 
-  const defaults = new BaseMaterial(cfg.material || {});
+  const defaults = new BaseMaterial(cfg.material || {}) as T & {
+    color?: THREE.Color;
+    roughness?: number;
+    metalness?: number;
+    envMap?: THREE.Texture;
+    envMapIntensity?: number;
+  };
 
   if (defaults.color) uniforms.diffuse.value = defaults.color;
   if ('roughness' in defaults) uniforms.roughness.value = defaults.roughness;
@@ -25,7 +45,10 @@ function extendMaterial(BaseMaterial, cfg) {
   if ('envMapIntensity' in defaults) uniforms.envMapIntensity.value = defaults.envMapIntensity;
 
   Object.entries(cfg.uniforms ?? {}).forEach(([key, u]) => {
-    uniforms[key] = u !== null && typeof u === 'object' && 'value' in u ? u : { value: u };
+    uniforms[key] =
+      u !== null && typeof u === 'object' && 'value' in u
+        ? u
+        : { value: u };
   });
 
   let vert = `${cfg.header}\n${cfg.vertexHeader ?? ''}\n${baseVert}`;
@@ -50,35 +73,58 @@ function extendMaterial(BaseMaterial, cfg) {
   return mat;
 }
 
-const CanvasWrapper = ({ children, onReady }) => {
-  const [playing, setPlaying] = useState(true);
+const CanvasWrapper: FC<{ children: ReactNode }> = ({ children }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    const onVis = () => setPlaying(document.visibilityState === "visible");
-    onVis();
-    document.addEventListener("visibilitychange", onVis);
-    return () => document.removeEventListener("visibilitychange", onVis);
+    let isTabActive = typeof document !== "undefined" ? document.visibilityState === "visible" : true;
+    let isIntersecting = true;
+
+    const updateVisibility = () => {
+      setIsVisible(isTabActive && isIntersecting);
+    };
+
+    const handleVisibilityChange = () => {
+      isTabActive = document.visibilityState === "visible";
+      updateVisibility();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        updateVisibility();
+      },
+      { threshold: 0.05 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      observer.disconnect();
+    };
   }, []);
 
   return (
-    <Canvas
-      dpr={1}
-      frameloop={playing ? "always" : "never"}
-      className="beams-container"
-      gl={{
-        antialias: false,
-        powerPreference: "low-power",
-        stencil: false,
-        depth: true,
-      }}
-      onCreated={() => onReady?.()}
-    >
-      {children}
-    </Canvas>
+    <div ref={containerRef} className="w-full h-full relative">
+      <Canvas
+        dpr={[1, 1.5]}
+        frameloop={isVisible ? "always" : "never"}
+        gl={{ powerPreference: "high-performance", antialias: true }}
+        className="w-full h-full relative"
+      >
+        {children}
+      </Canvas>
+    </div>
   );
 };
 
-const hexToNormalizedRGB = hex => {
+const hexToNormalizedRGB = (hex: string): [number, number, number] => {
   const clean = hex.replace('#', '');
   const r = parseInt(clean.substring(0, 2), 16);
   const g = parseInt(clean.substring(2, 4), 16);
@@ -163,21 +209,35 @@ float cnoise(vec3 P){
 }
 `;
 
-const Beams = ({
+export interface BeamsProps {
+  beamWidth?: number;
+  beamHeight?: number;
+  beamNumber?: number;
+  lightColor?: string;
+  beamColor?: string;
+  backgroundColor?: string;
+  speed?: number;
+  noiseIntensity?: number;
+  scale?: number;
+  rotation?: number;
+  lightMode?: boolean;
+}
+
+const Beams: FC<BeamsProps> = ({
   beamWidth = 2,
   beamHeight = 15,
-  beamNumber = 10,
-  lightColor = '#D4AF37',
-  beamColor = '#3a2800',
-  backgroundColor = '#0C0C0C',
-  speed = 1.2,
-  noiseIntensity = 1.5,
+  beamNumber = 12,
+  lightColor = '#ffffff',
+  beamColor = '#000000',
+  backgroundColor = '#000000',
+  speed = 2,
+  noiseIntensity = 1.75,
   scale = 0.2,
   rotation = 0,
-  lightMode = false,
-  onReady
+  lightMode = false
 }) => {
-  const meshRef = useRef(null);
+  const meshRef = useRef<THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>>(null!);
+
   const beamMaterial = useMemo(
     () =>
       extendMaterial(THREE.MeshStandardMaterial, {
@@ -243,8 +303,8 @@ const Beams = ({
   );
 
   return (
-    <CanvasWrapper onReady={onReady}>
-      <group rotation={[0, 0, degToRad(rotation)]}>
+    <CanvasWrapper>
+      <group rotation={[0, 0, THREE.MathUtils.degToRad(rotation)]}>
         <PlaneNoise ref={meshRef} material={beamMaterial} count={beamNumber} width={beamWidth} height={beamHeight} />
         <DirLight color={lightColor} position={[0, 3, 10]} />
       </group>
@@ -255,7 +315,13 @@ const Beams = ({
   );
 };
 
-function createStackedPlanesBufferGeometry(n, width, height, spacing, heightSegments) {
+function createStackedPlanesBufferGeometry(
+  n: number,
+  width: number,
+  height: number,
+  spacing: number,
+  heightSegments: number
+): THREE.BufferGeometry {
   const geometry = new THREE.BufferGeometry();
   const numVertices = n * (heightSegments + 1) * 2;
   const numFaces = n * heightSegments * 2;
@@ -303,11 +369,19 @@ function createStackedPlanesBufferGeometry(n, width, height, spacing, heightSegm
   return geometry;
 }
 
-const MergedPlanes = forwardRef(({ material, width, count, height }, ref) => {
-  const mesh = useRef(null);
+const MergedPlanes = forwardRef<
+  THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>,
+  {
+    material: THREE.ShaderMaterial;
+    width: number;
+    count: number;
+    height: number;
+  }
+>(({ material, width, count, height }, ref) => {
+  const mesh = useRef<THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>>(null!);
   useImperativeHandle(ref, () => mesh.current);
   const geometry = useMemo(
-    () => createStackedPlanesBufferGeometry(count, width, height, 0, 24),
+    () => createStackedPlanesBufferGeometry(count, width, height, 0, 100),
     [count, width, height]
   );
   useFrame((_, delta) => {
@@ -319,23 +393,40 @@ const MergedPlanes = forwardRef(({ material, width, count, height }, ref) => {
 });
 MergedPlanes.displayName = 'MergedPlanes';
 
-const PlaneNoise = forwardRef((props, ref) => (
+const PlaneNoise = forwardRef<
+  THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>,
+  {
+    material: THREE.ShaderMaterial;
+    width: number;
+    count: number;
+    height: number;
+  }
+>((props, ref) => (
   <MergedPlanes ref={ref} material={props.material} width={props.width} count={props.count} height={props.height} />
 ));
 PlaneNoise.displayName = 'PlaneNoise';
 
-const DirLight = ({ position, color }) => {
-  const dir = useRef(null);
+const DirLight: FC<{ position: [number, number, number]; color: string }> = ({ position, color }) => {
+  const dir = useRef<THREE.DirectionalLight>(null!);
   useEffect(() => {
     if (!dir.current) return;
-    const cam = dir.current.shadow?.camera;
-    if (!cam) return;
-    cam.top = 24;
-    cam.bottom = -24;
-    cam.left = -24;
-    cam.right = 24;
-    cam.far = 64;
-    dir.current.shadow.bias = -0.004;
+    const cam = dir.current.shadow?.camera as (THREE.Camera & {
+      top: number;
+      bottom: number;
+      left: number;
+      right: number;
+      far: number;
+    }) | undefined;
+    if (cam) {
+      cam.top = 24;
+      cam.bottom = -24;
+      cam.left = -24;
+      cam.right = 24;
+      cam.far = 64;
+    }
+    if (dir.current.shadow) {
+      dir.current.shadow.bias = -0.004;
+    }
   }, []);
   return <directionalLight ref={dir} color={color} intensity={1} position={position} />;
 };
