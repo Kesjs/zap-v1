@@ -7,10 +7,11 @@ import DashboardSidebar, { DashboardView } from "@/components/dashboard/sidebar"
 import DashboardHeader from "@/components/dashboard/header";
 import SalesRegistry, { DocumentItem } from "@/components/dashboard/sales-registry";
 import DocumentEditor, { LineItem } from "@/components/dashboard/document-editor";
-import SettingsStamp from "@/components/dashboard/settings-stamp";
+import SettingsView from "@/components/dashboard/settings-view";
 import CatalogView, { CatalogItem } from "@/components/dashboard/catalog-view";
 import PdfPreview from "@/components/dashboard/pdf-preview";
 import Spinner from "@/components/ui/spinner";
+import { WorkshopProvider } from "@/components/dashboard/workshop-context";
 import { createClient } from "@/lib/supabase/client";
 
 const supabase = createClient();
@@ -134,7 +135,7 @@ function DashboardMainContent() {
                 <CatalogView onSelectItemForInvoice={handleInvoiceFromCatalog} />
               )}
 
-              {currentView === "settings" && <SettingsStamp />}
+              {currentView === "settings" && <SettingsView onLogout={handleLogout} />}
 
               {currentView === "pdf-preview" && <PdfPreview />}
             </motion.div>
@@ -148,7 +149,9 @@ function DashboardMainContent() {
 export default function DashboardPage() {
   return (
     <SidebarProvider>
-      <DashboardMainContent />
+      <WorkshopProvider>
+        <DashboardMainContent />
+      </WorkshopProvider>
     </SidebarProvider>
   );
 }

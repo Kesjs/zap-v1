@@ -1,18 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Bars3Icon,
   ChevronLeftIcon,
   PlusIcon,
-  UserCircleIcon,
+  MagnifyingGlassIcon,
   ArrowLeftOnRectangleIcon,
   Cog6ToothIcon,
   CheckBadgeIcon,
 } from "@heroicons/react/24/outline";
 import { DashboardView } from "./sidebar";
 import { useSidebar } from "./sidebar-context";
+import { useWorkshop } from "./workshop-context";
 
 interface HeaderProps {
   title: string;
@@ -28,13 +30,14 @@ export default function DashboardHeader({
   onLogout,
 }: HeaderProps) {
   const { isCollapsed, toggleSidebar, toggleMobile } = useSidebar();
+  const { workshop, getInitials } = useWorkshop();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const viewTitles: Record<DashboardView, { section: string; page: string }> = {
     registry: { section: "Cockpit", page: "Documents" },
     new: { section: "Facturation", page: "Nouveau document" },
     catalog: { section: "Atelier", page: "Services" },
-    settings: { section: "Configuration", page: "Mon Atelier" },
+    settings: { section: "Configuration", page: "Paramètres de l'Atelier" },
     "pdf-preview": { section: "Test", page: "Aperçu PDF" },
   };
 
@@ -43,7 +46,7 @@ export default function DashboardHeader({
   return (
     <header className="sticky top-0 z-30 h-16 bg-[#000000] border-b border-white/10 px-4 sm:px-6 flex items-center justify-between transition-all select-none">
       {/* ──────────────────────────────────────────────────────────────────────────
-          GAUCHE : Sidebar Trigger + Breadcrumbs
+          GAUCHE : Sidebar Trigger + Titre de la Vue
       ────────────────────────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-3">
         {/* Mobile Hamburger */}
@@ -56,7 +59,7 @@ export default function DashboardHeader({
           <Bars3Icon className="w-5 h-5" />
         </button>
 
-        {/* Desktop Sidebar Collapse / Expand Button — seul déclencheur, style peaufiné */}
+        {/* Desktop Sidebar Collapse / Expand Button */}
         <button
           type="button"
           onClick={toggleSidebar}
@@ -76,33 +79,32 @@ export default function DashboardHeader({
         {/* Separator */}
         <div className="hidden sm:block h-5 w-[1px] bg-white/10" />
 
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-xs font-medium">
-          <span className="text-zinc-500 hidden sm:inline-block">
-            {breadcrumb.section}
-          </span>
-          <span className="text-zinc-600 hidden sm:inline-block">/</span>
-          <span
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              color: "#F4F4F5",
-              fontWeight: 500,
-            }}
-            className="text-sm sm:text-xs tracking-tight"
+        {/* Page Title */}
+        <div className="flex items-center">
+          <h1
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
+            className="text-base sm:text-sm font-semibold tracking-tight text-white"
           >
             {breadcrumb.page}
-          </span>
-        </nav>
+          </h1>
+        </div>
       </div>
 
       {/* ──────────────────────────────────────────────────────────────────────────
-          DROITE : Bouton Action Rapide + Profil Dropdown
+          DROITE : Recherche Rapide + Bouton Créer + Avatar Mobile Uniquement
       ────────────────────────────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-3">
-        {/* Status Badge (Desktop) */}
-        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/40 border border-emerald-800/40 text-emerald-400 text-[11px] font-mono">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>IFU 320194857 · UEMOA</span>
+      <div className="flex items-center gap-2.5 sm:gap-3">
+        {/* Desktop Quick Search Input */}
+        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.03] text-xs text-zinc-400 focus-within:border-white/30 focus-within:text-white transition-all w-48 lg:w-64">
+          <MagnifyingGlassIcon className="w-3.5 h-3.5 shrink-0 text-zinc-500" />
+          <input
+            type="text"
+            placeholder="Rechercher client, n°..."
+            className="bg-transparent border-none outline-none text-xs text-white placeholder:text-zinc-600 w-full"
+          />
+          <span className="text-[10px] font-mono text-zinc-500 bg-white/5 border border-white/10 px-1 py-0.5 rounded">
+            ⌘K
+          </span>
         </div>
 
         {/* Fast Action CTA : + Créer un document */}
@@ -118,20 +120,30 @@ export default function DashboardHeader({
           </button>
         )}
 
-        {/* User Profile Dropdown */}
-        <div className="relative">
+        {/* Mobile ONLY Profile Avatar Dropdown (supprimé sur Desktop pour éviter le doublon) */}
+        <div className="relative md:hidden">
           <button
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 p-1.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/20 transition-colors cursor-pointer"
+            className="flex items-center gap-2 p-1 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] transition-colors cursor-pointer"
             title="Menu profil"
           >
-            <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-semibold flex items-center justify-center">
-              KM
+            <div className="relative w-8 h-8 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-semibold flex items-center justify-center overflow-hidden">
+              {workshop.logoUrl ? (
+                <Image
+                  src={workshop.logoUrl}
+                  alt={workshop.name}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              ) : (
+                getInitials()
+              )}
             </div>
           </button>
 
-          {/* Dropdown Menu Modal */}
+          {/* Mobile Dropdown Menu Modal */}
           {isDropdownOpen && (
             <>
               {/* Invisible dismiss backdrop */}
@@ -140,11 +152,13 @@ export default function DashboardHeader({
                 onClick={() => setIsDropdownOpen(false)}
               />
 
-              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-black/95 backdrop-blur-md border border-white/10 p-2 z-50 text-xs shadow-2xl">
+              <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-black/95 backdrop-blur-md border border-white/10 p-2.5 z-50 text-xs shadow-2xl">
                 {/* User details */}
-                <div className="px-3 py-2 border-b border-white/10 mb-1">
-                  <p className="font-medium text-white truncate">Koffi Mensah</p>
-                  <p className="text-[11px] text-zinc-400 truncate">Atelier Bois & Métal</p>
+                <div className="px-3 py-2.5 border-b border-white/10 mb-1.5">
+                  <p className="font-semibold text-white truncate">{workshop.name}</p>
+                  <p className="text-[11px] text-zinc-400 truncate mt-0.5">
+                    {workshop.city ? `${workshop.city}, ${workshop.country}` : workshop.activity}
+                  </p>
                 </div>
 
                 <button
@@ -153,10 +167,10 @@ export default function DashboardHeader({
                     onViewChange("settings");
                     setIsDropdownOpen(false);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/10 transition-colors text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/10 transition-colors text-left"
                 >
                   <Cog6ToothIcon className="w-4 h-4 text-zinc-400" />
-                  <span>Mon Atelier</span>
+                  <span>Paramètres de l&apos;Atelier</span>
                 </button>
 
                 <button
@@ -165,7 +179,7 @@ export default function DashboardHeader({
                     onViewChange("catalog");
                     setIsDropdownOpen(false);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/10 transition-colors text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/10 transition-colors text-left"
                 >
                   <CheckBadgeIcon className="w-4 h-4 text-zinc-400" />
                   <span>Services</span>
@@ -179,7 +193,7 @@ export default function DashboardHeader({
                     setIsDropdownOpen(false);
                     onLogout?.();
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-red-400 hover:bg-red-950/40 transition-colors text-left cursor-pointer"
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-950/40 transition-colors text-left cursor-pointer"
                 >
                   <ArrowLeftOnRectangleIcon className="w-4 h-4" />
                   <span>Se déconnecter</span>

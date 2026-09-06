@@ -15,6 +15,7 @@ import {
   BeakerIcon,
 } from "@heroicons/react/24/outline";
 import { useSidebar } from "./sidebar-context";
+import { useWorkshop } from "./workshop-context";
 
 export type DashboardView = "registry" | "new" | "catalog" | "settings" | "pdf-preview";
 
@@ -34,6 +35,7 @@ export default function Sidebar({
   onLogout,
 }: SidebarProps) {
   const { isCollapsed, isOpenMobile, closeMobile } = useSidebar();
+  const { workshop, getInitials } = useWorkshop();
 
   const navItems = [
     {
@@ -87,44 +89,39 @@ export default function Sidebar({
               isCollapsed ? "justify-center px-2" : "px-4"
             }`}
           >
-            {/* Logo Link to Home — le bouton collapse/expand vit désormais uniquement
-                dans le header (un seul déclencheur pour éviter le doublon). */}
-            <Link
-              href="/"
-              className="flex items-center gap-2.5 no-underline group overflow-hidden"
-              title="ZAP — Retour à l'accueil"
+            <button
+              type="button"
+              onClick={() => onViewChange("settings")}
+              className="flex items-center gap-2.5 no-underline group overflow-hidden text-left cursor-pointer w-full"
+              title={`${workshop.name} — Modifier les paramètres`}
             >
-              <div className="relative w-9 h-9 rounded-lg bg-black overflow-hidden shrink-0 shadow-sm flex items-center justify-center border border-white/10">
-                <Image
-                  src="/log.jpg"
-                  alt="ZAP"
-                  width={36}
-                  height={36}
-                  className="w-full h-full object-cover"
-                  priority
-                />
+              <div className="relative w-9 h-9 rounded-xl bg-black overflow-hidden shrink-0 shadow-sm flex items-center justify-center border border-white/15">
+                {workshop.logoUrl ? (
+                  <Image
+                    src={workshop.logoUrl}
+                    alt={workshop.name}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  <span className="text-xs font-bold text-white tracking-wider">
+                    {getInitials()}
+                  </span>
+                )}
               </div>
 
               {!isCollapsed && (
-                <div className="flex items-center gap-1.5 overflow-hidden">
-                  <span
-                    style={{
-                      fontFamily: "var(--font-space-grotesk), sans-serif",
-                      fontSize: "18px",
-                      fontWeight: 700,
-                      letterSpacing: "-0.03em",
-                      color: "#FFFFFF",
-                      lineHeight: 1,
-                    }}
-                  >
-                    ZAP
+                <div className="flex flex-col overflow-hidden leading-tight">
+                  <span className="text-xs font-semibold text-white truncate group-hover:text-zinc-200 transition-colors">
+                    {workshop.name}
                   </span>
-                  <span className="text-[9px] text-zinc-400 font-mono tracking-wider bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
-                    PRO
+                  <span className="text-[10px] text-zinc-400 truncate">
+                    {workshop.city ? `${workshop.city}, ${workshop.country}` : workshop.activity}
                   </span>
                 </div>
               )}
-            </Link>
+            </button>
           </div>
 
           {/* Navigation Items */}
@@ -217,16 +214,26 @@ export default function Sidebar({
             }`}
           >
             <div className="flex items-center gap-2 overflow-hidden">
-              <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-semibold flex items-center justify-center shrink-0">
-                KM
+              <div className="relative w-7 h-7 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-semibold flex items-center justify-center shrink-0 overflow-hidden">
+                {workshop.logoUrl ? (
+                  <Image
+                    src={workshop.logoUrl}
+                    alt={workshop.name}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  getInitials()
+                )}
               </div>
               {!isCollapsed && (
                 <div className="flex flex-col leading-tight overflow-hidden">
                   <span className="text-xs font-medium text-zinc-200 truncate">
-                    Atelier Koffi
+                    {workshop.name}
                   </span>
                   <span className="text-[10px] text-zinc-500 truncate">
-                    Cotonou, Bénin
+                    {workshop.city ? `${workshop.city}, ${workshop.country}` : "Bénin"}
                   </span>
                 </div>
               )}
@@ -272,28 +279,38 @@ export default function Sidebar({
               <div>
                 {/* Mobile Drawer Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
-                  <div className="flex items-center gap-2.5">
-                    <div className="relative w-9 h-9 rounded-lg bg-black overflow-hidden shadow-sm flex items-center justify-center border border-white/10">
-                      <Image
-                        src="/log.jpg"
-                        alt="ZAP"
-                        width={36}
-                        height={36}
-                        className="w-full h-full object-cover"
-                      />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onViewChange("settings");
+                      closeMobile();
+                    }}
+                    className="flex items-center gap-2.5 text-left cursor-pointer overflow-hidden"
+                  >
+                    <div className="relative w-9 h-9 rounded-xl bg-black overflow-hidden shadow-sm flex items-center justify-center border border-white/15 shrink-0">
+                      {workshop.logoUrl ? (
+                        <Image
+                          src={workshop.logoUrl}
+                          alt={workshop.name}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        <span className="text-xs font-bold text-white tracking-wider">
+                          {getInitials()}
+                        </span>
+                      )}
                     </div>
-                    <span
-                      style={{
-                        fontFamily: "var(--font-space-grotesk), sans-serif",
-                        fontSize: "18px",
-                        fontWeight: 700,
-                        letterSpacing: "-0.03em",
-                        color: "#FFFFFF",
-                      }}
-                    >
-                      ZAP
-                    </span>
-                  </div>
+                    <div className="flex flex-col leading-tight overflow-hidden">
+                      <span className="text-sm font-semibold text-white truncate">
+                        {workshop.name}
+                      </span>
+                      <span className="text-[11px] text-zinc-400 truncate">
+                        {workshop.city ? `${workshop.city}, ${workshop.country}` : workshop.activity}
+                      </span>
+                    </div>
+                  </button>
 
                   <button
                     type="button"
@@ -345,11 +362,23 @@ export default function Sidebar({
                 </div>
 
                 <div className="flex items-center justify-between p-2 rounded-xl bg-white/[0.03] border border-white/10">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-semibold flex items-center justify-center">
-                      KM
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <div className="relative w-7 h-7 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-semibold flex items-center justify-center shrink-0 overflow-hidden">
+                      {workshop.logoUrl ? (
+                        <Image
+                          src={workshop.logoUrl}
+                          alt={workshop.name}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        getInitials()
+                      )}
                     </div>
-                    <span className="text-xs font-medium text-zinc-200">Atelier Koffi</span>
+                    <span className="text-xs font-medium text-zinc-200 truncate">
+                      {workshop.name}
+                    </span>
                   </div>
                   <button
                     type="button"
