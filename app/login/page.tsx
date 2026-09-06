@@ -23,9 +23,7 @@ const GrainGradientShader = dynamic(
   () => import("@/components/auth/grain-gradient-shader"),
   {
     ssr: false,
-    loading: () => (
-      <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-[#0A0A0C] to-black" />
-    ),
+    loading: () => <div className="absolute inset-0 bg-black" />,
   }
 );
 
@@ -366,12 +364,12 @@ function LoginPageInner() {
   };
 
   return (
-    <section className="min-h-screen bg-[#050505] p-3 text-white antialiased font-['DM_Sans']">
+    <section className="min-h-screen bg-[#000000] p-3 text-white antialiased font-['DM_Sans']">
       <div className="grid min-h-[calc(100vh-1.5rem)] gap-4 lg:grid-cols-[0.98fr_1.02fr] xl:gap-6">
         {/* ─────────────────────────────────────────────────────────────
             LEFT PANEL : Ultra-clean Authentication Form (Lumail style)
            ───────────────────────────────────────────────────────────── */}
-        <div className="flex min-h-[640px] flex-col justify-between rounded-xl border border-white/10 bg-[#0A0A0C] px-6 py-8 sm:px-10 lg:min-h-0 lg:px-14 xl:px-16">
+        <div className="flex min-h-[640px] flex-col justify-between rounded-xl border border-white/10 bg-[#000000] px-6 py-8 sm:px-10 lg:min-h-0 lg:px-14 xl:px-16">
           <div className="mx-auto w-full max-w-[440px]">
             {/* Top Logo — Grand, lisible, sur fond blanc aux coins arrondis, sans texte ZAP */}
             <div className="flex items-center justify-between mb-8">
