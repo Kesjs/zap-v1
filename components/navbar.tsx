@@ -38,15 +38,7 @@ const dropdownItemStyle: React.CSSProperties = {
   transition: "all 0.15s ease",
 };
 
-// Ces liens pointent tous vers la même section pour l'instant : elle couvre déjà
-// ces 4 aspects du produit. À éclater en ancres dédiées si des sous-sections
-// séparées sont créées plus tard.
-const produitItems = [
-  { label: "Devis & Factures", href: "/#fonctionnalites" },
-  { label: "Reçus de paiement", href: "/#fonctionnalites" },
-  { label: "Signature & Cachet numérique", href: "/#fonctionnalites" },
-  { label: "Catalogue de prestations", href: "/#fonctionnalites" },
-];
+
 
 // Pages dédiées par métier
 const solutionsItems = [
@@ -182,7 +174,18 @@ export default function NavBar() {
 
           {/* Center nav — desktop */}
           <div className="hidden md:flex items-center gap-1">
-            <NavDropdown label="Produit" items={produitItems} />
+            <Link
+              href="/#fonctionnalites"
+              style={navLinkStyle}
+              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                (e.target as HTMLElement).style.color = "#FFFFFF";
+              }}
+              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                (e.target as HTMLElement).style.color = "#A1A1AA";
+              }}
+            >
+              Fonctionnalités
+            </Link>
             <NavDropdown label="Solutions" items={solutionsItems} />
             <Link
               href="/#pricing"
@@ -285,51 +288,65 @@ export default function NavBar() {
             boxShadow: "0 20px 40px rgba(0, 0, 0, 0.8)",
           }}
         >
-          {[
-            { label: "Produit", items: produitItems },
-            { label: "Solutions", items: solutionsItems },
-          ].map((group) => (
-            <details key={group.label} className="nav-accordion">
-              <summary
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "15px",
-                  fontWeight: 500,
-                  color: "#FFFFFF",
-                  padding: "10px 14px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                }}
-              >
-                {group.label}
-                <ChevronDownIcon className="nav-accordion-icon" style={{ width: 16, height: 16 }} />
-              </summary>
-              <div style={{ display: "flex", flexDirection: "column", padding: "2px 14px 8px 22px" }}>
-                {group.items.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    style={{
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: "14px",
-                      color: "#A1A1AA",
-                      textDecoration: "none",
-                      padding: "10px 0",
-                      minHeight: "44px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </details>
-          ))}
+          {/* Direct link for Fonctionnalités */}
+          <Link
+            href="/#fonctionnalites"
+            onClick={() => setIsMenuOpen(false)}
+            style={{
+              display: "block",
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: "15px",
+              fontWeight: 500,
+              color: "#FFFFFF",
+              padding: "10px 14px",
+              borderRadius: "8px",
+              textDecoration: "none",
+            }}
+          >
+            Fonctionnalités
+          </Link>
+
+          {/* Solutions Accordion */}
+          <details className="nav-accordion">
+            <summary
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "15px",
+                fontWeight: 500,
+                color: "#FFFFFF",
+                padding: "10px 14px",
+                borderRadius: "8px",
+                cursor: "pointer",
+              }}
+            >
+              Solutions
+              <ChevronDownIcon className="nav-accordion-icon" style={{ width: 16, height: 16 }} />
+            </summary>
+            <div style={{ display: "flex", flexDirection: "column", padding: "2px 14px 8px 22px" }}>
+              {solutionsItems.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "14px",
+                    color: "#A1A1AA",
+                    textDecoration: "none",
+                    padding: "10px 0",
+                    minHeight: "44px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </details>
 
           <Link
             href="/#pricing"
