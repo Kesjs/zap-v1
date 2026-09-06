@@ -22,6 +22,10 @@ function DashboardMainContent() {
   const [documentCount, setDocumentCount] = useState(3);
   const maxDocuments = 8;
 
+  const [prefilledClient, setPrefilledClient] = useState("");
+  const [prefilledType, setPrefilledType] = useState<"devis" | "facture" | "recu">("facture");
+  const [prefilledItems, setPrefilledItems] = useState<LineItem[] | undefined>(undefined);
+
   useEffect(() => {
     const timer = setTimeout(() => setIsReady(true), 150);
     return () => clearTimeout(timer);
@@ -34,10 +38,6 @@ function DashboardMainContent() {
       </div>
     );
   }
-
-  const [prefilledClient, setPrefilledClient] = useState("");
-  const [prefilledType, setPrefilledType] = useState<"devis" | "facture" | "recu">("facture");
-  const [prefilledItems, setPrefilledItems] = useState<LineItem[] | undefined>(undefined);
 
   const viewTitles: Record<DashboardView, string> = {
     registry: "Tableau de bord — Registre des ventes",
