@@ -132,44 +132,37 @@ export default function NavBar() {
         }}
       >
         <div className="flex items-center justify-between h-full px-4 sm:px-5">
-          {/* Logo */}
+          {/* Logo — grand, lisible, sur fond blanc aux coins arrondis, sans texte redondant */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 flex-shrink-0"
+            className="flex items-center flex-shrink-0 transition-opacity hover:opacity-90"
             style={{ textDecoration: "none" }}
+            aria-label="Accueil ZAP"
           >
             <div
               style={{
                 position: "relative",
-                width: "28px",
-                height: "28px",
-                borderRadius: "6px",
+                width: "40px",
+                height: "40px",
+                background: "#FFFFFF",
+                borderRadius: "10px",
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.35)",
+                padding: "2px",
               }}
             >
               <Image
                 src="/logo.png"
-                alt="ZAP Logo"
-                width={28}
-                height={28}
+                alt="ZAP"
+                width={38}
+                height={38}
                 priority
-                style={{ objectFit: "contain" }}
+                style={{ objectFit: "contain", width: "100%", height: "100%" }}
               />
             </div>
-            <span
-              style={{
-                fontFamily: "'DM Serif Display', serif",
-                fontSize: "21px",
-                fontWeight: 400,
-                color: "#FFFFFF",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              ZAP
-            </span>
           </Link>
 
           {/* Center nav — desktop */}

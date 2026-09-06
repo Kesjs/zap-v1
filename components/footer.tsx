@@ -26,36 +26,33 @@ export default function Footer() {
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             <Link
               href="/"
-              className="flex items-center gap-2.5"
+              className="flex items-center transition-opacity hover:opacity-90 mb-4"
               style={{ textDecoration: "none", width: "fit-content" }}
+              aria-label="Accueil ZAP"
             >
               <div
                 style={{
                   position: "relative",
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "6px",
+                  width: "44px",
+                  height: "44px",
+                  background: "#FFFFFF",
+                  borderRadius: "10px",
                   overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.4)",
+                  padding: "2px",
                 }}
               >
                 <Image
                   src="/logo.png"
-                  alt="ZAP Logo"
-                  width={28}
-                  height={28}
-                  style={{ objectFit: "contain" }}
+                  alt="ZAP"
+                  width={42}
+                  height={42}
+                  style={{ objectFit: "contain", width: "100%", height: "100%" }}
                 />
               </div>
-              <span
-                style={{
-                  fontFamily: "'DM Serif Display', serif",
-                  fontSize: "22px",
-                  color: "#FFFFFF",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                ZAP
-              </span>
             </Link>
 
             <p

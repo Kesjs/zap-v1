@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SidebarProvider, useSidebar } from "@/components/dashboard/sidebar-context";
 import DashboardSidebar, { DashboardView } from "@/components/dashboard/sidebar";
@@ -17,9 +17,23 @@ const supabase = createClient();
 function DashboardMainContent() {
   const { isCollapsed } = useSidebar();
 
+  const [isReady, setIsReady] = useState(false);
   const [currentView, setCurrentView] = useState<DashboardView>("registry");
   const [documentCount, setDocumentCount] = useState(3);
   const maxDocuments = 8;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 150);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isReady) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="h-6 w-6 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+      </div>
+    );
+  }
 
   const [prefilledClient, setPrefilledClient] = useState("");
   const [prefilledType, setPrefilledType] = useState<"devis" | "facture" | "recu">("facture");

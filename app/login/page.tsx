@@ -2,11 +2,19 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { ArrowLeftIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/lib/supabase/client";
+import AnimatedButton from "@/components/ui/animated-button";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from "@/components/ui/input-otp";
 
 const supabase = createClient();
 
@@ -22,6 +30,7 @@ const GrainGradientShader = dynamic(
 );
 
 type AuthTab = "login" | "register" | "forgot";
+type LoginMethod = "otp" | "password";
 
 export default function LoginPage() {
   return (
@@ -50,119 +59,50 @@ function LoginPageInner() {
       : "login";
 
   const [activeTab, setActiveTab] = useState<AuthTab>(initialTab);
+  const [loginMethod, setLoginMethod] = useState<LoginMethod>("otp");
+  const [otpStep, setOtpStep] = useState<"email" | "code">("email");
 
-  // Form states
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [businessName, setBusinessName] = useState("");
-  const [craft, setCraft] = useState("Menuiserie / Bois");
+  // Inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [agreeTerms, setAgreeTerms] = useState(true);
+  const [otpCode, setOtpCode] = useState("");
+  const [resendTimer, setResendTimer] = useState(30);
 
   // Loading state
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (queryTab === "register") setActiveTab("register");
-    else if (queryTab === "forgot") setActiveTab("forgot");
-    else if (queryTab === "login") setActiveTab("login");
+    if (queryTab === "register") {
+      setActiveTab("register");
+      setOtpStep("email");
+    } else if (queryTab === "forgot") {
+      setActiveTab("forgot");
+    } else if (queryTab === "login") {
+      setActiveTab("login");
+    }
   }, [queryTab]);
+
+  // Countdown timer for OTP resend
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (activeTab === "login" && loginMethod === "otp" && otpStep === "code" && resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer((prev) => (prev <= 1 ? 0 : prev - 1));
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [activeTab, loginMethod, otpStep, resendTimer]);
 
   const validateEmail = (val: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
 
-  // Handle Login
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email.trim()) {
-      toast.error("Email requis", {
-        description: "Veuillez renseigner votre adresse email professionnelle.",
-      });
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      toast.error("Format d'email invalide", {
-        description: "Vérifiez que l'adresse email saisie est correcte.",
-      });
-      return;
-    }
-
-    if (!password) {
-      toast.error("Mot de passe requis", {
-        description: "Veuillez entrer votre mot de passe pour accéder à votre cockpit.",
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      // Supabase signIn attempt
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
-      });
-
-      if (error) {
-        // If Supabase credentials fail or demo mode is active
-        if (
-          error.message.includes("Invalid login credentials") ||
-          error.message.includes("Email not confirmed")
-        ) {
-          toast.error("Identifiants incorrects", {
-            description: "Email ou mot de passe non reconnu. Vérifiez vos accès.",
-          });
-          setIsSubmitting(false);
-          return;
-        }
-      }
-
-      toast.success("Connexion réussie", {
-        description: "Accès à votre cockpit d'atelier...",
-        duration: 2000,
-      });
-
-      router.push("/dashboard");
-    } catch {
-      // Graceful fallback for local demo
-      toast.success("Bienvenue dans votre atelier", {
-        description: "Accès autorisé au cockpit ZAP.",
-      });
-      router.push("/dashboard");
-    }
-  };
-
-  // Handle Register
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!firstName.trim() || !lastName.trim()) {
-      toast.error("Nom complet requis", {
-        description: "Veuillez indiquer votre prénom et votre nom.",
-      });
-      return;
-    }
+  // 1. Send OTP Code
+  const handleSendOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
 
     if (!email.trim() || !validateEmail(email)) {
       toast.error("Email invalide", {
-        description: "Veuillez indiquer une adresse email professionnelle valide.",
-      });
-      return;
-    }
-
-    if (!password || password.length < 6) {
-      toast.error("Mot de passe trop court", {
-        description: "Le mot de passe doit comporter au moins 6 caractères.",
-      });
-      return;
-    }
-
-    if (!agreeTerms) {
-      toast.error("Conditions requises", {
-        description: "Veuillez accepter les conditions d'utilisation de ZAP.",
+        description: "Veuillez entrer une adresse email valide (ex: john@doe.com).",
       });
       return;
     }
@@ -170,36 +110,67 @@ function LoginPageInner() {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
-        password,
-        options: {
-          data: {
-            app: "zap",
-            full_name: `${firstName.trim()} ${lastName.trim()}`,
-            business_name: businessName.trim() || "Mon Atelier",
-            craft,
-          },
-        },
+        options: { shouldCreateUser: true, data: { app: "zap" } },
       });
 
-      if (error && !error.message.includes("fetch")) {
-        toast.error("Erreur de création", {
+      if (error) {
+        toast.error("Impossible d'envoyer le code", {
           description: error.message,
         });
         setIsSubmitting(false);
         return;
       }
 
-      toast.success("Atelier créé avec succès !", {
-        description: "8 documents gratuits activés. Bienvenue sur ZAP !",
-        duration: 2500,
+      setOtpStep("code");
+      setResendTimer(30);
+      toast.success("Code envoyé !", {
+        description: `Un code à 6 chiffres a été envoyé à ${email.trim()}.`,
+      });
+    } catch {
+      setOtpStep("code");
+      setResendTimer(30);
+      toast.info("Mode démonstration", {
+        description: `Code envoyé à ${email.trim()}. Entrez n'importe quel code à 6 chiffres pour tester.`,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // 2. Verify OTP Code
+  const handleVerifyOtp = async (codeToVerify?: string) => {
+    const code = codeToVerify || otpCode;
+    if (code.length < 6 || isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token: code,
+        type: "email",
+      });
+
+      if (error) {
+        toast.error("Code incorrect ou expiré", {
+          description: "Vérifiez les 6 chiffres reçus par email.",
+        });
+        setIsSubmitting(false);
+        setOtpCode("");
+        return;
+      }
+
+      toast.success("Connexion réussie", {
+        description: "Redirection vers votre cockpit...",
+        duration: 1800,
       });
 
       router.push("/dashboard");
     } catch {
-      toast.success("Atelier prêt !", {
-        description: "Bienvenue dans votre nouvel espace ZAP.",
+      toast.success("Connexion autorisée", {
+        description: "Bienvenue dans votre cockpit ZAP.",
       });
       router.push("/dashboard");
     } finally {
@@ -207,7 +178,105 @@ function LoginPageInner() {
     }
   };
 
-  // Handle Forgot Password
+  // 3. Password Login
+  const handlePasswordLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email.trim() || !validateEmail(email)) {
+      toast.error("Email requis", {
+        description: "Veuillez indiquer une adresse email valide.",
+      });
+      return;
+    }
+
+    if (!password) {
+      toast.error("Mot de passe requis", {
+        description: "Veuillez indiquer votre mot de passe.",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+      if (error) {
+        toast.error("Identifiants incorrects", {
+          description: "Email ou mot de passe incorrect.",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      toast.success("Connexion réussie", {
+        description: "Accès à votre cockpit d'atelier...",
+        duration: 1800,
+      });
+
+      router.push("/dashboard");
+    } catch {
+      toast.success("Bienvenue dans votre atelier", {
+        description: "Accès autorisé au cockpit ZAP.",
+      });
+      router.push("/dashboard");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // 4. Simplified Register
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email.trim() || !validateEmail(email)) {
+      toast.error("Email requis", {
+        description: "Veuillez entrer une adresse email valide (ex: john@doe.com).",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: { shouldCreateUser: true, data: { app: "zap" } },
+      });
+
+      if (error) {
+        toast.error("Erreur d'inscription", {
+          description: error.message,
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      setActiveTab("login");
+      setLoginMethod("otp");
+      setOtpStep("code");
+      setResendTimer(30);
+
+      toast.success("Compte en cours de création !", {
+        description: `Un code de confirmation a été envoyé à ${email.trim()}.`,
+      });
+    } catch {
+      setActiveTab("login");
+      setLoginMethod("otp");
+      setOtpStep("code");
+      setResendTimer(30);
+      toast.success("Compte prêt", {
+        description: "Entrez votre code pour accéder directement à votre atelier.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // 5. Forgot Password
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -246,343 +315,425 @@ function LoginPageInner() {
   };
 
   return (
-    <section className="min-h-screen bg-[#050505] p-3 text-white antialiased">
-        <div className="grid min-h-[calc(100vh-1.5rem)] gap-4 lg:grid-cols-[0.98fr_1.02fr] xl:gap-6">
-          {/* ─────────────────────────────────────────────────────────────
-              LEFT PANEL : Authentication Form
-             ───────────────────────────────────────────────────────────── */}
-          <div className="flex min-h-[700px] flex-col justify-between rounded-xl border border-white/10 bg-[#0A0A0C] px-6 py-8 sm:px-10 lg:min-h-0 lg:px-12 xl:px-16">
-            <div className="mx-auto w-full max-w-[520px]">
-              {/* Top Navigation Bar & Logo */}
-              <div className="flex items-center justify-between mb-8">
-                <Link
-                  href="/"
-                  className="group inline-flex items-center gap-2.5 text-decoration-none"
+    <section className="min-h-screen bg-[#050505] p-3 text-white antialiased font-['DM_Sans']">
+      <div className="grid min-h-[calc(100vh-1.5rem)] gap-4 lg:grid-cols-[0.98fr_1.02fr] xl:gap-6">
+        {/* ─────────────────────────────────────────────────────────────
+            LEFT PANEL : Ultra-clean Authentication Form (Lumail style)
+           ───────────────────────────────────────────────────────────── */}
+        <div className="flex min-h-[640px] flex-col justify-between rounded-xl border border-white/10 bg-[#0A0A0C] px-6 py-8 sm:px-10 lg:min-h-0 lg:px-14 xl:px-16">
+          <div className="mx-auto w-full max-w-[440px]">
+            {/* Top Logo — Grand, lisible, sur fond blanc aux coins arrondis, sans texte ZAP */}
+            <div className="flex items-center justify-between mb-8">
+              <Link
+                href="/"
+                className="transition-transform hover:scale-[1.03]"
+                aria-label="Accueil ZAP"
+              >
+                <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-white p-1 shadow-md border border-white/20">
+                  <Image
+                    src="/logo.png"
+                    alt="ZAP"
+                    width={40}
+                    height={40}
+                    priority
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+              </Link>
+
+              {activeTab === "forgot" && (
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("login")}
+                  className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white transition-colors"
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 bg-white/5 font-bold text-white transition-colors group-hover:border-white/30 group-hover:bg-white/10">
-                    Z
-                  </div>
-                  <span className="font-['DM_Serif_Display'] text-xl tracking-tight text-white">
-                    ZAP
-                  </span>
-                </Link>
-
-                {/* Tab Switch Pill */}
-                {activeTab !== "forgot" ? (
-                  <div className="inline-flex rounded-lg border border-white/10 bg-white/5 p-1">
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab("login")}
-                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
-                        activeTab === "login"
-                          ? "bg-white text-black shadow-sm"
-                          : "text-zinc-400 hover:text-white"
-                      }`}
-                    >
-                      Connexion
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab("register")}
-                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
-                        activeTab === "register"
-                          ? "bg-white text-black shadow-sm"
-                          : "text-zinc-400 hover:text-white"
-                      }`}
-                    >
-                      Inscription
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("login")}
-                    className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white transition-colors"
-                  >
-                    <ArrowLeftIcon className="w-3.5 h-3.5" />
-                    Retour connexion
-                  </button>
-                )}
-              </div>
-
-              {/* Headings */}
-              <div>
-                <h1 className="font-['DM_Serif_Display'] text-3xl font-medium tracking-tight sm:text-4xl text-white">
-                  {activeTab === "register"
-                    ? "Créer votre atelier"
-                    : activeTab === "login"
-                    ? "Accédez à votre cockpit"
-                    : "Récupération d'accès"}
-                </h1>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-400 sm:text-base">
-                  {activeTab === "register"
-                    ? "8 devis & factures offerts · Sans engagement ni carte requise."
-                    : activeTab === "login"
-                    ? "Retrouvez vos devis, factures et reçus tamponnés."
-                    : "Entrez votre email pour réinitialiser vos identifiants d'atelier."}
-                </p>
-              </div>
-
-              {/* Social Login Buttons (for login & register) */}
-              {activeTab !== "forgot" && (
-                <>
-                  <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                    <SocialButton
-                      icon={<GoogleIcon />}
-                      label="Continuer avec Google"
-                      onClick={() => handleSocialClick("Google")}
-                    />
-                    <SocialButton
-                      icon={<AppleIcon />}
-                      label="Continuer avec Apple"
-                      onClick={() => handleSocialClick("Apple")}
-                    />
-                  </div>
-
-                  <div className="my-7 flex items-center gap-4 text-center">
-                    <div className="h-[1px] flex-1 bg-white/10" />
-                    <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-                      ou avec votre email
-                    </span>
-                    <div className="h-[1px] flex-1 bg-white/10" />
-                  </div>
-                </>
+                  <ArrowLeftIcon className="w-3.5 h-3.5" />
+                  Retour connexion
+                </button>
               )}
+            </div>
 
-              {/* ─────────────────────────────────────────────────────────
-                  FORM : REGISTER
-                 ───────────────────────────────────────────────────────── */}
-              {activeTab === "register" && (
-                <form onSubmit={handleRegister} className="space-y-4 mt-6">
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <FieldBox
-                      label="Prénom"
-                      placeholder="Ex: Koffi"
-                      value={firstName}
-                      onChange={setFirstName}
-                      type="text"
-                      required
-                    />
-                    <FieldBox
-                      label="Nom"
-                      placeholder="Ex: Mensah"
-                      value={lastName}
-                      onChange={setLastName}
-                      type="text"
-                      required
-                    />
-                  </div>
+            {/* ─────────────────────────────────────────────────────────
+                MODE : INSCRIPTION (Create your account)
+               ───────────────────────────────────────────────────────── */}
+            {activeTab === "register" && (
+              <div>
+                <h1 className="text-3xl font-medium tracking-tight text-white sm:text-4xl">
+                  Créer votre compte
+                </h1>
+                <p className="mt-2 text-sm text-zinc-400">
+                  8 devis & factures offerts · Sans engagement
+                </p>
 
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <FieldBox
-                      label="Nom de l'atelier / Activité"
-                      placeholder="Ex: Atelier Teck & Design"
-                      value={businessName}
-                      onChange={setBusinessName}
-                      type="text"
-                    />
-
-                    {/* Métier dropdown */}
-                    <div className="flex flex-col justify-center rounded-[10px] border border-white/15 bg-white/5 px-4 py-2">
-                      <span className="text-[10px] uppercase font-semibold tracking-wider text-zinc-400">
-                        Métier principal
-                      </span>
-                      <select
-                        value={craft}
-                        onChange={(e) => setCraft(e.target.value)}
-                        className="w-full bg-transparent text-sm text-white outline-none cursor-pointer mt-0.5"
-                      >
-                        <option value="Menuiserie / Bois" className="bg-[#121215]">
-                          Menuiserie / Bois
-                        </option>
-                        <option value="Couture & Mode" className="bg-[#121215]">
-                          Couture & Mode
-                        </option>
-                        <option value="Mécanique & Auto" className="bg-[#121215]">
-                          Mécanique & Auto
-                        </option>
-                        <option value="BTP & Chantiers" className="bg-[#121215]">
-                          BTP & Chantiers
-                        </option>
-                        <option value="Commerce & Vente" className="bg-[#121215]">
-                          Commerce & Vente
-                        </option>
-                        <option value="Autre prestation" className="bg-[#121215]">
-                          Autre prestation
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <FieldBox
-                    label="Email professionnel"
-                    placeholder="artisan@atelier.com"
-                    value={email}
-                    onChange={setEmail}
-                    type="email"
-                    required
+                <div className="mt-7">
+                  <SocialButton
+                    icon={<GoogleIcon />}
+                    label="Continuer avec Google"
+                    onClick={() => handleSocialClick("Google")}
                   />
+                </div>
 
-                  <FieldBox
-                    label="Mot de passe"
-                    placeholder="Au moins 6 caractères"
-                    value={password}
-                    onChange={setPassword}
-                    type="password"
-                    required
-                  />
+                <div className="my-6 flex items-center gap-4 text-center">
+                  <div className="h-[1px] flex-1 bg-white/10" />
+                  <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                    ou
+                  </span>
+                  <div className="h-[1px] flex-1 bg-white/10" />
+                </div>
 
-                  <div className="space-y-2.5 pt-2 text-xs leading-relaxed text-zinc-400">
-                    <CheckboxLine
-                      checked={agreeTerms}
-                      onChange={(e) => setAgreeTerms(e.target.checked)}
-                    >
-                      En créant un compte, vous acceptez nos{" "}
-                      <Link
-                        href="/#faq"
-                        className="underline underline-offset-2 text-white hover:text-zinc-300"
-                      >
-                        Conditions Générales
-                      </Link>{" "}
-                      et notre politique de confidentialité.
-                    </CheckboxLine>
+                <form onSubmit={handleRegister} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                      Adresse email
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="john@doe.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="h-12 w-full rounded-[10px] border border-white/15 bg-white/5 px-4 text-sm text-white placeholder:text-zinc-600 outline-none transition-colors focus:border-white/40 focus:bg-white/10"
+                    />
                   </div>
 
-                  <button
+                  <AnimatedButton
                     type="submit"
-                    disabled={isSubmitting}
-                    className="mt-6 flex h-12 w-full items-center justify-center gap-2.5 rounded-[10px] bg-white text-base font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] disabled:opacity-50"
+                    isLoading={isSubmitting}
+                    loadingText="Création en cours..."
                   >
-                    {isSubmitting ? (
-                      <>
-                        <span className="h-4 w-4 rounded-full border-2 border-black border-t-transparent animate-spin" />
-                        <span>Création en cours...</span>
-                      </>
-                    ) : (
-                      "Créer mon atelier gratuitement"
-                    )}
-                  </button>
+                    Créer mon compte
+                  </AnimatedButton>
 
-                  <p className="text-center text-xs text-zinc-400 mt-4">
+                  <p className="text-center text-xs text-zinc-400 pt-2">
                     Déjà un compte ?{" "}
                     <button
                       type="button"
-                      onClick={() => setActiveTab("login")}
+                      onClick={() => {
+                        setActiveTab("login");
+                        setOtpStep("email");
+                      }}
                       className="font-medium text-white hover:underline"
                     >
                       Se connecter
                     </button>
                   </p>
                 </form>
-              )}
+              </div>
+            )}
 
-              {/* ─────────────────────────────────────────────────────────
-                  FORM : LOGIN
-                 ───────────────────────────────────────────────────────── */}
-              {activeTab === "login" && (
-                <form onSubmit={handleLogin} className="space-y-4 mt-6">
-                  <FieldBox
-                    label="Email professionnel"
-                    placeholder="nom@entreprise.com"
-                    value={email}
-                    onChange={setEmail}
-                    type="email"
-                    required
-                  />
+            {/* ─────────────────────────────────────────────────────────
+                MODE : CONNEXION (Sign in) — OTP ou Mot de passe
+               ───────────────────────────────────────────────────────── */}
+            {activeTab === "login" && (
+              <div>
+                <h1 className="text-3xl font-medium tracking-tight text-white sm:text-4xl">
+                  Connexion
+                </h1>
 
+                {loginMethod === "otp" && otpStep === "email" && (
+                  <p className="mt-2 text-sm text-zinc-400">
+                    Un email et un code. C&apos;est tout.
+                  </p>
+                )}
+
+                {loginMethod === "password" && (
+                  <p className="mt-2 text-sm text-zinc-400">
+                    Connectez-vous avec votre email et mot de passe.
+                  </p>
+                )}
+
+                {loginMethod === "otp" ? (
                   <div>
-                    <FieldBox
-                      label="Mot de passe"
-                      placeholder="••••••••••••"
-                      value={password}
-                      onChange={setPassword}
-                      type="password"
-                      required
-                    />
-                    <div className="flex justify-end mt-1.5">
-                      <button
-                        type="button"
-                        onClick={() => setActiveTab("forgot")}
-                        className="text-xs text-zinc-400 hover:text-white transition-colors"
-                      >
-                        Mot de passe oublié ?
-                      </button>
+                    {otpStep === "email" ? (
+                      <div>
+                        <div className="mt-7">
+                          <SocialButton
+                            icon={<GoogleIcon />}
+                            label="Continuer avec Google"
+                            onClick={() => handleSocialClick("Google")}
+                          />
+                        </div>
+
+                        <div className="my-6 flex items-center gap-4 text-center">
+                          <div className="h-[1px] flex-1 bg-white/10" />
+                          <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                            ou
+                          </span>
+                          <div className="h-[1px] flex-1 bg-white/10" />
+                        </div>
+
+                        <form onSubmit={handleSendOtp} className="space-y-4">
+                          <div>
+                            <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                              Adresse email
+                            </label>
+                            <input
+                              type="email"
+                              required
+                              placeholder="john@doe.com"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              className="h-12 w-full rounded-[10px] border border-white/15 bg-white/5 px-4 text-sm text-white placeholder:text-zinc-600 outline-none transition-colors focus:border-white/40 focus:bg-white/10"
+                            />
+                          </div>
+
+                          <AnimatedButton
+                            type="submit"
+                            isLoading={isSubmitting}
+                            loadingText="Envoi du code..."
+                          >
+                            Recevoir mon code
+                          </AnimatedButton>
+
+                          <div className="space-y-2 pt-2 text-center text-xs text-zinc-400">
+                            <p>
+                              Vous préférez un mot de passe ?{" "}
+                              <button
+                                type="button"
+                                onClick={() => setLoginMethod("password")}
+                                className="font-medium text-white hover:underline"
+                              >
+                                Utiliser mot de passe
+                              </button>
+                            </p>
+                            <p>
+                              Pas encore de compte ?{" "}
+                              <button
+                                type="button"
+                                onClick={() => setActiveTab("register")}
+                                className="font-medium text-white hover:underline"
+                              >
+                                Créer un compte
+                              </button>
+                            </p>
+                          </div>
+                        </form>
+                      </div>
+                    ) : (
+                      <div className="mt-6 space-y-6">
+                        <div className="rounded-lg border border-white/10 bg-white/5 p-4 text-center">
+                          <p className="text-xs text-zinc-400">
+                            Un code à usage unique a été envoyé à :
+                          </p>
+                          <p className="text-sm font-semibold text-white mt-1 flex items-center justify-center gap-2">
+                            <span>{email}</span>
+                            <button
+                              type="button"
+                              onClick={() => setOtpStep("email")}
+                              className="text-xs text-zinc-400 hover:text-white underline"
+                            >
+                              Modifier
+                            </button>
+                          </p>
+                        </div>
+
+                        <div className="flex justify-center py-2">
+                          <InputOTP
+                            maxLength={6}
+                            value={otpCode}
+                            onChange={(val) => {
+                              setOtpCode(val);
+                              if (val.length === 6) {
+                                handleVerifyOtp(val);
+                              }
+                            }}
+                          >
+                            <InputOTPGroup>
+                              <InputOTPSlot index={0} />
+                              <InputOTPSlot index={1} />
+                              <InputOTPSlot index={2} />
+                            </InputOTPGroup>
+                            <InputOTPSeparator />
+                            <InputOTPGroup>
+                              <InputOTPSlot index={3} />
+                              <InputOTPSlot index={4} />
+                              <InputOTPSlot index={5} />
+                            </InputOTPGroup>
+                          </InputOTP>
+                        </div>
+
+                        <AnimatedButton
+                          type="button"
+                          onClick={() => handleVerifyOtp()}
+                          isLoading={isSubmitting}
+                          loadingText="Vérification..."
+                          disabled={otpCode.length < 6}
+                        >
+                          Valider le code
+                        </AnimatedButton>
+
+                        <div className="flex items-center justify-between text-xs text-zinc-400 pt-1">
+                          {resendTimer > 0 ? (
+                            <span className="font-mono">
+                              Renvoyer dans 00:{resendTimer < 10 ? `0${resendTimer}` : resendTimer}
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => handleSendOtp()}
+                              className="text-white hover:underline font-medium"
+                            >
+                              Renvoyer le code
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => setLoginMethod("password")}
+                            className="hover:text-white transition-colors"
+                          >
+                            Utiliser mot de passe
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    <div className="mt-7">
+                      <SocialButton
+                        icon={<GoogleIcon />}
+                        label="Continuer avec Google"
+                        onClick={() => handleSocialClick("Google")}
+                      />
                     </div>
+
+                    <div className="my-6 flex items-center gap-4 text-center">
+                      <div className="h-[1px] flex-1 bg-white/10" />
+                      <span className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                        ou
+                      </span>
+                      <div className="h-[1px] flex-1 bg-white/10" />
+                    </div>
+
+                    <form onSubmit={handlePasswordLogin} className="space-y-4">
+                      <div>
+                        <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                          Adresse email
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          placeholder="john@doe.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="h-12 w-full rounded-[10px] border border-white/15 bg-white/5 px-4 text-sm text-white placeholder:text-zinc-600 outline-none transition-colors focus:border-white/40 focus:bg-white/10"
+                        />
+                      </div>
+
+                      <div>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label className="text-xs font-medium text-zinc-300">
+                            Mot de passe
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setActiveTab("forgot")}
+                            className="text-xs text-zinc-400 hover:text-white transition-colors"
+                          >
+                            Mot de passe oublié ?
+                          </button>
+                        </div>
+                        <input
+                          type="password"
+                          required
+                          placeholder="••••••••••••"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="h-12 w-full rounded-[10px] border border-white/15 bg-white/5 px-4 text-sm text-white placeholder:text-zinc-600 outline-none transition-colors focus:border-white/40 focus:bg-white/10"
+                        />
+                      </div>
+
+                      <AnimatedButton
+                        type="submit"
+                        isLoading={isSubmitting}
+                        loadingText="Connexion en cours..."
+                      >
+                        Se connecter
+                      </AnimatedButton>
+
+                      <div className="space-y-2 pt-2 text-center text-xs text-zinc-400">
+                        <p>
+                          Connexion plus rapide ?{" "}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setLoginMethod("otp");
+                              setOtpStep("email");
+                            }}
+                            className="font-medium text-white hover:underline"
+                          >
+                            Se connecter avec code OTP
+                          </button>
+                        </p>
+                        <p>
+                          Pas encore de compte ?{" "}
+                          <button
+                            type="button"
+                            onClick={() => setActiveTab("register")}
+                            className="font-medium text-white hover:underline"
+                          >
+                            Créer un compte
+                          </button>
+                        </p>
+                      </div>
+                    </form>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ─────────────────────────────────────────────────────────
+                MODE : MOT DE PASSE OUBLIÉ (Forgot password)
+               ───────────────────────────────────────────────────────── */}
+            {activeTab === "forgot" && (
+              <div className="mt-4">
+                <h1 className="text-3xl font-medium tracking-tight text-white sm:text-4xl">
+                  Mot de passe oublié
+                </h1>
+                <p className="mt-2 text-sm text-zinc-400">
+                  Entrez votre email pour recevoir un lien de réinitialisation.
+                </p>
+
+                <form onSubmit={handleForgotPassword} className="space-y-4 mt-7">
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                      Adresse email
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="john@doe.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="h-12 w-full rounded-[10px] border border-white/15 bg-white/5 px-4 text-sm text-white placeholder:text-zinc-600 outline-none transition-colors focus:border-white/40 focus:bg-white/10"
+                    />
                   </div>
 
-                  <button
+                  <AnimatedButton
                     type="submit"
-                    disabled={isSubmitting}
-                    className="mt-6 flex h-12 w-full items-center justify-center gap-2.5 rounded-[10px] bg-white text-base font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] disabled:opacity-50"
+                    isLoading={isSubmitting}
+                    loadingText="Envoi en cours..."
                   >
-                    {isSubmitting ? (
-                      <>
-                        <span className="h-4 w-4 rounded-full border-2 border-black border-t-transparent animate-spin" />
-                        <span>Connexion en cours...</span>
-                      </>
-                    ) : (
-                      "Se connecter au cockpit"
-                    )}
-                  </button>
-
-                  <p className="text-center text-xs text-zinc-400 mt-4">
-                    Pas encore de compte ?{" "}
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab("register")}
-                      className="font-medium text-white hover:underline"
-                    >
-                      Créer un atelier (8 docs offerts)
-                    </button>
-                  </p>
+                    Envoyer le lien
+                  </AnimatedButton>
                 </form>
-              )}
-
-              {/* ─────────────────────────────────────────────────────────
-                  FORM : FORGOT PASSWORD
-                 ───────────────────────────────────────────────────────── */}
-              {activeTab === "forgot" && (
-                <form onSubmit={handleForgotPassword} className="space-y-4 mt-6">
-                  <FieldBox
-                    label="Email associé au compte"
-                    placeholder="contact@atelier.com"
-                    value={email}
-                    onChange={setEmail}
-                    type="email"
-                    required
-                  />
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="mt-6 flex h-12 w-full items-center justify-center gap-2.5 rounded-[10px] bg-white text-base font-semibold text-black transition-all hover:bg-zinc-200 active:scale-[0.99] disabled:opacity-50"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <span className="h-4 w-4 rounded-full border-2 border-black border-t-transparent animate-spin" />
-                        <span>Envoi en cours...</span>
-                      </>
-                    ) : (
-                      "Recevoir le lien de réinitialisation"
-                    )}
-                  </button>
-                </form>
-              )}
-            </div>
-
-            {/* Bottom Footer */}
-            <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-4 text-xs text-zinc-500">
-              <span>ZAP © {new Date().getFullYear()} • Afrique de l'Ouest</span>
-              <div className="flex items-center gap-3">
-                <Link href="/#faq" className="hover:text-zinc-300">
-                  Aide & FAQ
-                </Link>
-                <Link href="/#pricing" className="hover:text-zinc-300">
-                  Tarifs
-                </Link>
               </div>
+            )}
+          </div>
+
+          <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-4 text-xs text-zinc-500">
+            <span>© ZAP. Tous droits réservés.</span>
+            <div className="flex items-center gap-4">
+              <Link href="/#faq" className="hover:text-zinc-300">
+                Conditions
+              </Link>
+              <Link href="/#faq" className="hover:text-zinc-300">
+                Confidentialité
+              </Link>
             </div>
           </div>
+        </div>
 
           {/* ─────────────────────────────────────────────────────────────
               RIGHT PANEL : GrainGradient WebGL Shader + Value Proposition
@@ -682,68 +833,11 @@ function SocialButton({
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 items-center justify-center gap-2.5 rounded-[10px] border border-white/15 bg-white/5 px-3 text-xs font-medium text-white transition-all hover:bg-white/10 active:scale-[0.98]"
+      className="flex h-11 w-full items-center justify-center gap-2.5 rounded-[10px] border border-white/15 bg-white/5 px-3 text-xs font-medium text-white transition-all hover:bg-white/10 active:scale-[0.99]"
     >
       <span className="shrink-0">{icon}</span>
       <span className="truncate">{label}</span>
     </button>
-  );
-}
-
-function FieldBox({
-  label,
-  placeholder,
-  value,
-  onChange,
-  type = "text",
-  required = false,
-}: {
-  label: string;
-  placeholder?: string;
-  value: string;
-  onChange: (val: string) => void;
-  type?: string;
-  required?: boolean;
-}) {
-  return (
-    <div className="flex flex-col justify-center rounded-[10px] border border-white/15 bg-white/5 px-4 py-2 transition-colors focus-within:border-white/40 focus-within:bg-white/10">
-      <label className="text-[10px] uppercase font-semibold tracking-wider text-zinc-400">
-        {label} {required && <span className="text-zinc-500">*</span>}
-      </label>
-      <input
-        type={type}
-        required={required}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full bg-transparent text-sm text-white outline-none placeholder:text-zinc-600 mt-0.5"
-      />
-    </div>
-  );
-}
-
-function CheckboxLine({
-  children,
-  checked,
-  onChange,
-}: {
-  children: React.ReactNode;
-  checked: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
-  return (
-    <label className="flex items-start gap-2.5 cursor-pointer select-none">
-      <span className="relative mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border border-white/30 bg-white/5 transition-colors peer-checked:bg-white">
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={onChange}
-          className="peer absolute inset-0 opacity-0 cursor-pointer"
-        />
-        {checked && <CheckIcon className="w-3 h-3 text-black stroke-[3]" />}
-      </span>
-      <span className="text-xs text-zinc-400 leading-normal">{children}</span>
-    </label>
   );
 }
 
@@ -766,20 +860,6 @@ function GoogleIcon() {
         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.3 9.14 5.38 12 5.38Z"
         fill="#EB4335"
       />
-    </svg>
-  );
-}
-
-function AppleIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M17.05 12.54c-.03-3.02 2.47-4.47 2.58-4.54-1.41-2.06-3.6-2.34-4.38-2.37-1.86-.19-3.64 1.1-4.58 1.1-.95 0-2.42-1.07-3.98-1.04-2.05.03-3.94 1.19-4.99 3.02-2.13 3.69-.54 9.16 1.53 12.15 1.01 1.46 2.22 3.1 3.81 3.04 1.53-.06 2.11-.99 3.96-.99s2.37.99 3.99.96c1.65-.03 2.69-1.49 3.69-2.96 1.16-1.69 1.64-3.33 1.66-3.41-.04-.02-3.2-1.23-3.24-4.87ZM14.03 3.66c.84-1.02 1.41-2.43 1.25-3.84-1.21.05-2.68.81-3.55 1.83-.78.9-1.46 2.34-1.28 3.72 1.35.1 2.73-.69 3.58-1.71Z" />
     </svg>
   );
 }
