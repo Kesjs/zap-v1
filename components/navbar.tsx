@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Bars2Icon, XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -69,10 +69,10 @@ function NavDropdown({
           type="button"
           style={navLinkStyle}
           className="flex items-center gap-1"
-          onMouseEnter={(e) => {
+          onMouseEnter={(e: MouseEvent<HTMLButtonElement>) => {
             (e.currentTarget as HTMLElement).style.color = "#B8502E";
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={(e: MouseEvent<HTMLButtonElement>) => {
             (e.currentTarget as HTMLElement).style.color = "rgba(28, 43, 69, 0.75)";
           }}
         >
@@ -96,10 +96,10 @@ function NavDropdown({
             <Link
               href={item.href}
               style={dropdownItemStyle}
-              onMouseEnter={(e) => {
+              onMouseEnter={(e: MouseEvent<HTMLAnchorElement>) => {
                 (e.currentTarget as HTMLElement).style.background = "rgba(28, 43, 69, 0.06)";
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={(e: MouseEvent<HTMLAnchorElement>) => {
                 (e.currentTarget as HTMLElement).style.background = "transparent";
               }}
             >
