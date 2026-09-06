@@ -1,0 +1,277 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ═══════════════════════════════════════════
+   ZAP — Design System
+   Palette Luxe & Premium Dark Mode
+═══════════════════════════════════════════ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* ZAP palette */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-warm: var(--accent-warm);
+
+  /* shadcn compat */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/* ZAP CSS Variables — always dark mode */
+:root {
+  --radius: 0.625rem;
+
+  /* Core palette */
+  --background: #000000;
+  --foreground: #F4F4F5;
+  --surface: #171717;
+  --border: #262626;
+  --accent: #D4AF37;
+  --accent-warm: #E2B170;
+
+  /* shadcn compat — mapped to ZAP palette */
+  --card: #171717;
+  --card-foreground: #F4F4F5;
+  --popover: #171717;
+  --popover-foreground: #F4F4F5;
+  --primary: #D4AF37;
+  --primary-foreground: #0C0C0C;
+  --secondary: #262626;
+  --secondary-foreground: #F4F4F5;
+  --muted: #1a1a1a;
+  --muted-foreground: rgba(244, 244, 245, 0.55);
+  --destructive: #ef4444;
+  --input: #262626;
+  --ring: #D4AF37;
+}
+
+/* Force dark everywhere — no light mode for ZAP */
+.dark,
+:root {
+  color-scheme: dark;
+}
+
+/* ─────────────────────────────────────────
+   Global base styles
+───────────────────────────────────────── */
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background: #000000;
+  }
+
+  body {
+    background: #000000;
+    color: #F4F4F5;
+    font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-dm-serif), "DM Serif Display", serif;
+    font-weight: 400;
+    line-height: 1.10;
+    letter-spacing: -0.025em;
+  }
+
+  h1 {
+    font-size: clamp(34px, 6vw, 46px);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ─────────────────────────────────────────
+   Keyframes
+───────────────────────────────────────── */
+
+/* Infinite marquee scroll */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+.animate-marquee-reverse {
+  animation: marquee-reverse 28s linear infinite;
+}
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-reverse {
+    animation: none;
+  }
+}
+
+@keyframes badge-beam {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.hero-cta {
+  transition: transform 0.15s ease;
+}
+.hero-cta:hover {
+  transform: translateY(-1px);
+}
+
+.below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2400px;
+}
+
+/* Crossfade for stamp before/after */
+@keyframes stamp-fade-before {
+  0%, 35%   { opacity: 1; }
+  45%, 90%  { opacity: 0; }
+  100%      { opacity: 1; }
+}
+@keyframes stamp-fade-after {
+  0%, 35%   { opacity: 0; }
+  45%, 90%  { opacity: 1; }
+  100%      { opacity: 0; }
+}
+
+.stamp-before {
+  animation: stamp-fade-before 7s ease-in-out infinite;
+}
+.stamp-after {
+  animation: stamp-fade-after 7s ease-in-out infinite;
+  position: absolute;
+  inset: 0;
+}
+
+/* BorderGlow hover effect */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+/* Subtle gold shimmer for badge */
+@keyframes border-beam {
+  0%   { offset-distance: 0%; }
+  100% { offset-distance: 100%; }
+}
+
+/* ─────────────────────────────────────────
+   Utility classes
+───────────────────────────────────────── */
+
+.font-serif-display {
+  font-family: var(--font-dm-serif), "DM Serif Display", serif;
+}
+.font-sans-ui {
+  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+}
+
+/* Gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #E2B170 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Ivoire text opacities */
+.text-ivory-70  { color: rgba(244, 244, 245, 0.70); }
+.text-ivory-60  { color: rgba(244, 244, 245, 0.60); }
+.text-ivory-50  { color: rgba(244, 244, 245, 0.50); }
+
+/* Surface card */
+.card-surface {
+  background: #171717;
+  border: 1px solid #262626;
+  border-radius: 16px;
+}
+
+/* Hairline top border accent */
+.border-top-accent {
+  border-top: 3px solid #D4AF37;
+}
+
+/* Edge mask for marquees */
+.mask-fade-edges {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+}
+
+/* Section spacing */
+.section-padding {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+/* Small-caps label (NOT all caps) */
+.label-tracked {
+  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 245, 0.45);
+}
