@@ -125,7 +125,7 @@ export default function OtpInput({
               isSuccess
                 ? {
                     scale: [1, 1.05, 1],
-                    borderColor: ["#C4634B", "#3F7D5C", "#3F7D5C"],
+                    borderColor: ["rgba(255,255,255,0.6)", "#4ADE80", "#4ADE80"],
                   }
                 : undefined
             }
@@ -136,8 +136,8 @@ export default function OtpInput({
             }}
             style={{
               position: "relative",
-              borderRadius: "6px",
-              background: "#FFFFFF",
+              borderRadius: "8px",
+              background: "rgba(255,255,255,0.04)",
             }}
           >
             <input
@@ -157,19 +157,19 @@ export default function OtpInput({
                 width: "44px",
                 height: "52px",
                 textAlign: "center",
-                fontFamily: "'Fraunces', serif",
+                fontFamily: "'DM Serif Display', serif",
                 fontSize: "22px",
-                color: isSuccess ? "#3F7D5C" : "#22314A",
+                color: isSuccess ? "#4ADE80" : "#FFFFFF",
                 background: "transparent",
                 border: hasError
-                  ? "1.5px solid #A23B3B"
+                  ? "1.5px solid #F87171"
                   : isFocused
-                  ? "1.5px solid #C4634B"
-                  : "1.5px solid rgba(34,49,74,0.22)",
-                borderRadius: "6px",
+                  ? "1.5px solid rgba(255,255,255,0.6)"
+                  : "1.5px solid rgba(255,255,255,0.15)",
+                borderRadius: "8px",
                 outline: "none",
                 transition: "border-color 0.2s",
-                caretColor: "#C4634B",
+                caretColor: "#FFFFFF",
               }}
               aria-label={`Chiffre ${index + 1}`}
             />
