@@ -80,7 +80,14 @@ function LoginPageInner() {
     } else if (queryTab === "login") {
       setActiveTab("login");
     }
-  }, [queryTab]);
+
+    const errorParam = searchParams.get("error");
+    if (errorParam === "auth-callback-failed") {
+      toast.error("Échec d'authentification", {
+        description: "La validation du compte avec Google ou le lien a échoué. Veuillez réessayer.",
+      });
+    }
+  }, [queryTab, searchParams]);
 
   // Countdown timer for OTP resend
   useEffect(() => {
@@ -116,8 +123,16 @@ function LoginPageInner() {
       });
 
       if (error) {
-        toast.error("Impossible d'envoyer le code", {
-          description: error.message,
+        const isRateLimit =
+          error.message.toLowerCase().includes("rate limit") ||
+          error.message.toLowerCase().includes("security purposes") ||
+          error.message.toLowerCase().includes("frequency");
+
+        toast.error(isRateLimit ? "Limite d'envoi Supabase atteinte" : "Impossible d'envoyer le code", {
+          description: isRateLimit
+            ? "Le quota gratuit d'emails de test Supabase est atteint. Configurez Resend SMTP dans Supabase pour des envois illimités."
+            : error.message,
+          duration: 6000,
         });
         setIsSubmitting(false);
         return;
@@ -248,8 +263,16 @@ function LoginPageInner() {
       });
 
       if (error) {
-        toast.error("Erreur d'inscription", {
-          description: error.message,
+        const isRateLimit =
+          error.message.toLowerCase().includes("rate limit") ||
+          error.message.toLowerCase().includes("security purposes") ||
+          error.message.toLowerCase().includes("frequency");
+
+        toast.error(isRateLimit ? "Limite d'envoi Supabase atteinte" : "Erreur d'inscription", {
+          description: isRateLimit
+            ? "Le quota gratuit d'emails de test Supabase est atteint. Configurez Resend SMTP dans Supabase pour des envois illimités."
+            : error.message,
+          duration: 6000,
         });
         setIsSubmitting(false);
         return;
@@ -307,11 +330,39 @@ function LoginPageInner() {
     }
   };
 
-  const handleSocialClick = (provider: string) => {
-    toast.info(`Connexion ${provider}`, {
-      description: `L'authentification directe avec ${provider} sera disponible lors de la prochaine mise à jour. Utilisez l'email professionnel.`,
-      duration: 3500,
-    });
+  const handleSocialClick = async (provider: string) => {
+    if (provider.toLowerCase() === "google") {
+      setIsSubmitting(true);
+      try {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+            queryParams: {
+              access_type: "offline",
+              prompt: "consent",
+            },
+          },
+        });
+
+        if (error) {
+          toast.error("Échec de connexion Google", {
+            description: error.message,
+          });
+          setIsSubmitting(false);
+        }
+      } catch (err: any) {
+        toast.error("Erreur de connexion", {
+          description: err?.message || "Impossible d'initialiser Google OAuth.",
+        });
+        setIsSubmitting(false);
+      }
+    } else {
+      toast.info(`Connexion ${provider}`, {
+        description: `L'authentification directe avec ${provider} sera disponible lors de la prochaine mise à jour.`,
+        duration: 3500,
+      });
+    }
   };
 
   return (
