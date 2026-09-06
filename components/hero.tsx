@@ -11,6 +11,7 @@ import {
 } from "@heroicons/react/24/solid";
 
 const Beams = dynamic(() => import("@/components/ui/Beams"), { ssr: false });
+import MotionButton from "@/components/ui/motion-button";
 
 const avatars = [
   {
@@ -269,27 +270,11 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col items-center gap-2.5">
-          <Link
+          <MotionButton
+            label="Créer un document"
             href="/login?tab=register"
-            className="hero-cta transition-transform hover:scale-105"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "#FFFFFF",
-              color: "#000000",
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "14px",
-              fontWeight: 600,
-              padding: "13px 26px",
-              borderRadius: "10px",
-              textDecoration: "none",
-              cursor: "pointer",
-              boxShadow: "0 0 35px rgba(255, 255, 255, 0.22)",
-            }}
-          >
-            Créer un document
-          </Link>
+            classes="w-64"
+          />
 
           <p
             style={{

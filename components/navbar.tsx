@@ -219,21 +219,34 @@ export default function NavBar() {
 
             <Link
               href="/login?tab=register"
-              className="hero-cta hidden md:flex items-center transition-transform hover:scale-105"
+              className="hidden md:flex items-center transition-all duration-200 hover:scale-[1.02]"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "13px",
-                fontWeight: 600,
-                color: "#000000",
-                background: "#FFFFFF",
-                padding: "8px 16px",
-                borderRadius: "8px",
+                fontWeight: 500,
+                color: "#FFFFFF",
+                background: "rgba(255, 255, 255, 0.08)",
+                border: "1px solid rgba(255, 255, 255, 0.18)",
+                padding: "7px 18px",
+                borderRadius: "9999px",
                 textDecoration: "none",
                 whiteSpace: "nowrap",
-                boxShadow: "0 0 20px rgba(255, 255, 255, 0.15)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)",
+              }}
+              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.15)";
+                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.32)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 255, 255, 0.12)";
+              }}
+              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.08)";
+                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.18)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)";
               }}
             >
-              Commencer gratuitement
+              Inscription
             </Link>
 
             {/* Mobile hamburger with 44px touch target */}
@@ -384,16 +397,17 @@ export default function NavBar() {
                 textAlign: "center",
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "14px",
-                fontWeight: 600,
-                color: "#000000",
-                background: "#FFFFFF",
+                fontWeight: 500,
+                color: "#FFFFFF",
+                background: "rgba(255, 255, 255, 0.08)",
+                border: "1px solid rgba(255, 255, 255, 0.18)",
                 padding: "11px 16px",
-                borderRadius: "8px",
+                borderRadius: "9999px",
                 textDecoration: "none",
-                boxShadow: "0 0 20px rgba(255, 255, 255, 0.15)",
+                boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25)",
               }}
             >
-              Commencer gratuitement
+              Inscription
             </Link>
           </div>
         </div>
