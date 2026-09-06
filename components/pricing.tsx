@@ -67,8 +67,16 @@ type Plan = {
   name: string;
   badge?: string;
   featured: boolean;
-  monthly: { amount: string; suffix: string };
-  annual: { amount: string; suffix: string };
+  monthly: {
+    amount: string;
+    period: string;
+    subtext?: string;
+  };
+  annual: {
+    amount: string;
+    period: string;
+    subtext?: string;
+  };
   description: string;
   ctaLabel: string;
   features: string[];
@@ -80,8 +88,8 @@ const plans: Plan[] = [
     key: "free",
     name: "Gratuit",
     featured: false,
-    monthly: { amount: "0 FCFA", suffix: "/pour toujours" },
-    annual: { amount: "0 FCFA", suffix: "/pour toujours" },
+    monthly: { amount: "0", period: "FCFA / toujours" },
+    annual: { amount: "0", period: "FCFA / toujours", subtext: "Sans engagement" },
     description: "8 documents pour démarrer et tester ZAP sans engagement.",
     ctaLabel: "Commencer gratuitement",
     features: [
@@ -97,8 +105,8 @@ const plans: Plan[] = [
     name: "Standard",
     badge: "Recommandé",
     featured: true,
-    monthly: { amount: "3 000 FCFA", suffix: "/mois" },
-    annual: { amount: "27 000 FCFA", suffix: "/an (~2 250 F/mois)" },
+    monthly: { amount: "5 000", period: "FCFA / mois" },
+    annual: { amount: "45 000", period: "FCFA / an", subtext: "Soit ~3 750 FCFA / mois (-25%)" },
     description: "40 documents par mois, pour formaliser votre activité au quotidien.",
     ctaLabel: "Choisir Standard",
     features: [
@@ -108,14 +116,14 @@ const plans: Plan[] = [
       "Catalogue d'atelier multi-métiers",
       "Duplication 1-clic d'un document existant",
     ],
-    footnote: "Besoin de plus ce mois-ci ? +20 documents pour 2 000 FCFA, sans changer de formule.",
+    footnote: "Besoin de plus ce mois-ci ? +20 documents pour 2 500 FCFA, sans changer de formule.",
   },
   {
     key: "pro",
     name: "Pro",
     featured: false,
-    monthly: { amount: "6 000 FCFA", suffix: "/mois" },
-    annual: { amount: "54 000 FCFA", suffix: "/an (~4 500 F/mois)" },
+    monthly: { amount: "20 000", period: "FCFA / mois" },
+    annual: { amount: "180 000", period: "FCFA / an", subtext: "Soit ~15 000 FCFA / mois (-25%)" },
     description: "Documents illimités, pour les ateliers et entreprises à fort volume.",
     ctaLabel: "Passer à Pro",
     features: [
@@ -123,7 +131,7 @@ const plans: Plan[] = [
       "Registre des ventes & trésorerie complète",
       "Catégories personnalisées illimitées",
       "Cachet & signature réutilisables à l'infini",
-      "Support prioritaire",
+      "Support prioritaire par WhatsApp",
     ],
   },
 ];
@@ -314,45 +322,64 @@ export default function Pricing() {
                     )}
                   </div>
 
-                  {/* Price */}
+                  {/* Price Block with clear FCFA typography and no overflow clipping */}
                   <div
                     style={{
-                      height: "48px",
+                      minHeight: "64px",
                       display: "flex",
-                      alignItems: "baseline",
-                      gap: "6px",
-                      marginBottom: "8px",
-                      overflow: "hidden",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      marginBottom: "10px",
                     }}
                   >
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={isAnnual ? `${plan.key}-annual` : `${plan.key}-monthly`}
-                        initial={{ opacity: 0, y: 12 }}
+                        initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -12 }}
-                        transition={{ duration: 0.25 }}
-                        className="flex items-baseline gap-2"
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.2 }}
                       >
-                        <span
+                        <div className="flex items-baseline gap-2 flex-wrap">
+                          <span
+                            style={{
+                              fontFamily: "'DM Sans', sans-serif",
+                              fontWeight: 700,
+                              fontSize: "36px",
+                              color: "#FFFFFF",
+                              lineHeight: 1,
+                              letterSpacing: "-0.03em",
+                              fontVariantNumeric: "tabular-nums",
+                            }}
+                          >
+                            {price.amount}
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: "'DM Sans', sans-serif",
+                              fontSize: "13.5px",
+                              fontWeight: 500,
+                              color: "#A1A1AA",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {price.period}
+                          </span>
+                        </div>
+
+                        {/* Annual savings subtext */}
+                        <div
                           style={{
-                            fontFamily: "'DM Serif Display', serif",
-                            fontSize: "36px",
-                            color: "#FFFFFF",
-                            lineHeight: 1,
-                          }}
-                        >
-                          {price.amount}
-                        </span>
-                        <span
-                          style={{
+                            minHeight: "18px",
+                            marginTop: "4px",
+                            fontSize: "11.5px",
                             fontFamily: "'DM Sans', sans-serif",
-                            fontSize: "13px",
-                            color: "rgba(255, 255, 255, 0.45)",
+                            color: isAnnual ? "#A1A1AA" : "transparent",
+                            transition: "color 0.2s ease",
                           }}
                         >
-                          {price.suffix}
-                        </span>
+                          {isAnnual && price.subtext ? price.subtext : "—"}
+                        </div>
                       </motion.div>
                     </AnimatePresence>
                   </div>
