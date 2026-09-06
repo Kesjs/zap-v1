@@ -45,31 +45,57 @@
   /* Core palette */
   --background: #000000;
   --foreground: #F4F4F5;
-  --surface: #171717;
+  --surface: #121215;
   --border: #262626;
-  --accent: #D4AF37;
-  --accent-warm: #E2B170;
+  --accent: #FFFFFF;
+  --accent-warm: #A1A1AA;
 
-  /* shadcn compat — mapped to ZAP palette */
-  --card: #171717;
+  /* shadcn compat — mapped to ZAP monochrome palette */
+  --card: #121215;
   --card-foreground: #F4F4F5;
-  --popover: #171717;
+  --popover: #121215;
   --popover-foreground: #F4F4F5;
-  --primary: #D4AF37;
-  --primary-foreground: #0C0C0C;
+  --primary: #FFFFFF;
+  --primary-foreground: #000000;
   --secondary: #262626;
   --secondary-foreground: #F4F4F5;
   --muted: #1a1a1a;
   --muted-foreground: rgba(244, 244, 245, 0.55);
   --destructive: #ef4444;
   --input: #262626;
-  --ring: #D4AF37;
+  --ring: #FFFFFF;
 }
 
-/* Force dark everywhere — no light mode for ZAP */
+/* Force dark everywhere */
 .dark,
 :root {
   color-scheme: dark;
+}
+
+/* Custom sleek monochrome scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 9999px;
+  border: 1px solid #09090b;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #27272a #09090b;
 }
 
 /* ─────────────────────────────────────────

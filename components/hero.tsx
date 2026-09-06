@@ -85,7 +85,7 @@ function HeroBadge() {
             borderRadius: "100px",
           }}
         >
-          NÉO
+          NEW
         </span>
         <span
           style={{
