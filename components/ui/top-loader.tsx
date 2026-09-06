@@ -58,8 +58,8 @@ export default function TopLoader() {
             }}
             style={{
               height: "100%",
-              background: "linear-gradient(90deg, #D4AF37 0%, #E2B170 100%)",
-              boxShadow: "0 0 10px rgba(212, 175, 55, 0.8), 0 0 5px #E2B170",
+              background: "linear-gradient(90deg, rgba(255,255,255,0.4) 0%, #FFFFFF 50%, rgba(255,255,255,0.8) 100%)",
+              boxShadow: "0 0 10px rgba(255, 255, 255, 0.8), 0 0 5px rgba(255, 255, 255, 0.5)",
             }}
           />
         )}

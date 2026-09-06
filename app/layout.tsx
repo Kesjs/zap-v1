@@ -3,6 +3,7 @@ import { DM_Sans, DM_Serif_Display } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/navbar";
 import TopLoader from "@/components/ui/top-loader";
+import { Toaster } from "sonner";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -56,6 +57,7 @@ export default function RootLayout({
     >
       <body className={`${dmSans.className} antialiased`} style={{ background: "#000000" }}>
         <TopLoader />
+        <Toaster position="top-right" richColors theme="dark" closeButton />
         <NavBar />
         {children}
       </body>
