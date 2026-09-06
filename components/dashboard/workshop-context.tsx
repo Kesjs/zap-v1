@@ -58,18 +58,33 @@ const DEFAULT_WORKSHOP: WorkshopProfile = {
   },
 };
 
+import { createClient } from "@/lib/supabase/client";
+
+const supabase = createClient();
+
 interface WorkshopContextType {
   workshop: WorkshopProfile;
-  updateWorkshop: (partial: Partial<WorkshopProfile>) => void;
+  updateWorkshop: (partial: Partial<WorkshopProfile>) => Promise<void>;
   getInitials: () => string;
+  isSyncing: boolean;
+  isCloudSynced: boolean;
+  lastSyncedAt: string | null;
+  userEmail: string | null;
+  userId: string | null;
+  refreshWorkshop: () => Promise<void>;
 }
 
 const WorkshopContext = createContext<WorkshopContextType | undefined>(undefined);
 
 export function WorkshopProvider({ children }: { children: React.ReactNode }) {
   const [workshop, setWorkshop] = useState<WorkshopProfile>(DEFAULT_WORKSHOP);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isCloudSynced, setIsCloudSynced] = useState(false);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  // Load from localStorage on mount
+  // 1. Hydrate from localStorage first (instant UI, zero flash)
   useEffect(() => {
     try {
       const saved = localStorage.getItem("zap:workshop_profile");
@@ -77,13 +92,60 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
         setWorkshop((prev) => ({ ...prev, ...JSON.parse(saved) }));
       }
     } catch {
-      // Ignore in private browsing
+      // Ignore
     }
   }, []);
 
-  const updateWorkshop = (partial: Partial<WorkshopProfile>) => {
+  // 2. Hydrate from Supabase Cloud Auth User Metadata
+  const refreshWorkshop = async () => {
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) {
+        setIsCloudSynced(false);
+        return;
+      }
+
+      setUserEmail(user.email ?? null);
+      setUserId(user.id);
+      setIsCloudSynced(true);
+
+      const cloudWorkshop = user.user_metadata?.workshop as Partial<WorkshopProfile> | undefined;
+      if (cloudWorkshop && typeof cloudWorkshop === "object") {
+        setWorkshop((prev) => {
+          const merged = { ...prev, ...cloudWorkshop };
+          try {
+            localStorage.setItem("zap:workshop_profile", JSON.stringify(merged));
+          } catch {
+            // Ignore
+          }
+          return merged;
+        });
+        setLastSyncedAt(new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }));
+      }
+    } catch (err) {
+      console.warn("Supabase fetch user warning:", err);
+    }
+  };
+
+  useEffect(() => {
+    refreshWorkshop();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(() => {
+      refreshWorkshop();
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  // 3. Update both locally and asynchronously in Supabase Cloud
+  const updateWorkshop = async (partial: Partial<WorkshopProfile>) => {
+    let nextProfile: WorkshopProfile = DEFAULT_WORKSHOP;
+
     setWorkshop((prev) => {
       const next = { ...prev, ...partial };
+      nextProfile = next;
       try {
         localStorage.setItem("zap:workshop_profile", JSON.stringify(next));
       } catch {
@@ -91,6 +153,37 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
       }
       return next;
     });
+
+    // Sync to Supabase Cloud if user is authenticated
+    try {
+      setIsSyncing(true);
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        setUserEmail(user.email ?? null);
+        setUserId(user.id);
+
+        const { error } = await supabase.auth.updateUser({
+          data: {
+            workshop: nextProfile,
+            updated_at: new Date().toISOString(),
+          },
+        });
+
+        if (!error) {
+          setIsCloudSynced(true);
+          setLastSyncedAt(
+            new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
+          );
+        } else {
+          console.warn("Supabase updateUser metadata error:", error.message);
+        }
+      }
+    } catch (err) {
+      console.warn("Supabase sync exception:", err);
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const getInitials = () => {
@@ -101,7 +194,19 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <WorkshopContext.Provider value={{ workshop, updateWorkshop, getInitials }}>
+    <WorkshopContext.Provider
+      value={{
+        workshop,
+        updateWorkshop,
+        getInitials,
+        isSyncing,
+        isCloudSynced,
+        lastSyncedAt,
+        userEmail,
+        userId,
+        refreshWorkshop,
+      }}
+    >
       {children}
     </WorkshopContext.Provider>
   );

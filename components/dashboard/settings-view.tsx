@@ -45,7 +45,16 @@ const COUNTRY_OPTIONS: SelectOption[] = [
 type SettingsTab = "identity" | "stamp" | "payments" | "security";
 
 export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
-  const { workshop, updateWorkshop, getInitials } = useWorkshop();
+  const {
+    workshop,
+    updateWorkshop,
+    getInitials,
+    isSyncing,
+    isCloudSynced,
+    lastSyncedAt,
+    userEmail: contextEmail,
+    userId,
+  } = useWorkshop();
   const [activeTab, setActiveTab] = useState<SettingsTab>("identity");
 
   // Local form state for Tab 1 (Identity)
@@ -269,9 +278,9 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
   // ─────────────────────────────────────────────────────────────────────────────
   // Save Actions
   // ─────────────────────────────────────────────────────────────────────────────
-  const handleSaveIdentity = (e: React.FormEvent) => {
+  const handleSaveIdentity = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateWorkshop({
+    await updateWorkshop({
       name,
       activity,
       city,
@@ -282,19 +291,23 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
       logoUrl,
     });
     toast.success("Informations de l'atelier enregistrées", {
-      description: "Toutes les modifications sont synchronisées.",
+      description: isCloudSynced
+        ? "Synchronisé avec succès sur votre compte Supabase Cloud."
+        : "Enregistré en local. Connectez-vous pour synchroniser sur le Cloud.",
     });
   };
 
-  const handleSavePayments = (e: React.FormEvent) => {
+  const handleSavePayments = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateWorkshop({
+    await updateWorkshop({
       mobileMoney1: mm1,
       mobileMoney2: mm2,
       bankInfo,
     });
     toast.success("Moyens de paiement enregistrés", {
-      description: "Les coordonnées d'acompte sont à jour.",
+      description: isCloudSynced
+        ? "Coordonnées de paiement synchronisées sur Supabase Cloud."
+        : "Enregistré en local. Connectez-vous pour synchroniser sur le Cloud.",
     });
   };
 
@@ -362,15 +375,44 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
   return (
     <div className="space-y-6">
       {/* ──────────────────────────────────────────────────────────────────────────
-          PAGE HEADER
+          PAGE HEADER WITH SUPABASE SYNC STATUS
       ────────────────────────────────────────────────────────────────────────── */}
-      <div className="border-b border-white/10 pb-5">
-        <h1 className="text-2xl font-semibold tracking-tight text-white">
-          Paramètres de l&apos;Atelier
-        </h1>
-        <p className="mt-1 text-sm text-zinc-400">
-          Gérez l&apos;identité de votre entreprise, vos coordonnées de paiement et vos accès.
-        </p>
+      <div className="border-b border-white/10 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-white">
+            Paramètres de l&apos;Atelier
+          </h1>
+          <p className="mt-1 text-sm text-zinc-400">
+            Gérez l&apos;identité de votre entreprise, vos coordonnées de paiement et vos accès.
+          </p>
+        </div>
+
+        {/* Supabase Cloud Live Status */}
+        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.03] self-start sm:self-auto">
+          <div
+            className={`w-2 h-2 rounded-full shrink-0 ${
+              isSyncing
+                ? "bg-amber-400 animate-pulse"
+                : isCloudSynced
+                ? "bg-emerald-400"
+                : "bg-zinc-500"
+            }`}
+          />
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+            <span className="text-xs font-medium text-white">
+              {isSyncing
+                ? "Synchronisation..."
+                : isCloudSynced
+                ? "Supabase Cloud actif"
+                : "Mode local"}
+            </span>
+            {lastSyncedAt && isCloudSynced && (
+              <span className="text-[10px] text-zinc-400 font-mono">
+                · synchro à {lastSyncedAt}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* ──────────────────────────────────────────────────────────────────────────
@@ -975,18 +1017,26 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
               </div>
 
               {/* Email information */}
-              <div className="p-4 rounded-xl border border-white/10 bg-white/[0.02] flex items-center justify-between">
+              <div className="p-4 rounded-xl border border-white/10 bg-white/[0.02] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-zinc-300">
+                  <label className="block text-xs font-medium text-zinc-400">
                     Adresse email du compte
                   </label>
-                  <p className="text-sm font-mono text-white mt-1">
-                    {userEmail || "Connecté via session locale"}
+                  <p className="text-sm font-mono text-white mt-0.5">
+                    {userEmail || contextEmail || "Session locale active"}
                   </p>
+                  {userId && (
+                    <p className="text-[10px] text-zinc-500 font-mono mt-0.5">
+                      ID Cloud : {userId}
+                    </p>
+                  )}
                 </div>
-                <span className="text-[10px] font-mono text-emerald-400 px-2.5 py-1 rounded-full bg-emerald-950/40 border border-emerald-800/40">
-                  Actif
-                </span>
+                <div className="flex items-center gap-2 self-start sm:self-auto">
+                  <span className="text-[10px] font-mono text-emerald-400 px-2.5 py-1 rounded-full bg-emerald-950/40 border border-emerald-800/40 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    Supabase Cloud
+                  </span>
+                </div>
               </div>
 
               {/* Change Password Form */}
