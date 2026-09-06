@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type MouseEvent } from "react";
+import { useState, useEffect, type MouseEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Bars2Icon, XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { usePathname } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 const navLinkStyle: React.CSSProperties = {
   fontFamily: "'DM Sans', sans-serif",
@@ -110,9 +111,28 @@ function NavDropdown({
 export default function NavBar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Hide landing navbar on dashboard and login pages
-  if (pathname?.startsWith("/dashboard") || pathname?.startsWith("/login")) {
+  useEffect(() => {
+    const supabase = createClient();
+
+    supabase.auth.getUser().then(({ data }) => {
+      setIsLoggedIn(!!data.user);
+    });
+
+    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session?.user);
+    });
+
+    return () => subscription.subscription.unsubscribe();
+  }, []);
+
+  // Hide landing navbar on dashboard, login and reset-password pages
+  if (
+    pathname?.startsWith("/dashboard") ||
+    pathname?.startsWith("/login") ||
+    pathname?.startsWith("/reset-password")
+  ) {
     return null;
   }
 
@@ -132,51 +152,37 @@ export default function NavBar() {
         }}
       >
         <div className="flex items-center justify-between h-full px-4 sm:px-5">
-          {/* Logo & Marque — Logo agrandi, net, accompagné du mot-symbole ZAP dans une typographie distinctive */}
+          {/* Logo — grand, lisible, sur fond blanc aux coins arrondis, sans texte redondant */}
           <Link
             href="/"
-            className="flex items-center flex-shrink-0 transition-opacity hover:opacity-90 group"
+            className="flex items-center flex-shrink-0 transition-opacity hover:opacity-90"
             style={{ textDecoration: "none" }}
             aria-label="Accueil ZAP"
           >
             <div
               style={{
                 position: "relative",
-                width: "38px",
-                height: "38px",
-                background: "#000000",
+                width: "40px",
+                height: "40px",
+                background: "#FFFFFF",
                 borderRadius: "10px",
                 overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
-                flexShrink: 0,
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.35)",
+                padding: "2px",
               }}
             >
               <Image
-                src="/log.jpg"
+                src="/logo.png"
                 alt="ZAP"
                 width={38}
                 height={38}
                 priority
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                style={{ objectFit: "contain", width: "100%", height: "100%" }}
               />
             </div>
-
-            <span
-              style={{
-                fontFamily: "var(--font-space-grotesk), sans-serif",
-                fontSize: "19px",
-                fontWeight: 700,
-                letterSpacing: "-0.03em",
-                color: "#FFFFFF",
-                marginLeft: "10px",
-                lineHeight: 1,
-              }}
-            >
-              ZAP
-            </span>
           </Link>
 
           {/* Center nav — desktop */}
@@ -210,58 +216,92 @@ export default function NavBar() {
 
           {/* Right: Connexion + CTA + mobile hamburger */}
           <div className="flex items-center gap-3">
-            <Link
-              href="/login?tab=login"
-              className="hidden md:flex items-center transition-colors"
-              style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: "13.5px",
-                fontWeight: 400,
-                color: "#A1A1AA",
-                textDecoration: "none",
-                whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                (e.target as HTMLElement).style.color = "#FFFFFF";
-              }}
-              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                (e.target as HTMLElement).style.color = "#A1A1AA";
-              }}
-            >
-              Connexion
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                href="/dashboard"
+                className="hidden md:flex items-center transition-all duration-200 hover:scale-[1.02]"
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "#FFFFFF",
+                  background: "rgba(255, 255, 255, 0.08)",
+                  border: "1px solid rgba(255, 255, 255, 0.18)",
+                  padding: "7px 18px",
+                  borderRadius: "9999px",
+                  textDecoration: "none",
+                  whiteSpace: "nowrap",
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
+                  boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)",
+                }}
+                onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                  (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.15)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.32)";
+                }}
+                onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                  (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.08)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.18)";
+                }}
+              >
+                Tableau de bord
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login?tab=login"
+                  className="hidden md:flex items-center transition-colors"
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "13.5px",
+                    fontWeight: 400,
+                    color: "#A1A1AA",
+                    textDecoration: "none",
+                    whiteSpace: "nowrap",
+                  }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    (e.target as HTMLElement).style.color = "#FFFFFF";
+                  }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    (e.target as HTMLElement).style.color = "#A1A1AA";
+                  }}
+                >
+                  Connexion
+                </Link>
 
-            <Link
-              href="/login?tab=register"
-              className="hidden md:flex items-center transition-all duration-200 hover:scale-[1.02]"
-              style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: "13px",
-                fontWeight: 500,
-                color: "#FFFFFF",
-                background: "rgba(255, 255, 255, 0.08)",
-                border: "1px solid rgba(255, 255, 255, 0.18)",
-                padding: "7px 18px",
-                borderRadius: "9999px",
-                textDecoration: "none",
-                whiteSpace: "nowrap",
-                backdropFilter: "blur(8px)",
-                WebkitBackdropFilter: "blur(8px)",
-                boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)",
-              }}
-              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.15)";
-                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.32)";
-                (e.currentTarget as HTMLElement).style.boxShadow = "inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 255, 255, 0.12)";
-              }}
-              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.08)";
-                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.18)";
-                (e.currentTarget as HTMLElement).style.boxShadow = "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)";
-              }}
-            >
-              Inscription
-            </Link>
+                <Link
+                  href="/login?tab=register"
+                  className="hidden md:flex items-center transition-all duration-200 hover:scale-[1.02]"
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "13px",
+                    fontWeight: 500,
+                    color: "#FFFFFF",
+                    background: "rgba(255, 255, 255, 0.08)",
+                    border: "1px solid rgba(255, 255, 255, 0.18)",
+                    padding: "7px 18px",
+                    borderRadius: "9999px",
+                    textDecoration: "none",
+                    whiteSpace: "nowrap",
+                    backdropFilter: "blur(8px)",
+                    WebkitBackdropFilter: "blur(8px)",
+                    boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)",
+                  }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.15)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.32)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 255, 255, 0.12)";
+                  }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.08)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.18)";
+                    (e.currentTarget as HTMLElement).style.boxShadow = "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)";
+                  }}
+                >
+                  Inscription
+                </Link>
+              </>
+            )}
 
             {/* Mobile hamburger with 44px touch target */}
             <button
@@ -385,45 +425,72 @@ export default function NavBar() {
             Tarifs
           </Link>
 
-          <Link
-            href="/login?tab=login"
-            onClick={() => setIsMenuOpen(false)}
-            style={{
-              display: "block",
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "15px",
-              fontWeight: 500,
-              color: "#A1A1AA",
-              padding: "10px 14px",
-              borderRadius: "8px",
-              textDecoration: "none",
-            }}
-          >
-            Connexion
-          </Link>
+          {isLoggedIn ? (
+            <div style={{ padding: "8px 6px 4px" }}>
+              <Link
+                href="/dashboard"
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  display: "block",
+                  textAlign: "center",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  color: "#FFFFFF",
+                  background: "rgba(255, 255, 255, 0.08)",
+                  border: "1px solid rgba(255, 255, 255, 0.18)",
+                  padding: "11px 16px",
+                  borderRadius: "9999px",
+                  textDecoration: "none",
+                  boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25)",
+                }}
+              >
+                Tableau de bord
+              </Link>
+            </div>
+          ) : (
+            <>
+              <Link
+                href="/login?tab=login"
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  display: "block",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "15px",
+                  fontWeight: 500,
+                  color: "#A1A1AA",
+                  padding: "10px 14px",
+                  borderRadius: "8px",
+                  textDecoration: "none",
+                }}
+              >
+                Connexion
+              </Link>
 
-          <div style={{ padding: "8px 6px 4px" }}>
-            <Link
-              href="/login?tab=register"
-              onClick={() => setIsMenuOpen(false)}
-              style={{
-                display: "block",
-                textAlign: "center",
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: "14px",
-                fontWeight: 500,
-                color: "#FFFFFF",
-                background: "rgba(255, 255, 255, 0.08)",
-                border: "1px solid rgba(255, 255, 255, 0.18)",
-                padding: "11px 16px",
-                borderRadius: "9999px",
-                textDecoration: "none",
-                boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25)",
-              }}
-            >
-              Inscription
-            </Link>
-          </div>
+              <div style={{ padding: "8px 6px 4px" }}>
+                <Link
+                  href="/login?tab=register"
+                  onClick={() => setIsMenuOpen(false)}
+                  style={{
+                    display: "block",
+                    textAlign: "center",
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    color: "#FFFFFF",
+                    background: "rgba(255, 255, 255, 0.08)",
+                    border: "1px solid rgba(255, 255, 255, 0.18)",
+                    padding: "11px 16px",
+                    borderRadius: "9999px",
+                    textDecoration: "none",
+                    boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25)",
+                  }}
+                >
+                  Inscription
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       )}
     </header>

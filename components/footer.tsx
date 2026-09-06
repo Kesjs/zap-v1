@@ -199,7 +199,7 @@ export default function Footer() {
 
           <div className="flex items-center gap-4">
             <Link
-              href="#"
+              href="/mentions-legales"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "12px",
@@ -211,7 +211,19 @@ export default function Footer() {
             </Link>
             <span style={{ color: "rgba(255, 255, 255, 0.2)" }}>·</span>
             <Link
-              href="#"
+              href="/cgu"
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: "12px",
+                color: "rgba(255, 255, 255, 0.45)",
+                textDecoration: "none",
+              }}
+            >
+              CGU
+            </Link>
+            <span style={{ color: "rgba(255, 255, 255, 0.2)" }}>·</span>
+            <Link
+              href="/confidentialite"
               style={{
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "12px",
