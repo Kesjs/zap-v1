@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 
@@ -31,15 +31,15 @@ export function FloatingPaths({ position }: { position: number }) {
             d={path.d}
             stroke="currentColor"
             strokeWidth={path.width}
-            strokeOpacity={0.04 + path.id * 0.012}
-            initial={{ pathLength: 0.3, opacity: 0.5 }}
+            strokeOpacity={0.03 + path.id * 0.006}
+            initial={{ pathLength: 0.3, opacity: 0.18 }}
             animate={{
               pathLength: 1,
-              opacity: [0.25, 0.65, 0.25],
               pathOffset: [0, 1, 0],
             }}
             transition={{
-              duration: 20 + (path.id % 12) * 1.2,
+              duration: 34 + (path.id % 12) * 2.4,
+              delay: -(path.id * 1.7),
               repeat: Number.POSITIVE_INFINITY,
               ease: "linear",
             }}
