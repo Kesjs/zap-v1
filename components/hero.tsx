@@ -14,8 +14,8 @@ function HeroBadge() {
           display: "inline-flex",
           alignItems: "center",
           gap: "8px",
-          background: "#171717",
-          border: "1px solid #262626",
+          background: "rgba(255, 255, 255, 0.65)",
+          border: "1px solid rgba(28, 43, 69, 0.14)",
           borderRadius: "100px",
           height: "28px",
           padding: "4px 12px 4px 4px",
@@ -31,7 +31,7 @@ function HeroBadge() {
             borderRadius: "100px",
             padding: "1px",
             background:
-              "linear-gradient(90deg, transparent 0%, #D4AF37 45%, #E2B170 55%, transparent 100%)",
+              "linear-gradient(90deg, transparent 0%, #B8502E 45%, #C89B3C 55%, transparent 100%)",
             WebkitMask:
               "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
             WebkitMaskComposite: "xor",
@@ -42,8 +42,8 @@ function HeroBadge() {
         />
         <span
           style={{
-            background: "#D4AF37",
-            color: "#0C0C0C",
+            background: "#1C2B45",
+            color: "#F4EEE2",
             fontSize: "10px",
             fontWeight: 600,
             fontFamily: "'DM Sans', sans-serif",
@@ -59,7 +59,7 @@ function HeroBadge() {
             fontFamily: "'DM Sans', sans-serif",
             fontSize: "12.5px",
             fontWeight: 400,
-            color: "rgba(244, 244, 245, 0.70)",
+            color: "rgba(28, 43, 69, 0.65)",
           }}
         >
           En finir avec les carnets papier
@@ -81,7 +81,8 @@ export default function Hero() {
         overflow: "hidden",
         paddingTop: "100px",
         paddingBottom: "80px",
-        background: "#000000",
+        background:
+          "radial-gradient(ellipse 900px 500px at 50% -10%, #FBF7EE 0%, #F4EEE2 60%)",
       }}
     >
       <div
@@ -106,7 +107,7 @@ export default function Hero() {
             fontSize: "clamp(34px, 6vw, 46px)",
             lineHeight: 1.1,
             letterSpacing: "-0.025em",
-            color: "#F4F4F5",
+            color: "#1C2B45",
             marginBottom: "20px",
           }}
         >
@@ -115,7 +116,7 @@ export default function Hero() {
           <span
             style={{
               fontStyle: "italic",
-              background: "linear-gradient(135deg, #D4AF37 0%, #E2B170 100%)",
+              background: "linear-gradient(135deg, #B8502E 0%, #C89B3C 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -130,7 +131,7 @@ export default function Hero() {
             fontFamily: "'DM Sans', sans-serif",
             fontSize: "15.5px",
             fontWeight: 300,
-            color: "rgba(244, 244, 245, 0.70)",
+            color: "rgba(28, 43, 69, 0.65)",
             maxWidth: "440px",
             lineHeight: 1.65,
             marginBottom: "32px",
@@ -147,8 +148,8 @@ export default function Hero() {
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "linear-gradient(135deg, #D4AF37 0%, #E2B170 100%)",
-              color: "#0C0C0C",
+              background: "linear-gradient(135deg, #1C2B45 0%, #2C3A5C 100%)",
+              color: "#F4EEE2",
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "14px",
               fontWeight: 500,
@@ -165,7 +166,7 @@ export default function Hero() {
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "12px",
-              color: "rgba(244, 244, 245, 0.60)",
+              color: "rgba(28, 43, 69, 0.55)",
             }}
           >
             8 documents gratuits pour commencer

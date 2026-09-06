@@ -27,13 +27,13 @@ export default function HeroVisualDocument() {
       transition={{ duration: 0.7, ease: "easeOut" }}
       className="w-full max-w-[620px] mx-auto mt-14"
       style={{
-        background: "#FAFAF8",
+        background: "#FFFFFF",
         border: "1px solid #E5E1D8",
-        borderTop: "3px solid #D4AF37",
+        borderTop: "3px solid #1C2B45",
         borderRadius: "16px",
         padding: "28px 24px",
         textAlign: "left",
-        boxShadow: "0 24px 60px rgba(0,0,0,0.4)",
+        boxShadow: "0 24px 60px rgba(28,43,69,0.16)",
       }}
     >
       <motion.div
