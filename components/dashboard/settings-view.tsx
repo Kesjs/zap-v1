@@ -234,7 +234,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
     ctx.lineWidth = 2.5;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.strokeStyle = "#FFFFFF";
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim() || "#FFFFFF";
   };
 
   const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
@@ -377,18 +377,18 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
       {/* ──────────────────────────────────────────────────────────────────────────
           PAGE HEADER WITH SUPABASE SYNC STATUS
       ────────────────────────────────────────────────────────────────────────── */}
-      <div className="border-b border-white/10 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="border-b border-[var(--border)] pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">
+          <h1 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
             Paramètres de l&apos;Atelier
           </h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <p className="mt-1 text-sm text-[var(--text-secondary)]">
             Gérez l&apos;identité de votre entreprise, vos coordonnées de paiement et vos accès.
           </p>
         </div>
 
         {/* Supabase Cloud Live Status */}
-        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.03] self-start sm:self-auto">
+        <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--accent-tint)] self-start sm:self-auto">
           <div
             className={`w-2 h-2 rounded-full shrink-0 ${
               isSyncing
@@ -399,7 +399,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
             }`}
           />
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-            <span className="text-xs font-medium text-white">
+            <span className="text-xs font-medium text-[var(--foreground)]">
               {isSyncing
                 ? "Synchronisation..."
                 : isCloudSynced
@@ -407,7 +407,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                 : "Mode local"}
             </span>
             {lastSyncedAt && isCloudSynced && (
-              <span className="text-[10px] text-zinc-400 font-mono">
+              <span className="text-[10px] text-[var(--text-secondary)] font-mono">
                 · synchro à {lastSyncedAt}
               </span>
             )}
@@ -433,14 +433,14 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all text-left whitespace-nowrap lg:whitespace-normal cursor-pointer ${
                     isActive
-                      ? "bg-white/10 text-white border border-white/15 shadow-sm"
-                      : "text-zinc-400 hover:text-white hover:bg-white/[0.04] border border-transparent"
+                      ? "bg-[var(--accent-tint-strong)] text-[var(--foreground)] border border-[var(--border)] shadow-sm"
+                      : "text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] border border-transparent"
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-zinc-400"}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-[var(--foreground)]" : "text-[var(--text-secondary)]"}`} />
                   <div className="flex flex-col">
                     <span className="font-medium">{tab.label}</span>
-                    <span className="hidden lg:block text-[10px] text-zinc-500 font-normal">
+                    <span className="hidden lg:block text-[10px] text-[var(--text-secondary)] font-normal">
                       {tab.description}
                     </span>
                   </div>
@@ -456,25 +456,25 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
               TAB 1 : IDENTITÉ & LOGO DE L'ATELIER
           ────────────────────────────────────────────────────────────────────────── */}
           {activeTab === "identity" && (
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8 space-y-8">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--accent-tint)] p-6 sm:p-8 space-y-8">
               <div>
-                <h2 className="text-lg font-medium text-white">
+                <h2 className="text-lg font-medium text-[var(--foreground)]">
                   Identité de votre Atelier
                 </h2>
-                <p className="mt-1 text-xs text-zinc-400">
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">
                   Ces informations s&apos;affichent automatiquement en en-tête de vos devis et factures.
                 </p>
               </div>
 
               {/* Logo Upload Dropzone (inspiré de 21st.dev) */}
               <div className="space-y-3">
-                <label className="block text-xs font-medium text-zinc-300">
+                <label className="block text-xs font-medium text-[var(--text-secondary)]">
                   Logo officiel de l&apos;atelier
                 </label>
 
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
                   {/* Current Logo / Initials Preview */}
-                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white/15 bg-black flex items-center justify-center shadow-md">
+                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--background)] flex items-center justify-center shadow-md">
                     {logoUrl ? (
                       <Image
                         src={logoUrl}
@@ -484,7 +484,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                         unoptimized
                       />
                     ) : (
-                      <span className="text-xl font-bold tracking-wider text-white">
+                      <span className="text-xl font-bold tracking-wider text-[var(--foreground)]">
                         {getInitials()}
                       </span>
                     )}
@@ -506,8 +506,8 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                     onClick={() => logoInputRef.current?.click()}
                     className={`flex-1 w-full flex flex-col items-center justify-center rounded-xl border border-dashed p-5 text-center cursor-pointer transition-all ${
                       isDraggingLogo
-                        ? "border-white bg-white/10"
-                        : "border-white/20 hover:border-white/40 bg-white/[0.02] hover:bg-white/[0.04]"
+                        ? "border-[var(--foreground)] bg-[var(--accent-tint-strong)]"
+                        : "border-[var(--border)] hover:border-[var(--accent)] bg-[var(--accent-tint)] hover:bg-[var(--accent-tint)]"
                     }`}
                   >
                     <input
@@ -517,11 +517,11 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                       onChange={handleLogoChange}
                       className="hidden"
                     />
-                    <ArrowUpTrayIcon className="w-5 h-5 text-zinc-400 mb-2" />
-                    <p className="text-xs font-medium text-white">
+                    <ArrowUpTrayIcon className="w-5 h-5 text-[var(--text-secondary)] mb-2" />
+                    <p className="text-xs font-medium text-[var(--foreground)]">
                       Cliquez pour téléverser ou glissez votre logo ici
                     </p>
-                    <p className="mt-1 text-[11px] text-zinc-500">
+                    <p className="mt-1 text-[11px] text-[var(--text-secondary)]">
                       PNG, JPG, WEBP ou SVG jusqu&apos;à 5 Mo
                     </p>
                   </div>
@@ -541,13 +541,13 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                 </div>
               </div>
 
-              <div className="h-[1px] bg-white/10" />
+              <div className="h-[1px] bg-[var(--accent-tint-strong)]" />
 
               {/* Form Fields */}
               <form onSubmit={handleSaveIdentity} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                       Nom de l&apos;atelier / Raison sociale
                     </label>
                     <input
@@ -556,12 +556,12 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="ex: Atelier Bois & Métal"
-                      className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-white/40 transition-colors"
+                      className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)]/40 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                       Corps de métier / Activité
                     </label>
                     <input
@@ -569,14 +569,14 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                       value={activity}
                       onChange={(e) => setActivity(e.target.value)}
                       placeholder="ex: Menuiserie, Couture, BTP..."
-                      className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-white/40 transition-colors"
+                      className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)]/40 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                       Ville & Quartier
                     </label>
                     <input
@@ -584,12 +584,12 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
                       placeholder="ex: Cotonou, Akpakpa"
-                      className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-white/40 transition-colors"
+                      className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)]/40 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                       Pays d&apos;activité
                     </label>
                     <CustomSelect
@@ -602,7 +602,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                  <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                     Numéro WhatsApp officiel (relié aux partages 1-clic)
                   </label>
                   <input
@@ -610,40 +610,40 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                     value={whatsapp}
                     onChange={(e) => setWhatsapp(e.target.value)}
                     placeholder="+229 97 00 11 22"
-                    className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-white/40 transition-colors"
+                    className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)]/40 transition-colors"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="text-xs font-medium text-zinc-300">
+                      <label className="text-xs font-medium text-[var(--text-secondary)]">
                         Numéro IFU / NINEA
                       </label>
-                      <span className="text-[10px] text-zinc-500 font-mono">Optionnel</span>
+                      <span className="text-[10px] text-[var(--text-secondary)] font-mono">Optionnel</span>
                     </div>
                     <input
                       type="text"
                       value={ifu}
                       onChange={(e) => setIfu(e.target.value)}
                       placeholder="ex: 3202112456789"
-                      className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-white/40 transition-colors font-mono"
+                      className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)]/40 transition-colors font-mono"
                     />
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="text-xs font-medium text-zinc-300">
+                      <label className="text-xs font-medium text-[var(--text-secondary)]">
                         Registre de commerce (RCCM)
                       </label>
-                      <span className="text-[10px] text-zinc-500 font-mono">Optionnel</span>
+                      <span className="text-[10px] text-[var(--text-secondary)] font-mono">Optionnel</span>
                     </div>
                     <input
                       type="text"
                       value={rccm}
                       onChange={(e) => setRccm(e.target.value)}
                       placeholder="ex: RB/COT/21 B 12345"
-                      className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-white/40 transition-colors font-mono"
+                      className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)]/40 transition-colors font-mono"
                     />
                   </div>
                 </div>
@@ -651,7 +651,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                 <div className="flex justify-end pt-4">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-colors cursor-pointer shadow-sm active:scale-98"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--foreground)] text-[var(--background)] font-semibold text-xs hover:opacity-90 transition-colors cursor-pointer shadow-sm active:scale-98"
                   >
                     <CheckIcon className="w-4 h-4" />
                     <span>Enregistrer l&apos;identité</span>
@@ -665,19 +665,19 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
               TAB 2 : TAMPON & SIGNATURE OFFICIELLE
           ────────────────────────────────────────────────────────────────────────── */}
           {activeTab === "stamp" && (
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8 space-y-8">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--accent-tint)] p-6 sm:p-8 space-y-8">
               <div>
-                <h2 className="text-lg font-medium text-white">
+                <h2 className="text-lg font-medium text-[var(--foreground)]">
                   Tampon encreur & Signature officielle
                 </h2>
-                <p className="mt-1 text-xs text-zinc-400">
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">
                   Prenez en photo votre vrai tampon sur papier blanc : l&apos;algorithme retire automatiquement le blanc pour ne garder que l&apos;empreinte nette.
                 </p>
               </div>
 
               {/* Stamp Upload Area */}
               <div className="space-y-4">
-                <label className="block text-xs font-medium text-zinc-300">
+                <label className="block text-xs font-medium text-[var(--text-secondary)]">
                   Empreinte du tampon encreur physique
                 </label>
 
@@ -685,7 +685,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                   {/* Dropzone */}
                   <div
                     onClick={() => stampInputRef.current?.click()}
-                    className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/20 hover:border-white/40 bg-white/[0.02] hover:bg-white/[0.04] p-6 text-center cursor-pointer transition-all"
+                    className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[var(--border)] hover:border-[var(--accent)] bg-[var(--accent-tint)] hover:bg-[var(--accent-tint)] p-6 text-center cursor-pointer transition-all"
                   >
                     <input
                       ref={stampInputRef}
@@ -694,17 +694,17 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                       onChange={handleStampUpload}
                       className="hidden"
                     />
-                    <PhotoIcon className="w-6 h-6 text-zinc-400 mb-2" />
-                    <p className="text-xs font-medium text-white">
+                    <PhotoIcon className="w-6 h-6 text-[var(--text-secondary)] mb-2" />
+                    <p className="text-xs font-medium text-[var(--foreground)]">
                       {isProcessingStamp ? "Détourage automatique..." : "Prendre en photo ou importer"}
                     </p>
-                    <p className="mt-1 text-[11px] text-zinc-500">
+                    <p className="mt-1 text-[11px] text-[var(--text-secondary)]">
                       Photo de votre tampon sur feuille blanche
                     </p>
                   </div>
 
                   {/* Stamp Result Preview */}
-                  <div className="flex flex-col items-center justify-center rounded-xl border border-white/10 bg-black/60 p-4 min-h-[140px] relative">
+                  <div className="flex flex-col items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 min-h-[140px] relative">
                     {stampUrl ? (
                       <div className="relative w-28 h-28">
                         <Image
@@ -716,7 +716,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                         />
                       </div>
                     ) : (
-                      <span className="text-xs text-zinc-500 text-center">
+                      <span className="text-xs text-[var(--text-secondary)] text-center">
                         Aucun tampon enregistré pour l&apos;instant
                       </span>
                     )}
@@ -729,7 +729,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           updateWorkshop({ stampUrl: null });
                           toast.info("Tampon retiré");
                         }}
-                        className="absolute top-2 right-2 p-1.5 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-white/10 transition-colors"
+                        className="absolute top-2 right-2 p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-red-400 hover:bg-[var(--accent-tint)] transition-colors"
                         title="Retirer le tampon"
                       >
                         <TrashIcon className="w-3.5 h-3.5" />
@@ -739,16 +739,16 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                 </div>
               </div>
 
-              <div className="h-[1px] bg-white/10" />
+              <div className="h-[1px] bg-[var(--accent-tint-strong)]" />
 
               {/* Signature Pad */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <label className="block text-xs font-medium text-zinc-300">
+                    <label className="block text-xs font-medium text-[var(--text-secondary)]">
                       Signature tactile
                     </label>
-                    <p className="text-[11px] text-zinc-500 mt-0.5">
+                    <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">
                       Signez au doigt ou à la souris dans le cadre ci-dessous.
                     </p>
                   </div>
@@ -757,7 +757,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                     <button
                       type="button"
                       onClick={clearSignature}
-                      className="inline-flex items-center gap-1 text-xs text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1 text-xs text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors cursor-pointer"
                     >
                       <ArrowPathIcon className="w-3.5 h-3.5" />
                       <span>Effacer</span>
@@ -765,7 +765,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                   )}
                 </div>
 
-                <div className="relative rounded-xl border border-white/15 bg-black overflow-hidden">
+                <div className="relative rounded-xl border border-[var(--border)] bg-[var(--background)] overflow-hidden">
                   <canvas
                     ref={signatureCanvasRef}
                     width={500}
@@ -780,7 +780,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                     className="w-full h-40 cursor-crosshair touch-none"
                   />
                   {!hasSignature && (
-                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs text-zinc-600">
+                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs text-[var(--text-secondary)]">
                       Tracez votre signature ici
                     </div>
                   )}
@@ -794,7 +794,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                         description: "Votre cachet officiel et signature sont prêts pour vos documents.",
                       });
                     }}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-colors cursor-pointer shadow-sm active:scale-98"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--foreground)] text-[var(--background)] font-semibold text-xs hover:opacity-90 transition-colors cursor-pointer shadow-sm active:scale-98"
                   >
                     <CheckIcon className="w-4 h-4" />
                     <span>Enregistrer le cachet & la signature</span>
@@ -808,26 +808,26 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
               TAB 3 : PAIEMENTS MOBILE MONEY & BANQUE
           ────────────────────────────────────────────────────────────────────────── */}
           {activeTab === "payments" && (
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8 space-y-8">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--accent-tint)] p-6 sm:p-8 space-y-8">
               <div>
-                <h2 className="text-lg font-medium text-white">
+                <h2 className="text-lg font-medium text-[var(--foreground)]">
                   Coordonnées de Paiement & Acomptes
                 </h2>
-                <p className="mt-1 text-xs text-zinc-400">
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">
                   Ces informations sont imprimées au bas de chaque facture pour que vos clients puissent vous transférer leur acompte sans erreur.
                 </p>
               </div>
 
               <form onSubmit={handleSavePayments} className="space-y-6">
                 {/* Mobile Money 1 */}
-                <div className="space-y-3 p-4 rounded-xl border border-white/10 bg-white/[0.02]">
-                  <span className="text-xs font-medium text-white uppercase tracking-wider">
+                <div className="space-y-3 p-4 rounded-xl border border-[var(--border)] bg-[var(--accent-tint)]">
+                  <span className="text-xs font-medium text-[var(--foreground)] uppercase tracking-wider">
                     Compte Mobile Money n°1 (Principal)
                   </span>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-zinc-400 mb-1">
+                      <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
                         Opérateur
                       </label>
                       <CustomSelect
@@ -843,7 +843,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-zinc-400 mb-1">
+                      <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
                         Numéro de réception
                       </label>
                       <input
@@ -853,12 +853,12 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setMm1((prev) => ({ ...prev, number: e.target.value }))
                         }
                         placeholder="+229 97 00 11 22"
-                        className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white outline-none focus:border-white/40 font-mono"
+                        className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]/40 font-mono"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-zinc-400 mb-1">
+                      <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
                         Nom du titulaire
                       </label>
                       <input
@@ -868,24 +868,24 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setMm1((prev) => ({ ...prev, name: e.target.value }))
                         }
                         placeholder="ex: Koffi Mensah"
-                        className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white outline-none focus:border-white/40"
+                        className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]/40"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Mobile Money 2 */}
-                <div className="space-y-3 p-4 rounded-xl border border-white/10 bg-white/[0.02]">
+                <div className="space-y-3 p-4 rounded-xl border border-[var(--border)] bg-[var(--accent-tint)]">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-white uppercase tracking-wider">
+                    <span className="text-xs font-medium text-[var(--foreground)] uppercase tracking-wider">
                       Compte Mobile Money n°2 (Optionnel)
                     </span>
-                    <span className="text-[10px] text-zinc-500 font-mono">Second réseau</span>
+                    <span className="text-[10px] text-[var(--text-secondary)] font-mono">Second réseau</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-zinc-400 mb-1">
+                      <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
                         Opérateur
                       </label>
                       <CustomSelect
@@ -901,7 +901,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-zinc-400 mb-1">
+                      <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
                         Numéro
                       </label>
                       <input
@@ -911,12 +911,12 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setMm2((prev) => ({ ...prev, number: e.target.value }))
                         }
                         placeholder="+229 95 33 44 55"
-                        className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white outline-none focus:border-white/40 font-mono"
+                        className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]/40 font-mono"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-zinc-400 mb-1">
+                      <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
                         Titulaire
                       </label>
                       <input
@@ -926,24 +926,24 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setMm2((prev) => ({ ...prev, name: e.target.value }))
                         }
                         placeholder="ex: Atelier Koffi"
-                        className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white outline-none focus:border-white/40"
+                        className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]/40"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Coordonnées bancaires */}
-                <div className="space-y-3 p-4 rounded-xl border border-white/10 bg-white/[0.02]">
+                <div className="space-y-3 p-4 rounded-xl border border-[var(--border)] bg-[var(--accent-tint)]">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-white uppercase tracking-wider">
+                    <span className="text-xs font-medium text-[var(--foreground)] uppercase tracking-wider">
                       Compte Bancaire d&apos;Atelier (Optionnel)
                     </span>
-                    <span className="text-[10px] text-zinc-500 font-mono">Pour clients entreprises</span>
+                    <span className="text-[10px] text-[var(--text-secondary)] font-mono">Pour clients entreprises</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-zinc-400 mb-1">
+                      <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
                         Nom de la Banque
                       </label>
                       <input
@@ -953,12 +953,12 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setBankInfo((prev) => ({ ...prev, bank: e.target.value }))
                         }
                         placeholder="ex: BOA Bénin, Ecobank..."
-                        className="h-10 w-full rounded-xl border border-white/15 bg-black px-3 text-xs text-white outline-none focus:border-white/40"
+                        className="h-10 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-xs text-[var(--foreground)] outline-none focus:border-[var(--accent)]/40"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-zinc-400 mb-1">
+                      <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
                         Numéro RIB
                       </label>
                       <input
@@ -968,12 +968,12 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setBankInfo((prev) => ({ ...prev, rib: e.target.value }))
                         }
                         placeholder="BJ061 01001 002345678901 23"
-                        className="h-10 w-full rounded-xl border border-white/15 bg-black px-3 text-xs text-white outline-none focus:border-white/40 font-mono text-[11px]"
+                        className="h-10 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-xs text-[var(--foreground)] outline-none focus:border-[var(--accent)]/40 font-mono text-[11px]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-zinc-400 mb-1">
+                      <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
                         IBAN
                       </label>
                       <input
@@ -983,7 +983,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                           setBankInfo((prev) => ({ ...prev, iban: e.target.value }))
                         }
                         placeholder="BJ66 BJ06 1010 0100..."
-                        className="h-10 w-full rounded-xl border border-white/15 bg-black px-3 text-xs text-white outline-none focus:border-white/40 font-mono text-[11px]"
+                        className="h-10 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-xs text-[var(--foreground)] outline-none focus:border-[var(--accent)]/40 font-mono text-[11px]"
                       />
                     </div>
                   </div>
@@ -992,7 +992,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                 <div className="flex justify-end pt-2">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-colors cursor-pointer shadow-sm"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--foreground)] text-[var(--background)] font-semibold text-xs hover:opacity-90 transition-colors cursor-pointer shadow-sm"
                   >
                     <CheckIcon className="w-4 h-4" />
                     <span>Enregistrer les coordonnées de paiement</span>
@@ -1006,27 +1006,27 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
               TAB 4 : COMPTE & SÉCURITÉ
           ────────────────────────────────────────────────────────────────────────── */}
           {activeTab === "security" && (
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8 space-y-8">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--accent-tint)] p-6 sm:p-8 space-y-8">
               <div>
-                <h2 className="text-lg font-medium text-white">
+                <h2 className="text-lg font-medium text-[var(--foreground)]">
                   Compte & Sécurité des accès
                 </h2>
-                <p className="mt-1 text-xs text-zinc-400">
+                <p className="mt-1 text-xs text-[var(--text-secondary)]">
                   Gérez vos identifiants de connexion et sécurisez l&apos;accès à votre espace.
                 </p>
               </div>
 
               {/* Email information */}
-              <div className="p-4 rounded-xl border border-white/10 bg-white/[0.02] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--accent-tint)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-zinc-400">
+                  <label className="block text-xs font-medium text-[var(--text-secondary)]">
                     Adresse email du compte
                   </label>
-                  <p className="text-sm font-mono text-white mt-0.5">
+                  <p className="text-sm font-mono text-[var(--foreground)] mt-0.5">
                     {userEmail || contextEmail || "Session locale active"}
                   </p>
                   {userId && (
-                    <p className="text-[10px] text-zinc-500 font-mono mt-0.5">
+                    <p className="text-[10px] text-[var(--text-secondary)] font-mono mt-0.5">
                       ID Cloud : {userId}
                     </p>
                   )}
@@ -1041,14 +1041,14 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
 
               {/* Change Password Form */}
               <form onSubmit={handleChangePassword} className="space-y-4 pt-2">
-                <div className="flex items-center gap-2 text-xs font-medium text-white">
-                  <LockClosedIcon className="w-4 h-4 text-zinc-400" />
+                <div className="flex items-center gap-2 text-xs font-medium text-[var(--foreground)]">
+                  <LockClosedIcon className="w-4 h-4 text-[var(--text-secondary)]" />
                   <span>Modifier le mot de passe</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-zinc-400 mb-1.5">
+                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                       Nouveau mot de passe
                     </label>
                     <input
@@ -1057,12 +1057,12 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-white/40 transition-colors"
+                      className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)]/40 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-zinc-400 mb-1.5">
+                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                       Confirmer le mot de passe
                     </label>
                     <input
@@ -1071,7 +1071,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="h-11 w-full rounded-xl border border-white/15 bg-black px-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-white/40 transition-colors"
+                      className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 text-sm text-[var(--foreground)] placeholder:text-[var(--text-secondary)] outline-none focus:border-[var(--accent)]/40 transition-colors"
                     />
                   </div>
                 </div>
@@ -1080,7 +1080,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                   <button
                     type="submit"
                     disabled={isChangingPassword}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-zinc-200 transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--foreground)] text-[var(--background)] font-semibold text-xs hover:opacity-90 transition-colors cursor-pointer shadow-sm disabled:opacity-50"
                   >
                     <CheckIcon className="w-4 h-4" />
                     <span>{isChangingPassword ? "Mise à jour..." : "Mettre à jour le mot de passe"}</span>
@@ -1088,15 +1088,15 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                 </div>
               </form>
 
-              <div className="h-[1px] bg-white/10" />
+              <div className="h-[1px] bg-[var(--accent-tint-strong)]" />
 
               {/* Logout Session */}
               <div className="flex items-center justify-between p-4 rounded-xl border border-red-900/30 bg-red-950/10">
                 <div>
-                  <p className="text-xs font-medium text-white">
+                  <p className="text-xs font-medium text-[var(--foreground)]">
                     Fermer la session de travail
                   </p>
-                  <p className="text-[11px] text-zinc-400 mt-0.5">
+                  <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">
                     Déconnecte cet appareil de votre cockpit d&apos;atelier.
                   </p>
                 </div>
@@ -1104,7 +1104,7 @@ export default function SettingsView({ onLogout }: { onLogout?: () => void }) {
                 <button
                   type="button"
                   onClick={onLogout}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium text-red-400 hover:text-white hover:bg-red-900/40 border border-red-900/40 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium text-red-400 hover:text-[var(--foreground)] hover:bg-red-900/40 border border-red-900/40 transition-colors cursor-pointer"
                 >
                   <ArrowLeftOnRectangleIcon className="w-4 h-4" />
                   <span>Se déconnecter</span>

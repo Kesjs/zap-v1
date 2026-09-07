@@ -355,10 +355,10 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
       {/* Header & Main Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-[var(--foreground)] tracking-tight">
             Modèles de prix &amp; Catalogue d&apos;atelier
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-400 mt-1">
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1">
             Gérez les prestations et tarifs de votre atelier pour facturer rapidement.
           </p>
         </div>
@@ -368,7 +368,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
             <button
               type="button"
               onClick={() => setIsClearConfirmOpen(true)}
-              className="h-10 px-3.5 rounded-xl border border-white/10 hover:border-red-500/40 text-xs text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
+              className="h-10 px-3.5 rounded-xl border border-[var(--border)] hover:border-red-500/40 text-xs text-[var(--text-secondary)] hover:text-red-400 transition-colors cursor-pointer"
               title="Supprimer tous les modèles existants pour partir d'une liste 100% vierge"
             >
               Vider les exemples
@@ -377,7 +377,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
             <button
               type="button"
               onClick={handleRestoreDefaults}
-              className="flex items-center gap-1.5 h-10 px-3.5 rounded-xl border border-white/10 hover:border-white/25 text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 h-10 px-3.5 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] text-xs text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors cursor-pointer"
               title="Restaurer les modèles types d'atelier"
             >
               <ArrowPathIcon className="w-3.5 h-3.5" />
@@ -388,7 +388,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
           <button
             type="button"
             onClick={handleOpenAdd}
-            className="flex items-center justify-center gap-2 h-10 px-4 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs sm:text-sm font-semibold transition-colors cursor-pointer shrink-0 shadow-sm"
+            className="flex items-center justify-center gap-2 h-10 px-4 rounded-xl bg-[var(--foreground)] hover:opacity-90 text-[var(--background)] text-xs sm:text-sm font-semibold transition-colors cursor-pointer shrink-0 shadow-sm"
           >
             <PlusIcon className="w-4 h-4 stroke-[2.5]" />
             <span>Ajouter une prestation</span>
@@ -397,7 +397,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
       </div>
 
       {/* Category Pills and Search Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#0C0C0C] border border-white/10 rounded-2xl p-2.5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-2.5">
         {/* Category Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
           <button
@@ -405,8 +405,8 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
             onClick={() => setActiveCategory("Tous")}
             className={`h-8 px-3 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
               activeCategory === "Tous"
-                ? "bg-white text-black font-semibold shadow-sm"
-                : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
+                ? "bg-[var(--foreground)] text-[var(--background)] font-semibold shadow-sm"
+                : "text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)]"
             }`}
           >
             Tous ({items.length})
@@ -419,8 +419,8 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               onClick={() => setActiveCategory(cat)}
               className={`h-8 px-3 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                 activeCategory === cat
-                  ? "bg-white text-black font-semibold shadow-sm"
-                  : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
+                  ? "bg-[var(--foreground)] text-[var(--background)] font-semibold shadow-sm"
+                  : "text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)]"
               }`}
             >
               {cat}
@@ -430,26 +430,26 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
         {/* Search Input */}
         <div className="relative min-w-[220px]">
-          <MagnifyingGlassIcon className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <MagnifyingGlassIcon className="w-4 h-4 text-[var(--text-secondary)] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Rechercher une prestation..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-9 pl-9 pr-3 bg-black border border-white/15 rounded-xl text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+            className="w-full h-9 pl-9 pr-3 bg-[var(--background)] border border-[var(--border)] rounded-xl text-xs text-[var(--foreground)] placeholder-zinc-500 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
           />
         </div>
       </div>
 
       {/* Catalog Table Card */}
-      <div className="bg-[#0C0C0C] border border-white/10 rounded-2xl overflow-hidden">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden">
         {filteredItems.length === 0 ? (
           <div className="p-12 text-center">
-            <TagIcon className="w-10 h-10 text-zinc-500 mx-auto mb-3" />
-            <p className="text-base text-white font-medium">
+            <TagIcon className="w-10 h-10 text-[var(--text-secondary)] mx-auto mb-3" />
+            <p className="text-base text-[var(--foreground)] font-medium">
               {items.length === 0 ? "Votre catalogue est actuellement vierge" : "Aucun modèle trouvé"}
             </p>
-            <p className="text-xs text-zinc-400 mt-1 mb-4">
+            <p className="text-xs text-[var(--text-secondary)] mt-1 mb-4">
               {items.length === 0
                 ? "Vous avez choisi de partir de zéro. Créez vos propres prestations selon votre activité."
                 : searchQuery
@@ -460,7 +460,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               <button
                 type="button"
                 onClick={handleOpenAdd}
-                className="h-9 px-4 rounded-xl bg-white text-black hover:bg-zinc-200 text-xs font-semibold cursor-pointer transition-colors shadow-sm"
+                className="h-9 px-4 rounded-xl bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 text-xs font-semibold cursor-pointer transition-colors shadow-sm"
               >
                 Ajouter ma première prestation
               </button>
@@ -468,7 +468,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                 <button
                   type="button"
                   onClick={handleRestoreDefaults}
-                  className="h-9 px-4 rounded-xl border border-white/15 text-zinc-300 hover:text-white text-xs cursor-pointer hover:bg-white/5 transition-colors"
+                  className="h-9 px-4 rounded-xl border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--foreground)] text-xs cursor-pointer hover:bg-[var(--accent-tint)] transition-colors"
                 >
                   Charger les modèles types
                 </button>
@@ -479,7 +479,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/10 text-[11px] font-mono uppercase text-zinc-400 bg-white/[0.02]">
+                <tr className="border-b border-[var(--border)] text-[11px] font-mono uppercase text-[var(--text-secondary)] bg-[var(--accent-tint)]">
                   <th className="py-3 px-4 font-medium">PRESTATION / ARTICLE</th>
                   <th className="py-3 px-4 font-medium">CORPS DE MÉTIER</th>
                   <th className="py-3 px-4 font-medium text-right">PRIX UNITAIRE</th>
@@ -488,12 +488,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               </thead>
               <tbody className="divide-y divide-white/5">
                 {filteredItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-white/[0.02] transition-colors">
+                  <tr key={item.id} className="hover:bg-[var(--accent-tint)] transition-colors">
                     {/* Item label & description */}
                     <td className="py-3.5 px-4">
-                      <p className="text-sm font-medium text-white">{item.label}</p>
+                      <p className="text-sm font-medium text-[var(--foreground)]">{item.label}</p>
                       {item.description && (
-                        <p className="text-xs text-zinc-400 mt-0.5 max-w-md line-clamp-1">
+                        <p className="text-xs text-[var(--text-secondary)] mt-0.5 max-w-md line-clamp-1">
                           {item.description}
                         </p>
                       )}
@@ -501,14 +501,14 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
                     {/* Category badge */}
                     <td className="py-3.5 px-4">
-                      <span className="inline-block py-0.5 px-2 rounded-md bg-white/[0.04] border border-white/10 text-[11px] text-zinc-300 font-mono">
+                      <span className="inline-block py-0.5 px-2 rounded-md bg-[var(--accent-tint)] border border-[var(--border)] text-[11px] text-[var(--text-secondary)] font-mono">
                         {item.category}
                       </span>
                     </td>
 
                     {/* Price in FCFA */}
                     <td className="py-3.5 px-4 text-right">
-                      <span className="text-sm font-semibold text-white font-mono tabular-nums">
+                      <span className="text-sm font-semibold text-[var(--foreground)] font-mono tabular-nums">
                         {item.price.toLocaleString("fr-FR")} FCFA
                       </span>
                     </td>
@@ -520,7 +520,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                           <button
                             type="button"
                             onClick={() => onSelectItemForInvoice(item)}
-                            className="flex items-center gap-1 h-8 px-2.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 hover:text-white border border-white/10 text-xs font-medium transition-colors cursor-pointer"
+                            className="flex items-center gap-1 h-8 px-2.5 rounded-lg bg-[var(--accent-tint-strong)] hover:bg-[var(--accent-tint-strong)] text-[var(--foreground)] hover:text-[var(--foreground)] border border-[var(--border)] text-xs font-medium transition-colors cursor-pointer"
                             title="Créer une facture avec cet article"
                           >
                             <DocumentTextIcon className="w-3.5 h-3.5" />
@@ -531,7 +531,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                         <button
                           type="button"
                           onClick={() => handleOpenEdit(item)}
-                          className="h-8 w-8 rounded-lg border border-white/10 hover:border-white/25 text-zinc-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
+                          className="h-8 w-8 rounded-lg border border-[var(--border)] hover:border-[var(--accent)] text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors cursor-pointer flex items-center justify-center"
                           title="Modifier l'article"
                         >
                           <PencilSquareIcon className="w-4 h-4" />
@@ -540,7 +540,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                         <button
                           type="button"
                           onClick={() => setDeleteItem(item)}
-                          className="h-8 w-8 rounded-lg border border-white/10 hover:border-red-900/50 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer flex items-center justify-center"
+                          className="h-8 w-8 rounded-lg border border-[var(--border)] hover:border-red-900/50 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer flex items-center justify-center"
                           title="Supprimer l'article"
                         >
                           <TrashIcon className="w-4 h-4" />
@@ -557,10 +557,10 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
       {/* Add / Edit Modal Dialog */}
       {(isAddOpen || editItem) && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#0C0C0C] border border-white/15 rounded-2xl p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 className="text-base font-semibold text-white tracking-tight">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+              <h3 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
                 {editItem ? "Modifier la prestation" : "Nouveau modèle de prestation"}
               </h3>
               <button
@@ -569,7 +569,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   setIsAddOpen(false);
                   setEditItem(null);
                 }}
-                className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1 rounded-lg text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors"
               >
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -577,13 +577,13 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
             <div className="space-y-3.5">
               <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                   Catégorie / Corps de métier *
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors cursor-pointer"
+                  className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors cursor-pointer"
                 >
                   {categories.map((c) => (
                     <option key={c} value={c}>
@@ -594,7 +594,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                   Ou créer une nouvelle catégorie personnalisée
                 </label>
                 <input
@@ -602,12 +602,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   placeholder="Ex: Soudure & Ferronnerie / Sérigraphie"
                   value={customCategoryInput}
                   onChange={(e) => setCustomCategoryInput(e.target.value)}
-                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--foreground)] placeholder-zinc-600 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                   Libellé de la prestation *
                 </label>
                 <input
@@ -615,12 +615,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   placeholder="Ex: Confection costume 3 pièces Bazin"
                   value={label}
                   onChange={(e) => setLabel(e.target.value)}
-                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] placeholder-zinc-600 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                   Description complémentaire (facultatif)
                 </label>
                 <input
@@ -628,12 +628,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   placeholder="Détails des matériaux ou prestations incluses..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] placeholder-zinc-600 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                   Prix unitaire (FCFA) *
                 </label>
                 <input
@@ -642,26 +642,26 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   step={500}
                   value={price}
                   onChange={(e) => setPrice(Number(e.target.value) || 0)}
-                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white font-mono tabular-nums focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] font-mono tabular-nums focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                 />
               </div>
             </div>
 
-            <div className="flex gap-3 pt-2 border-t border-white/10">
+            <div className="flex gap-3 pt-2 border-t border-[var(--border)]">
               <button
                 type="button"
                 onClick={() => {
                   setIsAddOpen(false);
                   setEditItem(null);
                 }}
-                className="flex-1 h-11 rounded-xl border border-white/15 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex-1 h-11 rounded-xl border border-[var(--border)] text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleSaveItem}
-                className="flex-1 h-11 rounded-xl bg-white text-black text-xs font-semibold hover:bg-zinc-200 transition-colors cursor-pointer shadow-sm"
+                className="flex-1 h-11 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-xs font-semibold hover:opacity-90 transition-colors cursor-pointer shadow-sm"
               >
                 Enregistrer
               </button>
@@ -672,12 +672,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
       {/* Clear All Confirmation Modal */}
       {isClearConfirmOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-[#0C0C0C] border border-white/15 rounded-2xl p-6 space-y-3 shadow-2xl">
-            <h3 className="text-base font-semibold text-white tracking-tight">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 space-y-3 shadow-2xl">
+            <h3 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
               Vider tous les modèles ?
             </h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
               Cette action supprimera tous les exemples pour vous permettre de créer vos propres modèles sur une base 100% vierge. Vous pourrez les restaurer à tout moment.
             </p>
 
@@ -685,14 +685,14 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               <button
                 type="button"
                 onClick={() => setIsClearConfirmOpen(false)}
-                className="flex-1 h-10 rounded-xl border border-white/15 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex-1 h-10 rounded-xl border border-[var(--border)] text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleClearAllExamples}
-                className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition-colors cursor-pointer"
+                className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-500 text-[var(--foreground)] text-xs font-semibold transition-colors cursor-pointer"
               >
                 Vider et partir de zéro
               </button>
@@ -703,27 +703,27 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
       {/* Delete Single Item Modal */}
       {deleteItem && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-[#0C0C0C] border border-white/15 rounded-2xl p-6 space-y-3 shadow-2xl">
-            <h3 className="text-base font-semibold text-white tracking-tight">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 space-y-3 shadow-2xl">
+            <h3 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
               Supprimer cette prestation ?
             </h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">
-              Voulez-vous supprimer <strong className="text-white">{deleteItem.label}</strong> du catalogue ? Cette action est irréversible.
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+              Voulez-vous supprimer <strong className="text-[var(--foreground)]">{deleteItem.label}</strong> du catalogue ? Cette action est irréversible.
             </p>
 
             <div className="flex gap-3 pt-3">
               <button
                 type="button"
                 onClick={() => setDeleteItem(null)}
-                className="flex-1 h-10 rounded-xl border border-white/15 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex-1 h-10 rounded-xl border border-[var(--border)] text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
-                className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition-colors cursor-pointer"
+                className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-500 text-[var(--foreground)] text-xs font-semibold transition-colors cursor-pointer"
               >
                 Supprimer
               </button>

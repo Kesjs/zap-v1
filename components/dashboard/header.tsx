@@ -122,7 +122,7 @@ export default function DashboardHeader({
             type="button"
             onClick={() => onViewChange("new")}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shadow-sm"
-            style={{ background: "var(--accent)", color: "var(--primary-foreground)" }}
+            style={{ background: "var(--accent)", color: "#FFFFFF" }}
           >
             <PlusIcon className="w-4 h-4" />
             <span className="hidden sm:inline">Créer un document</span>

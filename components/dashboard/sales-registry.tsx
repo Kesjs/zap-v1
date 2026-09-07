@@ -242,9 +242,9 @@ export default function SalesRegistry({
     switch (type) {
       case "devis":
         return {
-          bg: "rgba(255, 255, 255, 0.06)",
-          border: "rgba(255, 255, 255, 0.15)",
-          text: "#E4E4E7",
+          bg: "var(--surface)",
+          border: "var(--border)",
+          text: "var(--foreground)",
           label: "DEVIS",
         };
       case "facture":
@@ -268,20 +268,21 @@ export default function SalesRegistry({
     <div className="flex flex-col gap-6">
       {/* Onboarding Checklist Guide */}
       {showChecklist && (
-        <div className="bg-[#0C0C0C] border border-white/10 rounded-2xl p-5 sm:p-6 relative">
+        <div className="rounded-2xl border p-5 sm:p-6 relative" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h3 className="text-sm sm:text-base font-semibold text-white tracking-tight">
+              <h3 className="text-sm sm:text-base font-semibold tracking-tight" style={{ color: "var(--foreground)" }}>
                 Démarrage rapide — Configurez votre atelier
               </h3>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
                 3 étapes indispensables pour professionnaliser vos devis et factures.
               </p>
             </div>
             <button
               type="button"
               onClick={() => setShowChecklist(false)}
-              className="p-1 rounded-lg text-zinc-500 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+              className="p-1 rounded-lg transition-colors cursor-pointer hover:bg-[var(--accent-tint)]"
+              style={{ color: "var(--text-secondary)" }}
               title="Fermer le guide"
             >
               <XMarkIcon className="w-4 h-4" />
@@ -297,21 +298,23 @@ export default function SalesRegistry({
               <div
                 key={step.title}
                 onClick={step.action}
-                className={`p-3.5 rounded-xl border transition-all ${
-                  step.action ? "cursor-pointer hover:border-white/25 hover:bg-white/[0.02]" : "cursor-default"
-                } ${step.done ? "bg-white/[0.02] border-white/10" : "bg-black border-white/10"}`}
+                className={`p-3.5 rounded-xl border transition-all ${step.action ? "cursor-pointer hover:opacity-80" : "cursor-default"}`}
+                style={{
+                  background: step.done ? "var(--accent-tint)" : "var(--background)",
+                  borderColor: "var(--border)",
+                }}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className={`text-xs font-semibold ${step.done ? "text-emerald-400" : "text-white"}`}>
+                  <span className="text-xs font-semibold" style={{ color: step.done ? "#34D399" : "var(--foreground)" }}>
                     {step.title}
                   </span>
                   {step.done ? (
                     <CheckBadgeIcon className="w-4 h-4 text-emerald-400" />
                   ) : (
-                    <span className="w-2 h-2 rounded-full bg-zinc-600" />
+                    <span className="w-2 h-2 rounded-full" style={{ background: "var(--text-secondary)" }} />
                   )}
                 </div>
-                <span className="text-[11px] text-zinc-400 block">{step.desc}</span>
+                <span className="text-[11px] block" style={{ color: "var(--text-secondary)" }}>{step.desc}</span>
               </div>
             ))}
           </div>
@@ -321,34 +324,34 @@ export default function SalesRegistry({
       {/* Metrics Banner */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Card 1: Total Encaissé */}
-        <div className="bg-[#0C0C0C] border border-white/10 hover:border-white/20 transition-all rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+        <div className="rounded-2xl border p-5 sm:p-6 flex flex-col justify-between transition-all hover:opacity-90" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
                 <BanknotesIcon className="w-4 h-4" />
               </div>
-              <span className="text-xs font-medium text-zinc-400">Total encaissé</span>
+              <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>Total encaissé</span>
             </div>
             <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               En caisse
             </span>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-semibold text-white font-mono tabular-nums tracking-tight">
+            <span className="text-2xl sm:text-3xl font-semibold font-mono tabular-nums tracking-tight" style={{ color: "var(--foreground)" }}>
               {totalEncaissed.toLocaleString("fr-FR")}
             </span>
-            <span className="text-xs font-medium text-zinc-500 font-mono">FCFA</span>
+            <span className="text-xs font-medium font-mono" style={{ color: "var(--text-secondary)" }}>FCFA</span>
           </div>
         </div>
 
         {/* Card 2: En attente */}
-        <div className="bg-[#0C0C0C] border border-white/10 hover:border-white/20 transition-all rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+        <div className="rounded-2xl border p-5 sm:p-6 flex flex-col justify-between transition-all hover:opacity-90" style={{ background: "var(--surface)", borderColor: "var(--border)" }}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                 <ClockIcon className="w-4 h-4" />
               </div>
-              <span className="text-xs font-medium text-zinc-400">Factures en attente</span>
+              <span className="text-xs font-medium" style={{ color: "var(--text-secondary)" }}>Factures en attente</span>
             </div>
             {totalPending > 0 && (
               <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -357,10 +360,10 @@ export default function SalesRegistry({
             )}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-semibold text-white font-mono tabular-nums tracking-tight">
+            <span className="text-2xl sm:text-3xl font-semibold font-mono tabular-nums tracking-tight" style={{ color: "var(--foreground)" }}>
               {totalPending.toLocaleString("fr-FR")}
             </span>
-            <span className="text-xs font-medium text-zinc-500 font-mono">FCFA</span>
+            <span className="text-xs font-medium font-mono" style={{ color: "var(--text-secondary)" }}>FCFA</span>
           </div>
         </div>
       </div>
@@ -369,14 +372,14 @@ export default function SalesRegistry({
       {mode === "home" ? (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
           <div>
-            <h2 className="text-sm font-semibold text-white">Documents récents</h2>
-            <p className="text-xs text-zinc-400">Les 3 dernières pièces enregistrées dans l&apos;atelier</p>
+            <h2 className="text-sm font-semibold text-[var(--foreground)]">Documents récents</h2>
+            <p className="text-xs text-[var(--text-secondary)]">Les 3 dernières pièces enregistrées dans l&apos;atelier</p>
           </div>
           <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={onCreateDocument}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white text-black text-xs font-semibold hover:bg-zinc-200 transition-colors cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-xs font-semibold hover:opacity-90 transition-colors cursor-pointer"
             >
               <PlusIcon className="w-4 h-4" />
               <span>Créer</span>
@@ -385,7 +388,7 @@ export default function SalesRegistry({
               <button
                 type="button"
                 onClick={onNavigateDocuments}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/10 border border-white/10 text-xs font-medium text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--surface)] hover:bg-[var(--accent-tint)] border border-[var(--border)] text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors cursor-pointer"
               >
                 <span>Voir tous les documents ({documents.length})</span>
                 <span>→</span>
@@ -410,7 +413,7 @@ export default function SalesRegistry({
                 transform: "translateY(-50%)",
                 width: "18px",
                 height: "18px",
-                color: "#A1A1AA",
+                color: "var(--text-secondary)",
               }}
             />
             <input
@@ -421,8 +424,8 @@ export default function SalesRegistry({
               style={{
                 width: "100%",
                 height: "44px",
-                background: "#171717",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
                 borderRadius: "12px",
                 padding: "0 14px 0 42px",
                 color: "#F4F4F5",
@@ -448,11 +451,11 @@ export default function SalesRegistry({
               onClick={onCreateDocument}
               style={{
                 height: "44px",
-                background: "#FFFFFF",
+                background: "var(--foreground)",
                 border: "none",
                 borderRadius: "12px",
                 padding: "0 20px",
-                color: "#000000",
+                color: "var(--background)",
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: "14px",
                 fontWeight: 600,
@@ -474,28 +477,28 @@ export default function SalesRegistry({
       <div
         className="hidden sm:block"
         style={{
-          background: "#171717",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
           borderRadius: "16px",
           overflow: "hidden",
         }}
       >
         <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
           <thead>
-            <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.1)" }}>
-              <th style={{ padding: "16px 20px", fontSize: "12px", color: "#A1A1AA", fontWeight: 500 }}>
+            <tr style={{ borderBottom: "1px solid var(--border)" }}>
+              <th style={{ padding: "16px 20px", fontSize: "12px", color: "var(--text-secondary)", fontWeight: 500 }}>
                 N° &amp; DATE
               </th>
-              <th style={{ padding: "16px 20px", fontSize: "12px", color: "#A1A1AA", fontWeight: 500 }}>
+              <th style={{ padding: "16px 20px", fontSize: "12px", color: "var(--text-secondary)", fontWeight: 500 }}>
                 CLIENT
               </th>
-              <th style={{ padding: "16px 20px", fontSize: "12px", color: "#A1A1AA", fontWeight: 500 }}>
+              <th style={{ padding: "16px 20px", fontSize: "12px", color: "var(--text-secondary)", fontWeight: 500 }}>
                 TYPE
               </th>
-              <th style={{ padding: "16px 20px", fontSize: "12px", color: "#A1A1AA", fontWeight: 500, textAlign: "right" }}>
+              <th style={{ padding: "16px 20px", fontSize: "12px", color: "var(--text-secondary)", fontWeight: 500, textAlign: "right" }}>
                 MONTANT TOTAL
               </th>
-              <th style={{ padding: "16px 20px", fontSize: "12px", color: "#A1A1AA", fontWeight: 500, textAlign: "right" }}>
+              <th style={{ padding: "16px 20px", fontSize: "12px", color: "var(--text-secondary)", fontWeight: 500, textAlign: "right" }}>
                 ACTIONS
               </th>
             </tr>
@@ -504,19 +507,19 @@ export default function SalesRegistry({
             {displayedDocuments.length === 0 ? (
               <tr>
                 <td colSpan={5} style={{ padding: "48px 20px", textAlign: "center" }}>
-                  <DocumentTextIcon style={{ width: "36px", height: "36px", margin: "0 auto 12px", color: "#52525B" }} />
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "14px", fontWeight: 500, color: "#D4D4D8", margin: 0 }}>
+                  <DocumentTextIcon style={{ width: "36px", height: "36px", margin: "0 auto 12px", color: "var(--text-secondary)" }} />
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "14px", fontWeight: 500, color: "var(--foreground)", margin: 0 }}>
                     Aucun document enregistré
                   </p>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "12px", color: "#71717A", margin: "4px 0 16px" }}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "12px", color: "var(--text-secondary)", margin: "4px 0 16px" }}>
                     Créez votre première facture, devis ou reçu officiel conforme OHADA.
                   </p>
                   <button
                     type="button"
                     onClick={onCreateDocument}
                     style={{
-                      background: "#FFFFFF",
-                      color: "#000000",
+                      background: "var(--foreground)",
+                      color: "var(--background)",
                       border: "none",
                       borderRadius: "10px",
                       padding: "8px 16px",
@@ -537,12 +540,12 @@ export default function SalesRegistry({
               displayedDocuments.map((doc) => {
                 const badge = getTypeBadgeStyle(doc.type);
                 return (
-                  <tr key={doc.id} style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)" }}>
+                  <tr key={doc.id} style={{ borderBottom: "1px solid var(--border)" }}>
                     <td style={{ padding: "16px 20px" }}>
                       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13.5px", color: "#F4F4F5", margin: 0, fontWeight: 500 }}>
                         {doc.number}
                       </p>
-                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "11px", color: "#A1A1AA", margin: "2px 0 0" }}>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "11px", color: "var(--text-secondary)", margin: "2px 0 0" }}>
                         {doc.date}
                       </p>
                     </td>
@@ -590,11 +593,11 @@ export default function SalesRegistry({
                             type="button"
                             onClick={() => handleOpenEncaisser(doc)}
                             style={{
-                              background: "rgba(255, 255, 255, 0.08)",
-                              border: "1px solid rgba(255, 255, 255, 0.2)",
+                              background: "var(--accent-tint-strong)",
+                              border: "1px solid var(--border)",
                               borderRadius: "8px",
                               padding: "6px 12px",
-                              color: "#FFFFFF",
+                              color: "var(--foreground)",
                               fontFamily: "'DM Sans', sans-serif",
                               fontSize: "12.5px",
                               fontWeight: 500,
@@ -611,10 +614,10 @@ export default function SalesRegistry({
                           title="Dupliquer le document"
                           style={{
                             background: "transparent",
-                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                            border: "1px solid var(--border)",
                             borderRadius: "8px",
                             padding: "6px 8px",
-                            color: "#A1A1AA",
+                            color: "var(--text-secondary)",
                             cursor: "pointer",
                           }}
                         >
@@ -627,10 +630,10 @@ export default function SalesRegistry({
                           title="Supprimer définitivement ce document"
                           style={{
                             background: "transparent",
-                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                            border: "1px solid var(--border)",
                             borderRadius: "8px",
                             padding: "6px 8px",
-                            color: "#71717A",
+                            color: "var(--text-secondary)",
                             cursor: "pointer",
                           }}
                           className="hover:text-red-400 hover:border-red-500/30 transition-colors"
@@ -652,26 +655,26 @@ export default function SalesRegistry({
         {displayedDocuments.length === 0 ? (
           <div
             style={{
-              background: "#171717",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
               borderRadius: "14px",
               padding: "36px 20px",
               textAlign: "center",
             }}
           >
-            <DocumentTextIcon style={{ width: "32px", height: "32px", margin: "0 auto 10px", color: "#52525B" }} />
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "14px", fontWeight: 500, color: "#D4D4D8", margin: 0 }}>
+            <DocumentTextIcon style={{ width: "32px", height: "32px", margin: "0 auto 10px", color: "var(--text-secondary)" }} />
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "14px", fontWeight: 500, color: "var(--foreground)", margin: 0 }}>
               Aucun document enregistré
             </p>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "12px", color: "#71717A", margin: "4px 0 16px" }}>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "12px", color: "var(--text-secondary)", margin: "4px 0 16px" }}>
               Créez votre première facture, devis ou reçu.
             </p>
             <button
               type="button"
               onClick={onCreateDocument}
               style={{
-                background: "#FFFFFF",
-                color: "#000000",
+                background: "var(--foreground)",
+                color: "var(--background)",
                 border: "none",
                 borderRadius: "10px",
                 padding: "8px 16px",
@@ -694,8 +697,8 @@ export default function SalesRegistry({
             <div
               key={doc.id}
               style={{
-                background: "#171717",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
                 borderRadius: "14px",
                 padding: "16px",
                 display: "flex",
@@ -736,8 +739,8 @@ export default function SalesRegistry({
                 </span>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-white/10">
-                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "11px", color: "#A1A1AA" }}>
+              <div className="flex items-center justify-between pt-2 border-t border-[var(--border)]">
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "11px", color: "var(--text-secondary)" }}>
                   {doc.number} · {doc.date}
                 </span>
 
@@ -747,8 +750,8 @@ export default function SalesRegistry({
                       type="button"
                       onClick={() => handleOpenEncaisser(doc)}
                       style={{
-                        background: "#FFFFFF",
-                        color: "#000000",
+                        background: "var(--foreground)",
+                        color: "var(--background)",
                         border: "none",
                         borderRadius: "8px",
                         padding: "6px 12px",
@@ -765,10 +768,10 @@ export default function SalesRegistry({
                     onClick={() => onDuplicateDocument?.(doc)}
                     style={{
                       background: "transparent",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      border: "1px solid var(--border)",
                       borderRadius: "8px",
                       padding: "6px",
-                      color: "#A1A1AA",
+                      color: "var(--text-secondary)",
                       cursor: "pointer",
                     }}
                   >
@@ -780,10 +783,10 @@ export default function SalesRegistry({
                     onClick={() => handleDeleteDocument(doc.id, doc.number)}
                     style={{
                       background: "transparent",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      border: "1px solid var(--border)",
                       borderRadius: "8px",
                       padding: "6px",
-                      color: "#71717A",
+                      color: "var(--text-secondary)",
                       cursor: "pointer",
                     }}
                     className="hover:text-red-400 hover:border-red-500/30 transition-colors"
@@ -812,31 +815,31 @@ export default function SalesRegistry({
             padding: "16px",
           }}
         >
-          <div className="w-full max-w-md bg-[#0C0C0C] border border-white/15 rounded-2xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <h3 className="text-base font-semibold text-white tracking-tight">
+          <div className="w-full max-w-md bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+              <h3 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
                 Encaisser la facture
               </h3>
               <button
                 type="button"
                 onClick={() => setEncaisserDoc(null)}
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors"
               >
                 <XMarkIcon className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="bg-white/[0.03] border border-white/10 rounded-xl p-3 text-xs text-zinc-300">
-              <span className="text-zinc-500 block mb-0.5 font-mono uppercase tracking-wider text-[10px]">Client & Référence</span>
+            <div className="bg-[var(--accent-tint)] border border-[var(--border)] rounded-xl p-3 text-xs text-[var(--text-secondary)]">
+              <span className="text-[var(--text-secondary)] block mb-0.5 font-mono uppercase tracking-wider text-[10px]">Client & Référence</span>
               <div className="flex items-center justify-between">
-                <span className="font-medium text-white">{encaisserDoc.client}</span>
-                <span className="font-mono text-zinc-400">{encaisserDoc.number}</span>
+                <span className="font-medium text-[var(--foreground)]">{encaisserDoc.client}</span>
+                <span className="font-mono text-[var(--text-secondary)]">{encaisserDoc.number}</span>
               </div>
             </div>
 
             {/* Mode de règlement */}
             <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-2">
+              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-2">
                 Mode de règlement
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -847,8 +850,8 @@ export default function SalesRegistry({
                     onClick={() => setPaymentMode(mode)}
                     className={`h-11 rounded-xl text-xs font-medium transition-all cursor-pointer flex items-center justify-center border ${
                       paymentMode === mode
-                        ? "bg-white text-black border-white font-semibold shadow-sm"
-                        : "bg-white/[0.03] border-white/10 text-zinc-400 hover:text-white hover:bg-white/[0.06]"
+                        ? "bg-[var(--foreground)] text-[var(--background)] border-[var(--foreground)] font-semibold shadow-sm"
+                        : "bg-[var(--accent-tint)] border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint-strong)]"
                     }`}
                   >
                     {mode}
@@ -859,14 +862,14 @@ export default function SalesRegistry({
 
             {/* Montant */}
             <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-2">
+              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-2">
                 Montant encaissé (FCFA)
               </label>
               <input
                 type="number"
                 value={encaissementAmount}
                 onChange={(e) => setEncaissementAmount(Number(e.target.value))}
-                className="w-full h-11 bg-black border border-white/15 rounded-xl px-3.5 text-white font-mono tabular-nums text-base focus:border-white focus:outline-none focus:ring-1 focus:ring-white transition-colors"
+                className="w-full h-11 bg-[var(--background)] border border-[var(--border)] rounded-xl px-3.5 text-[var(--foreground)] font-mono tabular-nums text-base focus:border-[var(--foreground)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)] transition-colors"
               />
             </div>
 
@@ -875,7 +878,7 @@ export default function SalesRegistry({
               <button
                 type="button"
                 onClick={() => setEncaisserDoc(null)}
-                className="flex-1 h-11 bg-transparent border border-white/15 hover:bg-white/5 rounded-xl text-sm font-medium text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                className="flex-1 h-11 bg-transparent border border-[var(--border)] hover:bg-[var(--accent-tint)] rounded-xl text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors cursor-pointer"
               >
                 Annuler
               </button>
@@ -883,7 +886,7 @@ export default function SalesRegistry({
                 type="button"
                 onClick={handleConfirmEncaisser}
                 disabled={isProcessing}
-                className="flex-1 h-11 bg-white hover:bg-zinc-200 text-black rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 cursor-pointer"
+                className="flex-1 h-11 bg-[var(--foreground)] hover:opacity-90 text-[var(--background)] rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 cursor-pointer"
               >
                 {isProcessing ? "Validation..." : "Valider le reçu"}
               </button>

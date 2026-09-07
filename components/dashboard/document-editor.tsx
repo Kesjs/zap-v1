@@ -407,23 +407,23 @@ export default function DocumentEditor({
     <div className="flex flex-col gap-6 max-w-4xl mx-auto pb-32">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-24 right-6 bg-[#0C0C0C] border border-white/20 rounded-xl p-4 text-sm text-white z-50 flex items-center gap-2.5 shadow-2xl">
+        <div className="fixed bottom-24 right-6 bg-[var(--surface)] border border-[var(--border)] rounded-xl p-4 text-sm text-[var(--foreground)] z-50 flex items-center gap-2.5 shadow-2xl">
           <CheckBadgeIcon className="w-5 h-5 text-emerald-400 shrink-0" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* TEMPLATE PICKER: Real Net-Compliant Models OR Custom Blank / Saved */}
-      <div className="bg-[#0C0C0C] border border-white/10 rounded-2xl p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
           <div>
             <div className="flex items-center gap-2">
-              <SparklesIcon className="w-4 h-4 text-zinc-300" />
-              <h3 className="text-base font-semibold text-white tracking-tight">
+              <SparklesIcon className="w-4 h-4 text-[var(--text-secondary)]" />
+              <h3 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
                 Choix du modèle de document
               </h3>
             </div>
-            <p className="text-xs text-zinc-400 mt-0.5">
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
               Utilisez un modèle certifié du net, vos propres modèles sauvegardés, ou partez d&apos;une page blanche sans contrainte.
             </p>
           </div>
@@ -434,8 +434,8 @@ export default function DocumentEditor({
               onClick={handleStartBlank}
               className={`h-9 px-3 rounded-lg text-xs font-medium border transition-colors cursor-pointer flex items-center gap-1.5 ${
                 selectedTemplateId === "blank"
-                  ? "bg-white text-black border-white font-semibold shadow-sm"
-                  : "bg-white/[0.03] border-white/10 text-zinc-300 hover:text-white hover:bg-white/[0.06]"
+                  ? "bg-[var(--foreground)] text-[var(--background)] border-[var(--foreground)] font-semibold shadow-sm"
+                  : "bg-[var(--accent-tint)] border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint-strong)]"
               }`}
               title="Créer un document sans aucun modèle imposé"
             >
@@ -446,7 +446,7 @@ export default function DocumentEditor({
             <button
               type="button"
               onClick={() => setIsSaveModalOpen(true)}
-              className="h-9 px-3 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-xs font-medium text-zinc-200 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
+              className="h-9 px-3 rounded-lg bg-[var(--accent-tint)] hover:bg-[var(--accent-tint-strong)] border border-[var(--border)] text-xs font-medium text-[var(--foreground)] hover:text-[var(--foreground)] transition-colors cursor-pointer flex items-center gap-1.5"
               title="Enregistrer la configuration actuelle comme modèle d'atelier réutilisable"
             >
               <BookmarkIcon className="w-3.5 h-3.5" />
@@ -463,20 +463,20 @@ export default function DocumentEditor({
               onClick={() => handleApplyOfficialTemplate(tmpl)}
               className={`p-3.5 rounded-xl border transition-all cursor-pointer text-left flex flex-col justify-between ${
                 selectedTemplateId === tmpl.id
-                  ? "bg-white/[0.08] border-white ring-1 ring-white/20"
-                  : "bg-white/[0.02] border-white/10 hover:border-white/25 hover:bg-white/[0.04]"
+                  ? "bg-[var(--accent-tint-strong)] border-[var(--foreground)] ring-1 ring-[var(--accent)]/30"
+                  : "bg-[var(--accent-tint)] border-[var(--border)] hover:border-[var(--accent)] hover:bg-[var(--accent-tint)]"
               }`}
             >
               <div>
-                <span className="inline-block text-[10px] font-mono py-0.5 px-2 rounded-md bg-white/10 text-zinc-200 border border-white/10 mb-2">
+                <span className="inline-block text-[10px] font-mono py-0.5 px-2 rounded-md bg-[var(--accent-tint-strong)] text-[var(--foreground)] border border-[var(--border)] mb-2">
                   {tmpl.badge}
                 </span>
-                <p className="text-xs font-semibold text-white leading-snug">{tmpl.name}</p>
-                <p className="text-[11px] text-zinc-400 mt-1 line-clamp-2 leading-relaxed">
+                <p className="text-xs font-semibold text-[var(--foreground)] leading-snug">{tmpl.name}</p>
+                <p className="text-[11px] text-[var(--text-secondary)] mt-1 line-clamp-2 leading-relaxed">
                   {tmpl.description}
                 </p>
               </div>
-              <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-zinc-400 font-mono">
+              <div className="mt-3 pt-2 border-t border-[var(--border)] flex items-center justify-between text-[10px] text-[var(--text-secondary)] font-mono">
                 <span className="uppercase">{tmpl.type}</span>
                 <span>{tmpl.hasDeposit ? `Acompte ${tmpl.depositPercent}%` : "Comptant"}</span>
               </div>
@@ -486,8 +486,8 @@ export default function DocumentEditor({
 
         {/* User's Own Custom Templates (if any) */}
         {customTemplates.length > 0 && (
-          <div className="pt-3 border-t border-white/10">
-            <span className="text-[11px] uppercase tracking-wider text-zinc-400 font-mono block mb-2">
+          <div className="pt-3 border-t border-[var(--border)]">
+            <span className="text-[11px] uppercase tracking-wider text-[var(--text-secondary)] font-mono block mb-2">
               Vos modèles personnalisés d&apos;atelier ({customTemplates.length}) :
             </span>
             <div className="flex flex-wrap gap-2">
@@ -497,18 +497,18 @@ export default function DocumentEditor({
                   onClick={() => handleApplyCustomTemplate(custom)}
                   className={`flex items-center gap-2 py-1.5 px-3 rounded-xl border text-xs cursor-pointer transition-colors ${
                     selectedTemplateId === `custom_${custom.id}`
-                      ? "bg-white text-black border-white font-medium"
-                      : "bg-white/[0.03] border-white/10 text-zinc-300 hover:text-white hover:bg-white/[0.06]"
+                      ? "bg-[var(--foreground)] text-[var(--background)] border-[var(--foreground)] font-medium"
+                      : "bg-[var(--accent-tint)] border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint-strong)]"
                   }`}
                 >
                   <span className="font-medium">{custom.name}</span>
-                  <span className={`text-[10px] font-mono ${selectedTemplateId === `custom_${custom.id}` ? "text-zinc-700" : "text-zinc-400"}`}>
+                  <span className={`text-[10px] font-mono ${selectedTemplateId === `custom_${custom.id}` ? "text-[var(--foreground)]" : "text-[var(--text-secondary)]"}`}>
                     ({custom.items.length} lignes)
                   </span>
                   <button
                     type="button"
                     onClick={(e) => handleDeleteCustomTemplate(custom.id, e)}
-                    className="text-zinc-400 hover:text-red-400 p-0.5 transition-colors"
+                    className="text-[var(--text-secondary)] hover:text-red-400 p-0.5 transition-colors"
                     title="Supprimer ce modèle personnalisé"
                   >
                     <XMarkIcon className="w-3.5 h-3.5" />
@@ -521,7 +521,7 @@ export default function DocumentEditor({
       </div>
 
       {/* 3 Tabs Document Type Switcher */}
-      <div className="flex bg-[#0C0C0C] border border-white/10 rounded-xl p-1.5 select-none">
+      <div className="flex bg-[var(--surface)] border border-[var(--border)] rounded-xl p-1.5 select-none">
         {[
           { id: "facture" as const, label: "Facture officielle", badge: "Comptabilité OHADA" },
           { id: "devis" as const, label: "Devis proforma", badge: "Avant travaux" },
@@ -533,12 +533,12 @@ export default function DocumentEditor({
             onClick={() => setDocType(tab.id)}
             className={`flex-1 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-medium transition-all cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1.5 ${
               docType === tab.id
-                ? "bg-white text-black font-semibold shadow-sm"
-                : "text-zinc-400 hover:text-white"
+                ? "bg-[var(--foreground)] text-[var(--background)] font-semibold shadow-sm"
+                : "text-[var(--text-secondary)] hover:text-[var(--foreground)]"
             }`}
           >
             <span>{tab.label}</span>
-            <span className={`hidden sm:inline text-[10px] font-mono ${docType === tab.id ? "text-zinc-700" : "text-zinc-500"}`}>
+            <span className={`hidden sm:inline text-[10px] font-mono ${docType === tab.id ? "text-[var(--foreground)]" : "text-[var(--text-secondary)]"}`}>
               ({tab.badge})
             </span>
           </button>
@@ -546,19 +546,19 @@ export default function DocumentEditor({
       </div>
 
       {/* 1. Client & Dates Info Card */}
-      <div className="bg-[#0C0C0C] border border-white/10 rounded-2xl p-5 sm:p-6 space-y-4">
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
-          <h2 className="text-base font-semibold text-white tracking-tight">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-4">
+        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+          <h2 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
             1. Informations du client &amp; Mentions
           </h2>
-          <span className="text-xs font-mono text-zinc-400 bg-white/[0.04] border border-white/10 px-2.5 py-1 rounded-md">
+          <span className="text-xs font-mono text-[var(--text-secondary)] bg-[var(--accent-tint)] border border-[var(--border)] px-2.5 py-1 rounded-md">
             {docType === "recu" ? "REC-2025-0043" : docType === "facture" ? "FAC-2025-0105" : "DEV-2025-0090"}
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+            <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
               Nom du client / Entreprise *
             </label>
             <input
@@ -566,12 +566,12 @@ export default function DocumentEditor({
               placeholder="Ex: Mme Tossou / Société Générale Bénin"
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
-              className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+              className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] placeholder-zinc-600 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+            <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
               Numéro WhatsApp client (pour envoi direct)
             </label>
             <input
@@ -579,20 +579,20 @@ export default function DocumentEditor({
               placeholder="+229 97 00 00 00 / +225 07..."
               value={clientPhone}
               onChange={(e) => setClientPhone(e.target.value)}
-              className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+              className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] placeholder-zinc-600 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
           <div>
-            <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+            <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
               Échéance / Validité du document
             </label>
             <select
               value={validity}
               onChange={(e) => setValidity(e.target.value)}
-              className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors cursor-pointer"
+              className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors cursor-pointer"
             >
               <option value="Paiement à réception">Paiement à réception (Comptant)</option>
               <option value="Valable 15 jours">Valable 15 jours</option>
@@ -602,14 +602,14 @@ export default function DocumentEditor({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+            <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
               Mode de règlement Mobile Money / Espèces
             </label>
             <div className="grid grid-cols-2 gap-2">
               <select
                 value={paymentProvider}
                 onChange={(e: any) => setPaymentProvider(e.target.value)}
-                className="w-full h-11 px-3 rounded-xl bg-black border border-white/15 text-sm text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors cursor-pointer"
+                className="w-full h-11 px-3 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors cursor-pointer"
               >
                 <option value="Wave">Wave</option>
                 <option value="MTN MoMo">MTN MoMo</option>
@@ -623,7 +623,7 @@ export default function DocumentEditor({
                 value={paymentPhone}
                 onChange={(e) => setPaymentPhone(e.target.value)}
                 placeholder="+229..."
-                className="w-full h-11 px-3 rounded-xl bg-black border border-white/15 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                className="w-full h-11 px-3 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--foreground)] placeholder-zinc-600 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
               />
             </div>
           </div>
@@ -631,26 +631,26 @@ export default function DocumentEditor({
 
         {/* Legal Mentions Input (OHADA / UEMOA) */}
         <div>
-          <label className="block text-xs font-medium text-zinc-300 mb-1">
+          <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
             Mention légale &amp; Régime fiscal (Norme UEMOA / OHADA)
           </label>
           <input
             type="text"
             value={legalMention}
             onChange={(e) => setLegalMention(e.target.value)}
-            className="w-full h-10 px-3.5 rounded-xl bg-black border border-white/15 text-xs text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+            className="w-full h-10 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-xs text-[var(--text-secondary)] placeholder-zinc-600 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
           />
         </div>
       </div>
 
       {/* 2. Line Items Card */}
-      <div className="bg-[#0C0C0C] border border-white/10 rounded-2xl p-5 sm:p-6 space-y-4">
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-4">
+        <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
           <div>
-            <h2 className="text-base font-semibold text-white tracking-tight">
+            <h2 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
               2. Prestations &amp; Produits ({items.length} {items.length > 1 ? "lignes" : "ligne"})
             </h2>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-[var(--text-secondary)]">
               Saisie totalement libre : personnalisez chaque libellé, quantité et prix unitaire.
             </p>
           </div>
@@ -658,7 +658,7 @@ export default function DocumentEditor({
           <button
             type="button"
             onClick={() => setIsAddDialogOpen(true)}
-            className="flex items-center gap-1.5 h-9 px-3.5 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-semibold transition-colors cursor-pointer shadow-sm"
+            className="flex items-center gap-1.5 h-9 px-3.5 rounded-lg bg-[var(--foreground)] hover:opacity-90 text-[var(--background)] text-xs font-semibold transition-colors cursor-pointer shadow-sm"
           >
             <PlusIcon className="w-4 h-4" />
             <span>Ajouter une ligne</span>
@@ -667,16 +667,16 @@ export default function DocumentEditor({
 
         {/* Added Items List */}
         {items.length === 0 ? (
-          <div className="p-8 text-center border border-dashed border-white/15 rounded-xl bg-white/[0.02]">
-            <DocumentTextIcon className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-            <p className="text-sm text-zinc-300 font-medium">Aucune ligne dans ce document</p>
-            <p className="text-xs text-zinc-500 mt-1 mb-4">
+          <div className="p-8 text-center border border-dashed border-[var(--border)] rounded-xl bg-[var(--accent-tint)]">
+            <DocumentTextIcon className="w-8 h-8 text-[var(--text-secondary)] mx-auto mb-2" />
+            <p className="text-sm text-[var(--text-secondary)] font-medium">Aucune ligne dans ce document</p>
+            <p className="text-xs text-[var(--text-secondary)] mt-1 mb-4">
               Ajoutez vos propres prestations manuellement ou choisissez un modèle ci-dessus.
             </p>
             <button
               type="button"
               onClick={() => setIsAddDialogOpen(true)}
-              className="h-9 px-4 rounded-lg bg-white text-black hover:bg-zinc-200 text-xs font-semibold cursor-pointer transition-colors"
+              className="h-9 px-4 rounded-lg bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 text-xs font-semibold cursor-pointer transition-colors"
             >
               Ajouter la première ligne
             </button>
@@ -686,23 +686,23 @@ export default function DocumentEditor({
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-black border border-white/10 hover:border-white/20 transition-colors"
+                className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] hover:border-[var(--border)] transition-colors"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{item.label}</p>
-                  <p className="text-xs text-zinc-400 font-mono">
+                  <p className="text-sm font-medium text-[var(--foreground)] truncate">{item.label}</p>
+                  <p className="text-xs text-[var(--text-secondary)] font-mono">
                     {item.qty} × {item.price.toLocaleString("fr-FR")} FCFA
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-sm font-semibold text-white font-mono tabular-nums">
+                  <span className="text-sm font-semibold text-[var(--foreground)] font-mono tabular-nums">
                     {(item.qty * item.price).toLocaleString("fr-FR")} FCFA
                   </span>
                   <button
                     type="button"
                     onClick={() => handleDeleteItem(item.id)}
-                    className="p-1.5 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-white/5 transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-red-400 hover:bg-[var(--accent-tint)] transition-colors cursor-pointer"
                     title="Supprimer cette ligne"
                   >
                     <TrashIcon className="w-4 h-4" />
@@ -715,15 +715,15 @@ export default function DocumentEditor({
       </div>
 
       {/* 3. OPTIONAL DEPOSIT & BALANCE DUE MODULE */}
-      <div className="bg-[#0C0C0C] border border-white/10 rounded-2xl p-5 sm:p-6 space-y-4">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <BanknotesIcon className="w-5 h-5 text-zinc-300" />
+            <BanknotesIcon className="w-5 h-5 text-[var(--text-secondary)]" />
             <div>
-              <h2 className="text-base font-semibold text-white tracking-tight">
+              <h2 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
                 3. Acompte &amp; Reste à payer (Optionnel)
               </h2>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-[var(--text-secondary)]">
                 Inactif pour les ventes comptant. Activez pour les chantiers et fabrications sur commande.
               </p>
             </div>
@@ -737,16 +737,16 @@ export default function DocumentEditor({
               onChange={(e) => setHasDeposit(e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-black after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-white peer-checked:after:bg-black" />
+            <div className="w-11 h-6 bg-[var(--border)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[var(--background)] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[var(--foreground)] after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--foreground)] peer-checked:after:bg-[var(--background)]" />
           </label>
         </div>
 
         {/* Deposit details when enabled */}
         {hasDeposit && (
-          <div className="pt-3 border-t border-white/10 space-y-3">
+          <div className="pt-3 border-t border-[var(--border)] space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                   Montant de l&apos;acompte versé par le client (FCFA)
                 </label>
                 <input
@@ -755,12 +755,12 @@ export default function DocumentEditor({
                   max={total}
                   value={depositAmount}
                   onChange={(e) => setDepositAmount(Number(e.target.value) || 0)}
-                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white font-mono tabular-nums focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] font-mono tabular-nums focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                   Raccourcis de pourcentage :
                 </label>
                 <div className="flex gap-2">
@@ -773,7 +773,7 @@ export default function DocumentEditor({
                       key={btn.percent}
                       type="button"
                       onClick={() => handleSetDepositPercent(btn.percent)}
-                      className="flex-1 h-11 px-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/30 text-xs font-medium text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                      className="flex-1 h-11 px-2 rounded-xl bg-[var(--accent-tint)] border border-[var(--border)] hover:border-[var(--accent)] text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors cursor-pointer"
                     >
                       {btn.label}
                     </button>
@@ -783,22 +783,22 @@ export default function DocumentEditor({
             </div>
 
             {/* Financial Summary Box */}
-            <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-black border border-white/10 text-center">
+            <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] text-center">
               <div>
-                <span className="text-[11px] text-zinc-400 block mb-0.5 font-mono uppercase tracking-wider">Montant Total</span>
-                <span className="text-sm font-semibold text-white font-mono tabular-nums">
+                <span className="text-[11px] text-[var(--text-secondary)] block mb-0.5 font-mono uppercase tracking-wider">Montant Total</span>
+                <span className="text-sm font-semibold text-[var(--foreground)] font-mono tabular-nums">
                   {total.toLocaleString("fr-FR")} F
                 </span>
               </div>
-              <div className="border-x border-white/10">
+              <div className="border-x border-[var(--border)]">
                 <span className="text-[11px] text-emerald-400 block mb-0.5 font-mono uppercase tracking-wider">Acompte Perçu</span>
                 <span className="text-sm font-semibold text-emerald-400 font-mono tabular-nums">
                   - {effectiveDeposit.toLocaleString("fr-FR")} F
                 </span>
               </div>
               <div>
-                <span className="text-[11px] text-zinc-400 block mb-0.5 font-mono uppercase tracking-wider">Reste dû</span>
-                <span className="text-sm font-bold text-white font-mono tabular-nums">
+                <span className="text-[11px] text-[var(--text-secondary)] block mb-0.5 font-mono uppercase tracking-wider">Reste dû</span>
+                <span className="text-sm font-bold text-[var(--foreground)] font-mono tabular-nums">
                   {remainingBalance.toLocaleString("fr-FR")} FCFA
                 </span>
               </div>
@@ -808,8 +808,8 @@ export default function DocumentEditor({
       </div>
 
       {/* 4. Stamp & Signature Card */}
-      <div className="bg-[#0C0C0C] border border-white/10 rounded-2xl p-5 sm:p-6 space-y-3">
-        <h2 className="text-base font-semibold text-white tracking-tight">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-3">
+        <h2 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
           4. Empreinte certifiée sur le document
         </h2>
 
@@ -821,7 +821,7 @@ export default function DocumentEditor({
               onChange={(e) => setIncludeStamp(e.target.checked)}
               className="w-4 h-4 accent-white cursor-pointer"
             />
-            <span className="text-sm text-zinc-300">
+            <span className="text-sm text-[var(--text-secondary)]">
               Apposer le tampon d&apos;atelier officiel ZAP
             </span>
           </label>
@@ -833,7 +833,7 @@ export default function DocumentEditor({
               onChange={(e) => setIncludeSignature(e.target.checked)}
               className="w-4 h-4 accent-white cursor-pointer"
             />
-            <span className="text-sm text-zinc-300">
+            <span className="text-sm text-[var(--text-secondary)]">
               Apposer la signature manuscrite certifiée
             </span>
           </label>
@@ -841,20 +841,20 @@ export default function DocumentEditor({
       </div>
 
       {/* Sticky Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-md border-t border-white/10 p-4 z-40">
+      <div className="fixed bottom-0 left-0 right-0 bg-[var(--background)]/95 backdrop-blur-md border-t border-[var(--border)] p-4 z-40">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-baseline gap-4">
             <div>
-              <span className="text-[11px] text-zinc-400 block font-mono uppercase tracking-wider">Total net :</span>
-              <span className="text-xl sm:text-2xl text-white font-mono tabular-nums font-bold">
+              <span className="text-[11px] text-[var(--text-secondary)] block font-mono uppercase tracking-wider">Total net :</span>
+              <span className="text-xl sm:text-2xl text-[var(--foreground)] font-mono tabular-nums font-bold">
                 {total.toLocaleString("fr-FR")} FCFA
               </span>
             </div>
 
             {hasDeposit && effectiveDeposit > 0 && (
-              <div className="border-l border-white/10 pl-4">
-                <span className="text-[11px] text-zinc-400 block font-mono uppercase tracking-wider">Reste à payer :</span>
-                <span className="text-base sm:text-lg font-bold text-white font-mono tabular-nums">
+              <div className="border-l border-[var(--border)] pl-4">
+                <span className="text-[11px] text-[var(--text-secondary)] block font-mono uppercase tracking-wider">Reste à payer :</span>
+                <span className="text-base sm:text-lg font-bold text-[var(--foreground)] font-mono tabular-nums">
                   {remainingBalance.toLocaleString("fr-FR")} FCFA
                 </span>
               </div>
@@ -865,7 +865,7 @@ export default function DocumentEditor({
             type="button"
             onClick={handleGenerateAndShare}
             disabled={isGenerating}
-            className="w-full sm:w-auto h-12 px-6 rounded-xl bg-white hover:bg-zinc-200 text-black text-sm font-semibold transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="w-full sm:w-auto h-12 px-6 rounded-xl bg-[var(--foreground)] hover:opacity-90 text-[var(--background)] text-sm font-semibold transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             <ShareIcon className="w-4 h-4" />
             <span>
@@ -877,27 +877,27 @@ export default function DocumentEditor({
 
       {/* Modal: Save Current Document as Custom Template */}
       {isSaveModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#0C0C0C] border border-white/15 rounded-2xl p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 className="text-base font-semibold text-white tracking-tight">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+              <h3 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
                 Enregistrer comme modèle d&apos;atelier
               </h3>
               <button
                 type="button"
                 onClick={() => setIsSaveModalOpen(false)}
-                className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1 rounded-lg text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors"
               >
                 <XMarkIcon className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-zinc-400 leading-relaxed">
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
               Ce modèle sauvegardera vos {items.length} lignes de prestation, les conditions de règlement ({paymentProvider}) et la configuration d&apos;acompte pour vos prochains devis et factures.
             </p>
 
             <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">
                 Nom de votre modèle personnalisé *
               </label>
               <input
@@ -905,22 +905,22 @@ export default function DocumentEditor({
                 placeholder="Ex: Mon devis standard Meuble TV / Ma robe mariage"
                 value={newTemplateName}
                 onChange={(e) => setNewTemplateName(e.target.value)}
-                className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] placeholder-zinc-600 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
               />
             </div>
 
-            <div className="flex gap-3 pt-2 border-t border-white/10">
+            <div className="flex gap-3 pt-2 border-t border-[var(--border)]">
               <button
                 type="button"
                 onClick={() => setIsSaveModalOpen(false)}
-                className="flex-1 h-11 rounded-xl border border-white/15 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex-1 h-11 rounded-xl border border-[var(--border)] text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleSaveCurrentAsTemplate}
-                className="flex-1 h-11 rounded-xl bg-white text-black text-xs font-semibold hover:bg-zinc-200 transition-colors cursor-pointer shadow-sm"
+                className="flex-1 h-11 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-xs font-semibold hover:opacity-90 transition-colors cursor-pointer shadow-sm"
               >
                 Enregistrer le modèle
               </button>
@@ -931,16 +931,16 @@ export default function DocumentEditor({
 
       {/* Dialog for adding line item manually */}
       {isAddDialogOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-2xl bg-[#0C0C0C] border border-white/15 p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 className="text-base font-semibold text-white tracking-tight">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
+              <h3 className="text-base font-semibold text-[var(--foreground)] tracking-tight">
                 Ajouter une prestation libre
               </h3>
               <button
                 type="button"
                 onClick={() => setIsAddDialogOpen(false)}
-                className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1 rounded-lg text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors"
               >
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -948,54 +948,54 @@ export default function DocumentEditor({
 
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1.5">Désignation</label>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">Désignation</label>
                 <input
                   type="text"
                   placeholder="Ex: Confection porte bois rouge / Réparation châssis"
                   value={manualLabel}
                   onChange={(e) => setManualLabel(e.target.value)}
-                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] placeholder-zinc-600 focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-zinc-300 mb-1.5">Quantité</label>
+                  <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">Quantité</label>
                   <input
                     type="number"
                     min={1}
                     value={manualQty}
                     onChange={(e) => setManualQty(Number(e.target.value) || 1)}
-                    className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white font-mono tabular-nums focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                    className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] font-mono tabular-nums focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-zinc-300 mb-1.5">Prix unitaire (FCFA)</label>
+                  <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1.5">Prix unitaire (FCFA)</label>
                   <input
                     type="number"
                     min={0}
                     step={500}
                     value={manualPrice}
                     onChange={(e) => setManualPrice(Number(e.target.value) || 0)}
-                    className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white font-mono tabular-nums focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
+                    className="w-full h-11 px-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] text-sm text-[var(--foreground)] font-mono tabular-nums focus:outline-none focus:border-[var(--foreground)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-3 border-t border-white/10">
+            <div className="flex justify-end gap-3 pt-3 border-t border-[var(--border)]">
               <button
                 type="button"
                 onClick={() => setIsAddDialogOpen(false)}
-                className="flex-1 h-11 rounded-xl border border-white/15 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex-1 h-11 rounded-xl border border-[var(--border)] text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--accent-tint)] transition-colors cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleAddManualItem}
-                className="flex-1 h-11 rounded-xl bg-white text-black text-xs font-semibold hover:bg-zinc-200 transition-colors cursor-pointer shadow-sm"
+                className="flex-1 h-11 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-xs font-semibold hover:opacity-90 transition-colors cursor-pointer shadow-sm"
               >
                 Ajouter au document
               </button>

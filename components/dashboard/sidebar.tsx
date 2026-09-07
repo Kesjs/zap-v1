@@ -132,12 +132,6 @@ export default function Sidebar({
                       : { background: "transparent", color: "var(--text-secondary)", borderColor: "transparent" }
                   }
                 >
-                  {isActive && (
-                    <span
-                      className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full"
-                      style={{ background: "var(--accent)" }}
-                    />
-                  )}
                   <Icon
                     className={`shrink-0 transition-colors ${isCollapsed ? "w-5 h-5" : "w-4 h-4"}`}
                     style={{ color: isActive ? "var(--accent)" : "var(--text-secondary)" }}
@@ -319,12 +313,6 @@ export default function Sidebar({
                             : { background: "transparent", color: "var(--text-secondary)", borderColor: "transparent" }
                         }
                       >
-                        {isActive && (
-                          <span
-                            className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full"
-                            style={{ background: "var(--accent)" }}
-                          />
-                        )}
                         <Icon className="w-5 h-5" style={{ color: isActive ? "var(--accent)" : "var(--text-secondary)" }} />
                         <span className="flex-1 text-left">{item.label}</span>
                       </button>
