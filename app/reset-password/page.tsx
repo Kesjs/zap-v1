@@ -108,27 +108,35 @@ function ResetPasswordInner() {
   return (
     <section className="min-h-screen bg-[#000000] p-3 text-white antialiased font-['DM_Sans'] flex items-center justify-center">
       <div className="w-full max-w-[440px] rounded-xl border border-white/10 bg-[#000000] px-6 py-10 sm:px-10">
-        {/* Logo — Logo seul sans fond */}
+        {/* Top Logo & Retour unifiés façon Stripe Checkout */}
         <div className="flex items-center justify-between mb-8">
           <Link
             href="/"
             aria-label="Retour à l'accueil ZAP"
-            className="inline-flex items-center transition-opacity hover:opacity-80"
+            className="group inline-flex items-center gap-2.5 py-1 px-2.5 -ml-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-all no-underline"
           >
-            <Image
-              src="/logo.png"
-              alt="ZAP"
-              width={38}
-              height={38}
-              priority
-              className="h-9 w-9 object-contain"
-            />
+            <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-white/5 border border-white/10 group-hover:border-white/20 group-hover:bg-white/10 transition-all text-zinc-400 group-hover:text-white">
+              <ArrowLeftIcon className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
+            </div>
+            <div className="relative w-7 h-7 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0 bg-black border border-white/10">
+              <Image
+                src="/log.jpg"
+                alt="ZAP"
+                width={28}
+                height={28}
+                priority
+                className="rotate-90 transition-transform duration-300"
+                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+              />
+            </div>
+            <span className="text-sm font-bold tracking-tight text-white font-['Space_Grotesk']">
+              ZAP
+            </span>
           </Link>
           <Link
             href="/login"
             className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white transition-colors"
           >
-            <ArrowLeftIcon className="w-3.5 h-3.5" />
             Retour connexion
           </Link>
         </div>
