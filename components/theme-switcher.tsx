@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useCallback, useRef } from "react";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
+import { flushSync } from "react-dom";
 
 interface ThemeSwitcherProps {
   theme: "light" | "dark";
@@ -10,49 +11,74 @@ interface ThemeSwitcherProps {
 }
 
 /**
- * Toggle clair/sombre animé — pilule avec thumb glissant.
- * Contrôlé (theme/onToggle) pour rester réutilisable partout où on en a besoin.
+ * Toggle clair/sombre — icône seule (pas de fond/pilule coloré),
+ * révélé par un cercle animé via la View Transitions API.
+ * Reste contrôlé par le DashboardThemeProvider : ce composant ne fait
+ * que déclencher onToggle() à l'intérieur de la transition.
  */
 export default function ThemeSwitcher({ theme, onToggle, className = "" }: ThemeSwitcherProps) {
   const isDark = theme === "dark";
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const isTransitioningRef = useRef(false);
+
+  const handleClick = useCallback(() => {
+    const button = buttonRef.current;
+    if (!button || isTransitioningRef.current) return;
+
+    if (typeof document.startViewTransition !== "function") {
+      onToggle();
+      return;
+    }
+
+    const { top, left, width, height } = button.getBoundingClientRect();
+    const x = left + width / 2;
+    const y = top + height / 2;
+    const maxRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    isTransitioningRef.current = true;
+    const transition = document.startViewTransition(() => {
+      flushSync(onToggle);
+    });
+
+    transition.ready
+      .then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${maxRadius}px at ${x}px ${y}px)`,
+            ],
+          },
+          {
+            duration: 400,
+            easing: "ease-in-out",
+            pseudoElement: "::view-transition-new(root)",
+          }
+        );
+      })
+      .catch(() => {});
+
+    transition.finished.finally(() => {
+      isTransitioningRef.current = false;
+    });
+  }, [onToggle]);
 
   return (
     <button
       type="button"
-      onClick={onToggle}
+      ref={buttonRef}
+      onClick={handleClick}
       role="switch"
       aria-checked={isDark}
       aria-label={isDark ? "Passer au thème clair" : "Passer au thème sombre"}
       title={isDark ? "Thème sombre — cliquer pour passer au clair" : "Thème clair — cliquer pour passer au sombre"}
-      className={`relative inline-flex h-8 w-[52px] shrink-0 items-center rounded-full border transition-colors cursor-pointer ${className}`}
-      style={{
-        background: "var(--accent-tint)",
-        borderColor: "var(--border)",
-      }}
+      className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors cursor-pointer hover:bg-[var(--surface)] ${className}`}
+      style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
     >
-      <motion.span
-        layout
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        className="flex h-6 w-6 items-center justify-center rounded-full shadow-sm"
-        style={{
-          background: "var(--accent)",
-          marginLeft: isDark ? "calc(100% - 26px)" : "2px",
-        }}
-      >
-        <motion.span
-          key={theme}
-          initial={{ scale: 0.5, opacity: 0, rotate: -45 }}
-          animate={{ scale: 1, opacity: 1, rotate: 0 }}
-          transition={{ duration: 0.2 }}
-          className="flex items-center justify-center"
-        >
-          {isDark ? (
-            <MoonIcon className="w-3.5 h-3.5" style={{ color: "var(--primary-foreground)" }} />
-          ) : (
-            <SunIcon className="w-3.5 h-3.5" style={{ color: "var(--primary-foreground)" }} />
-          )}
-        </motion.span>
-      </motion.span>
+      {isDark ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
     </button>
   );
 }
