@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ═══════════════════════════════════════════
-   ZAP — Design System
-   Palette Luxe & Premium Dark Mode
+   ZAP — Design System (Dashboard)
+   Indigo + Terre de Barre — clair/sombre
 ═══════════════════════════════════════════ */
 
 @theme inline {
@@ -21,6 +21,8 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-warm: var(--accent-warm);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
 
   /* shadcn compat */
   --color-card: var(--card);
@@ -38,64 +40,132 @@
   --color-ring: var(--ring);
 }
 
-/* ZAP CSS Variables — always dark mode */
+/* ─────────────────────────────────────────
+   THÈME CLAIR (par défaut)
+───────────────────────────────────────── */
 :root {
   --radius: 0.625rem;
+  color-scheme: light;
 
-  /* Core palette */
-  --background: #000000;
-  --foreground: #F4F4F5;
-  --surface: #000000;
-  --border: #262626;
-  --accent: #FFFFFF;
-  --accent-warm: #A1A1AA;
+  --background: #FFFFFF;
+  --foreground: #16213E;
+  --surface: #F7F7F8;
+  --border: #E5E5E5;
+  --text-secondary: #6B6F7B;
+  --accent: #B5502E;
+  --accent-warm: #B5502E;
+  --accent-tint: rgba(181, 80, 46, 0.10);
+  --accent-tint-strong: rgba(181, 80, 46, 0.16);
+  --success: #4F7942;
+  --danger: #A83232;
 
-  /* shadcn compat — mapped to ZAP monochrome palette */
-  --card: #000000;
-  --card-foreground: #F4F4F5;
-  --popover: #000000;
-  --popover-foreground: #F4F4F5;
-  --primary: #FFFFFF;
-  --primary-foreground: #000000;
-  --secondary: #262626;
-  --secondary-foreground: #F4F4F5;
-  --muted: #1a1a1a;
-  --muted-foreground: rgba(244, 244, 245, 0.55);
-  --destructive: #ef4444;
-  --input: #262626;
-  --ring: #FFFFFF;
+  --card: #F7F7F8;
+  --card-foreground: #16213E;
+  --popover: #FFFFFF;
+  --popover-foreground: #16213E;
+  --primary: #16213E;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E5E5E5;
+  --secondary-foreground: #16213E;
+  --muted: #F0F0F1;
+  --muted-foreground: #6B6F7B;
+  --destructive: #A83232;
+  --input: #E5E5E5;
+  --ring: #B5502E;
 }
 
-/* Force dark everywhere */
-.dark,
-:root {
+/* ─────────────────────────────────────────
+   THÈME SOMBRE
+───────────────────────────────────────── */
+.dark {
+  color-scheme: dark;
+
+  --background: #0A0A0A;
+  --foreground: #F2F2F2;
+  --surface: #161616;
+  --border: #2A2A2A;
+  --text-secondary: #9A9A9A;
+  --accent: #D97A54;
+  --accent-warm: #D97A54;
+  --accent-tint: rgba(217, 122, 84, 0.12);
+  --accent-tint-strong: rgba(217, 122, 84, 0.18);
+  --success: #6FA35E;
+  --danger: #D45A5A;
+
+  --card: #161616;
+  --card-foreground: #F2F2F2;
+  --popover: #161616;
+  --popover-foreground: #F2F2F2;
+  --primary: #F2F2F2;
+  --primary-foreground: #0A0A0A;
+  --secondary: #2A2A2A;
+  --secondary-foreground: #F2F2F2;
+  --muted: #1a1a1a;
+  --muted-foreground: #9A9A9A;
+  --destructive: #D45A5A;
+  --input: #2A2A2A;
+  --ring: #D97A54;
+}
+
+/* ─────────────────────────────────────────
+   DASHBOARD — thème local indépendant
+   (la landing page reste toujours sombre ;
+   seul le dashboard répond au toggle)
+───────────────────────────────────────── */
+.zap-dashboard[data-theme="light"] {
+  --background: #FFFFFF;
+  --foreground: #16213E;
+  --surface: #F7F7F8;
+  --border: #E5E5E5;
+  --text-secondary: #6B6F7B;
+  --accent: #B5502E;
+  --accent-warm: #B5502E;
+  --accent-tint: rgba(181, 80, 46, 0.10);
+  --accent-tint-strong: rgba(181, 80, 46, 0.16);
+  --success: #4F7942;
+  --danger: #A83232;
+  color-scheme: light;
+}
+.zap-dashboard[data-theme="dark"] {
+  --background: #0A0A0A;
+  --foreground: #F2F2F2;
+  --surface: #161616;
+  --border: #2A2A2A;
+  --text-secondary: #9A9A9A;
+  --accent: #D97A54;
+  --accent-warm: #D97A54;
+  --accent-tint: rgba(217, 122, 84, 0.12);
+  --accent-tint-strong: rgba(217, 122, 84, 0.18);
+  --success: #6FA35E;
+  --danger: #D45A5A;
   color-scheme: dark;
 }
+.zap-dashboard {
+  background: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
 
-/* Custom sleek monochrome scrollbar */
+/* Custom scrollbar, réactif au thème */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: var(--background);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: var(--border);
   border-radius: 9999px;
-  border: 1px solid #09090b;
+  border: 1px solid var(--background);
   transition: background 0.2s ease;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: var(--text-secondary);
 }
-
 * {
   scrollbar-width: thin;
-  scrollbar-color: #27272a #09090b;
+  scrollbar-color: var(--border) var(--background);
 }
 
 /* ─────────────────────────────────────────
@@ -110,17 +180,18 @@
 
   html {
     scroll-behavior: smooth;
-    background: #000000;
+    background: var(--background);
   }
 
   body {
-    background: #000000;
-    color: #F4F4F5;
+    background: var(--background);
+    color: var(--foreground);
     font-family: var(--font-dm-sans), "DM Sans", sans-serif;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -148,58 +219,36 @@
 /* ─────────────────────────────────────────
    Keyframes
 ───────────────────────────────────────── */
-
-/* Infinite marquee scroll */
 @keyframes marquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-
 @keyframes marquee-reverse {
   0%   { transform: translateX(-50%); }
   100% { transform: translateX(0); }
 }
-
-.animate-marquee {
-  animation: marquee 28s linear infinite;
-}
-.animate-marquee-reverse {
-  animation: marquee-reverse 28s linear infinite;
-}
+.animate-marquee { animation: marquee 28s linear infinite; }
+.animate-marquee-reverse { animation: marquee-reverse 28s linear infinite; }
 .animate-marquee:hover,
-.animate-marquee-reverse:hover {
-  animation-play-state: paused;
-}
+.animate-marquee-reverse:hover { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee,
-  .animate-marquee-reverse {
-    animation: none;
-  }
+  .animate-marquee, .animate-marquee-reverse { animation: none; }
 }
 
 @keyframes badge-beam {
-  0% {
-    background-position: 200% center;
-  }
-  100% {
-    background-position: -200% center;
-  }
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
-.hero-cta {
-  transition: transform 0.15s ease;
-}
-.hero-cta:hover {
-  transform: translateY(-1px);
-}
+.hero-cta { transition: transform 0.15s ease; }
+.hero-cta:hover { transform: translateY(-1px); }
 
 .below-fold {
   content-visibility: auto;
   contain-intrinsic-size: auto 2400px;
 }
 
-/* Crossfade for stamp before/after */
 @keyframes stamp-fade-before {
   0%, 35%   { opacity: 1; }
   45%, 90%  { opacity: 0; }
@@ -210,109 +259,83 @@
   45%, 90%  { opacity: 1; }
   100%      { opacity: 0; }
 }
-
-.stamp-before {
-  animation: stamp-fade-before 7s ease-in-out infinite;
-}
+.stamp-before { animation: stamp-fade-before 7s ease-in-out infinite; }
 .stamp-after {
   animation: stamp-fade-after 7s ease-in-out infinite;
   position: absolute;
   inset: 0;
 }
 
-/* BorderGlow hover effect */
 @keyframes glow-pulse {
   0%, 100% { opacity: 0.6; }
   50%       { opacity: 1; }
 }
 
-/* Subtle gold shimmer for badge */
 @keyframes border-beam {
   0%   { offset-distance: 0%; }
   100% { offset-distance: 100%; }
 }
 
+/* Toggle thème — animation du thumb */
+@keyframes theme-thumb-pop {
+  0%   { transform: scale(0.8); opacity: 0.4; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 /* ─────────────────────────────────────────
    Utility classes
 ───────────────────────────────────────── */
+.font-serif-display { font-family: var(--font-dm-serif), "DM Serif Display", serif; }
+.font-sans-ui { font-family: var(--font-dm-sans), "DM Sans", sans-serif; }
 
-.font-serif-display {
-  font-family: var(--font-dm-serif), "DM Serif Display", serif;
-}
-.font-sans-ui {
-  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
-}
-
-/* Accent gradient text (monochrome) */
 .text-gold-gradient {
-  background: linear-gradient(135deg, #FFFFFF 0%, #A1A1AA 100%);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Ivoire text opacities */
-.text-ivory-70  { color: rgba(244, 244, 245, 0.70); }
-.text-ivory-60  { color: rgba(244, 244, 245, 0.60); }
-.text-ivory-50  { color: rgba(244, 244, 245, 0.50); }
+.text-ivory-70 { color: color-mix(in srgb, var(--foreground) 70%, transparent); }
+.text-ivory-60 { color: color-mix(in srgb, var(--foreground) 60%, transparent); }
+.text-ivory-50 { color: color-mix(in srgb, var(--foreground) 50%, transparent); }
 
-/* Surface card */
 .card-surface {
-  background: #171717;
-  border: 1px solid #262626;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 16px;
 }
 
-/* Hairline top border accent */
 .border-top-accent {
-  border-top: 3px solid #FFFFFF;
+  border-top: 3px solid var(--accent);
 }
 
-/* Edge mask for marquees */
 .mask-fade-edges {
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 12%,
-    black 88%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 12%,
-    black 88%,
-    transparent 100%
-  );
+  mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
 }
 
-/* Section spacing */
-.section-padding {
-  padding-top: 96px;
-  padding-bottom: 96px;
-}
+.section-padding { padding-top: 96px; padding-bottom: 96px; }
 
-/* Mobile nav accordion (Produit / Solutions) */
-.nav-accordion summary {
-  list-style: none;
-  cursor: pointer;
-}
-.nav-accordion summary::-webkit-details-marker {
-  display: none;
-}
-.nav-accordion-icon {
-  transition: transform 0.2s ease;
-}
-.nav-accordion[open] .nav-accordion-icon {
-  transform: rotate(180deg);
-}
+.nav-accordion summary { list-style: none; cursor: pointer; }
+.nav-accordion summary::-webkit-details-marker { display: none; }
+.nav-accordion-icon { transition: transform 0.2s ease; }
+.nav-accordion[open] .nav-accordion-icon { transform: rotate(180deg); }
 
-/* Small-caps label (NOT all caps) */
 .label-tracked {
   font-family: var(--font-dm-sans), "DM Sans", sans-serif;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(244, 244, 245, 0.45);
+  color: var(--text-secondary);
+}
+
+/* Icône légèrement teintée (pastille accent à faible opacité) */
+.icon-tinted {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--accent-tint);
+  color: var(--accent);
 }
