@@ -15,6 +15,8 @@ import {
 import { DashboardView } from "./sidebar";
 import { useSidebar } from "./sidebar-context";
 import { useWorkshop } from "./workshop-context";
+import { useDashboardTheme } from "./theme-context";
+import ThemeSwitcher from "@/components/theme-switcher";
 
 interface HeaderProps {
   title: string;
@@ -31,6 +33,7 @@ export default function DashboardHeader({
 }: HeaderProps) {
   const { isCollapsed, toggleSidebar, toggleMobile } = useSidebar();
   const { workshop, getInitials } = useWorkshop();
+  const { theme, toggleTheme } = useDashboardTheme();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const viewTitles: Record<DashboardView, { section: string; page: string }> = {
@@ -46,26 +49,27 @@ export default function DashboardHeader({
   const breadcrumb = viewTitles[currentView] || { section: "Cockpit", page: title };
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-[#000000] border-b border-white/10 px-4 sm:px-6 flex items-center justify-between transition-all select-none">
-      {/* ──────────────────────────────────────────────────────────────────────────
-          GAUCHE : Sidebar Trigger + Titre de la Vue
-      ────────────────────────────────────────────────────────────────────────── */}
+    <header
+      className="sticky top-0 z-30 h-16 border-b px-4 sm:px-6 flex items-center justify-between transition-all select-none"
+      style={{ background: "var(--surface)", borderColor: "var(--border)" }}
+    >
+      {/* GAUCHE : Sidebar Trigger + Titre de la Vue */}
       <div className="flex items-center gap-3">
-        {/* Mobile Hamburger */}
         <button
           type="button"
           onClick={toggleMobile}
-          className="md:hidden p-2 rounded-lg text-zinc-300 hover:text-white hover:bg-white/10 border border-white/10 transition-colors cursor-pointer"
+          className="md:hidden p-2 rounded-lg border transition-colors cursor-pointer"
+          style={{ color: "var(--text-secondary)", borderColor: "var(--border)" }}
           title="Menu de navigation"
         >
           <Bars3Icon className="w-5 h-5" />
         </button>
 
-        {/* Desktop Sidebar Collapse / Expand Button */}
         <button
           type="button"
           onClick={toggleSidebar}
-          className="hidden md:flex items-center justify-center w-9 h-9 rounded-xl text-zinc-400 hover:text-white bg-white/[0.04] hover:bg-white/10 border border-white/10 transition-all cursor-pointer active:scale-95"
+          className="hidden md:flex items-center justify-center w-9 h-9 rounded-xl border transition-all cursor-pointer active:scale-95"
+          style={{ color: "var(--text-secondary)", background: "var(--background)", borderColor: "var(--border)" }}
           title={isCollapsed ? "Déplier la barre latérale" : "Replier la barre latérale"}
         >
           <motion.span
@@ -78,43 +82,47 @@ export default function DashboardHeader({
           </motion.span>
         </button>
 
-        {/* Separator */}
-        <div className="hidden sm:block h-5 w-[1px] bg-white/10" />
+        <div className="hidden sm:block h-5 w-[1px]" style={{ background: "var(--border)" }} />
 
-        {/* Page Title */}
         <div className="flex items-center">
           <h1
-            style={{ fontFamily: "'DM Sans', sans-serif" }}
-            className="text-base sm:text-sm font-semibold tracking-tight text-white"
+            style={{ fontFamily: "'DM Sans', sans-serif", color: "var(--foreground)" }}
+            className="text-base sm:text-sm font-semibold tracking-tight"
           >
             {breadcrumb.page}
           </h1>
         </div>
       </div>
 
-      {/* ──────────────────────────────────────────────────────────────────────────
-          DROITE : Recherche Rapide + Bouton Créer + Avatar Mobile Uniquement
-      ────────────────────────────────────────────────────────────────────────── */}
+      {/* DROITE : Toggle thème + Recherche + Créer + Avatar mobile */}
       <div className="flex items-center gap-2.5 sm:gap-3">
-        {/* Desktop Quick Search Input */}
-        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.03] text-xs text-zinc-400 focus-within:border-white/30 focus-within:text-white transition-all w-48 lg:w-64">
-          <MagnifyingGlassIcon className="w-3.5 h-3.5 shrink-0 text-zinc-500" />
+        <ThemeSwitcher theme={theme} onToggle={toggleTheme} className="hidden sm:inline-flex" />
+
+        <div
+          className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition-all w-48 lg:w-64"
+          style={{ borderColor: "var(--border)", background: "var(--background)", color: "var(--text-secondary)" }}
+        >
+          <MagnifyingGlassIcon className="w-3.5 h-3.5 shrink-0" />
           <input
             type="text"
             placeholder="Rechercher client, n°..."
-            className="bg-transparent border-none outline-none text-xs text-white placeholder:text-zinc-600 w-full"
+            className="bg-transparent border-none outline-none text-xs w-full"
+            style={{ color: "var(--foreground)" }}
           />
-          <span className="text-[10px] font-mono text-zinc-500 bg-white/5 border border-white/10 px-1 py-0.5 rounded">
+          <span
+            className="text-[10px] font-mono px-1 py-0.5 rounded border"
+            style={{ background: "var(--surface)", borderColor: "var(--border)", color: "var(--text-secondary)" }}
+          >
             ⌘K
           </span>
         </div>
 
-        {/* Fast Action CTA : + Créer un document */}
         {currentView !== "new" && (
           <button
             type="button"
             onClick={() => onViewChange("new")}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-semibold transition-colors cursor-pointer shadow-sm"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shadow-sm"
+            style={{ background: "var(--accent)", color: "var(--primary-foreground)" }}
           >
             <PlusIcon className="w-4 h-4" />
             <span className="hidden sm:inline">Créer un document</span>
@@ -122,43 +130,40 @@ export default function DashboardHeader({
           </button>
         )}
 
-        {/* Mobile ONLY Profile Avatar Dropdown (supprimé sur Desktop pour éviter le doublon) */}
+        {/* Mobile ONLY : toggle thème + avatar */}
+        <ThemeSwitcher theme={theme} onToggle={toggleTheme} className="sm:hidden" />
+
         <div className="relative md:hidden">
           <button
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 p-1 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] transition-colors cursor-pointer"
+            className="flex items-center gap-2 p-1 rounded-xl border transition-colors cursor-pointer"
+            style={{ borderColor: "var(--border)", background: "var(--background)" }}
             title="Menu profil"
           >
-            <div className="relative w-8 h-8 rounded-lg bg-white/10 border border-white/20 text-white text-xs font-semibold flex items-center justify-center overflow-hidden">
+            <div
+              className="relative w-8 h-8 rounded-lg border text-xs font-semibold flex items-center justify-center overflow-hidden"
+              style={{ background: "var(--accent-tint)", borderColor: "var(--border)", color: "var(--accent)" }}
+            >
               {workshop.logoUrl ? (
-                <Image
-                  src={workshop.logoUrl}
-                  alt={workshop.name}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
+                <Image src={workshop.logoUrl} alt={workshop.name} fill className="object-cover" unoptimized />
               ) : (
                 getInitials()
               )}
             </div>
           </button>
 
-          {/* Mobile Dropdown Menu Modal */}
           {isDropdownOpen && (
             <>
-              {/* Invisible dismiss backdrop */}
-              <div
-                className="fixed inset-0 z-40"
-                onClick={() => setIsDropdownOpen(false)}
-              />
+              <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
 
-              <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-black/95 backdrop-blur-md border border-white/10 p-2.5 z-50 text-xs shadow-2xl">
-                {/* User details */}
-                <div className="px-3 py-2.5 border-b border-white/10 mb-1.5">
-                  <p className="font-semibold text-white truncate">{workshop.name}</p>
-                  <p className="text-[11px] text-zinc-400 truncate mt-0.5">
+              <div
+                className="absolute right-0 mt-2 w-64 rounded-2xl border p-2.5 z-50 text-xs shadow-2xl"
+                style={{ background: "var(--surface)", borderColor: "var(--border)" }}
+              >
+                <div className="px-3 py-2.5 border-b mb-1.5" style={{ borderColor: "var(--border)" }}>
+                  <p className="font-semibold truncate" style={{ color: "var(--foreground)" }}>{workshop.name}</p>
+                  <p className="text-[11px] truncate mt-0.5" style={{ color: "var(--text-secondary)" }}>
                     {workshop.city ? `${workshop.city}, ${workshop.country}` : workshop.activity}
                   </p>
                 </div>
@@ -169,9 +174,10 @@ export default function DashboardHeader({
                     onViewChange("settings");
                     setIsDropdownOpen(false);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/10 transition-colors text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-colors text-left"
+                  style={{ color: "var(--text-secondary)" }}
                 >
-                  <Cog6ToothIcon className="w-4 h-4 text-zinc-400" />
+                  <Cog6ToothIcon className="w-4 h-4" style={{ color: "var(--accent)" }} />
                   <span>Paramètres de l&apos;Atelier</span>
                 </button>
 
@@ -181,13 +187,14 @@ export default function DashboardHeader({
                     onViewChange("catalog");
                     setIsDropdownOpen(false);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/10 transition-colors text-left"
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-colors text-left"
+                  style={{ color: "var(--text-secondary)" }}
                 >
-                  <CheckBadgeIcon className="w-4 h-4 text-zinc-400" />
+                  <CheckBadgeIcon className="w-4 h-4" style={{ color: "var(--accent)" }} />
                   <span>Services</span>
                 </button>
 
-                <div className="border-t border-white/10 my-1" />
+                <div className="border-t my-1" style={{ borderColor: "var(--border)" }} />
 
                 <button
                   type="button"
@@ -195,7 +202,8 @@ export default function DashboardHeader({
                     setIsDropdownOpen(false);
                     onLogout?.();
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-red-400 hover:bg-red-950/40 transition-colors text-left cursor-pointer"
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-colors text-left cursor-pointer"
+                  style={{ color: "var(--danger)" }}
                 >
                   <ArrowLeftOnRectangleIcon className="w-4 h-4" />
                   <span>Se déconnecter</span>
