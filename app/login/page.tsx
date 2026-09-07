@@ -16,17 +16,9 @@ import {
   InputOTPSlot,
   InputOTPSeparator,
 } from "@/components/ui/input-otp";
+import { FloatingPaths } from "@/components/ui/background-paths";
 
 const supabase = createClient();
-
-// Dynamic import with ssr: false to prevent WebGL hydration mismatches
-const GrainGradientShader = dynamic(
-  () => import("@/components/auth/grain-gradient-shader"),
-  {
-    ssr: false,
-    loading: () => <div className="absolute inset-0 bg-black" />,
-  }
-);
 
 type AuthTab = "login" | "register" | "forgot";
 type LoginMethod = "otp" | "password";
@@ -373,15 +365,15 @@ function LoginPageInner() {
                 onMouseEnter={() => setIsBackHovered(true)}
                 onMouseLeave={() => setIsBackHovered(false)}
                 aria-label="Retour à l'accueil ZAP"
-                className="group inline-flex items-center gap-2 h-9 px-3 -ml-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 transition-all no-underline cursor-pointer"
+                className="group inline-flex items-center gap-2 py-1 text-zinc-400 hover:text-white transition-colors no-underline cursor-pointer"
               >
                 {/* Flèche retour animée */}
                 <motion.div
-                  animate={{ x: isBackHovered ? -2 : 0 }}
+                  animate={{ x: isBackHovered ? -3 : 0 }}
                   transition={{ type: "spring", stiffness: 400, damping: 25 }}
                   className="flex items-center justify-center text-zinc-400 group-hover:text-white transition-colors"
                 >
-                  <ArrowLeftIcon className="w-3.5 h-3.5" />
+                  <ArrowLeftIcon className="w-4 h-4" />
                 </motion.div>
 
                 {/* Zone animée : Texte 'Retour' se transforme en Logo ZAP */}
@@ -390,24 +382,24 @@ function LoginPageInner() {
                     {!isBackHovered ? (
                       <motion.span
                         key="text"
-                        initial={{ opacity: 0, y: 5 }}
+                        initial={{ opacity: 0, y: 3 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -5 }}
+                        exit={{ opacity: 0, y: -3 }}
                         transition={{ duration: 0.15, ease: "easeInOut" }}
-                        className="text-xs font-medium text-zinc-300 group-hover:text-white select-none whitespace-nowrap"
+                        className="text-xs font-medium text-zinc-400 group-hover:text-white select-none whitespace-nowrap"
                       >
                         Retour
                       </motion.span>
                     ) : (
                       <motion.div
                         key="logo"
-                        initial={{ opacity: 0, scale: 0.85, y: 5 }}
+                        initial={{ opacity: 0, scale: 0.85, y: 3 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.85, y: -5 }}
+                        exit={{ opacity: 0, scale: 0.85, y: -3 }}
                         transition={{ type: "spring", stiffness: 450, damping: 25 }}
                         className="flex items-center gap-1.5"
                       >
-                        <div className="relative w-5 h-5 rounded-md overflow-hidden bg-black border border-white/20 flex items-center justify-center shrink-0">
+                        <div className="relative w-5 h-5 rounded-md overflow-hidden flex items-center justify-center shrink-0">
                           <Image
                             src="/log.jpg"
                             alt="ZAP"
@@ -822,17 +814,22 @@ function LoginPageInner() {
         </div>
 
           {/* ─────────────────────────────────────────────────────────────
-              VISUAL PANEL (Desktop: Left / Mobile: Bottom) : GrainGradient WebGL Shader + Value Proposition
+              VISUAL PANEL (Desktop: Left / Mobile: Bottom) : Background FloatingPaths identique au CTA final
              ───────────────────────────────────────────────────────────── */}
-          <div className="order-2 lg:order-1 relative flex min-h-[560px] flex-col justify-center overflow-hidden rounded-xl bg-black p-8 text-white sm:p-12 lg:min-h-0 lg:p-14">
-            {/* The Dynamic WebGL GrainGradient Shader */}
-            <GrainGradientShader />
-
-            {/* Overlay Gradient for contrast */}
-            <div
-              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/60"
-              aria-hidden="true"
-            />
+          <div className="order-2 lg:order-1 relative flex min-h-[560px] flex-col justify-center overflow-hidden rounded-xl border border-white/10 bg-[#000000] p-8 text-white sm:p-12 lg:min-h-0 lg:p-14">
+            {/* Background Animated Floating Paths — identique au Final CTA de la landing page */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              <FloatingPaths position={1} />
+              <FloatingPaths position={-1} />
+              {/* Masque radial sombre pour fondre les trajectoires aux extrémités */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 50% 50%, transparent 20%, #000000 90%)",
+                }}
+              />
+            </div>
 
             {/* Center Content */}
             <div className="relative z-10 py-8">

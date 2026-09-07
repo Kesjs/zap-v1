@@ -117,15 +117,15 @@ function ResetPasswordInner() {
             onMouseEnter={() => setIsBackHovered(true)}
             onMouseLeave={() => setIsBackHovered(false)}
             aria-label="Retour à l'accueil ZAP"
-            className="group inline-flex items-center gap-2 h-9 px-3 -ml-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 transition-all no-underline cursor-pointer"
+            className="group inline-flex items-center gap-2 py-1 text-zinc-400 hover:text-white transition-colors no-underline cursor-pointer"
           >
             {/* Flèche retour animée */}
             <motion.div
-              animate={{ x: isBackHovered ? -2 : 0 }}
+              animate={{ x: isBackHovered ? -3 : 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
               className="flex items-center justify-center text-zinc-400 group-hover:text-white transition-colors"
             >
-              <ArrowLeftIcon className="w-3.5 h-3.5" />
+              <ArrowLeftIcon className="w-4 h-4" />
             </motion.div>
 
             {/* Zone animée : Texte 'Retour' se transforme en Logo ZAP */}
@@ -134,24 +134,24 @@ function ResetPasswordInner() {
                 {!isBackHovered ? (
                   <motion.span
                     key="text"
-                    initial={{ opacity: 0, y: 5 }}
+                    initial={{ opacity: 0, y: 3 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
+                    exit={{ opacity: 0, y: -3 }}
                     transition={{ duration: 0.15, ease: "easeInOut" }}
-                    className="text-xs font-medium text-zinc-300 group-hover:text-white select-none whitespace-nowrap"
+                    className="text-xs font-medium text-zinc-400 group-hover:text-white select-none whitespace-nowrap"
                   >
                     Retour
                   </motion.span>
                 ) : (
                   <motion.div
                     key="logo"
-                    initial={{ opacity: 0, scale: 0.85, y: 5 }}
+                    initial={{ opacity: 0, scale: 0.85, y: 3 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.85, y: -5 }}
+                    exit={{ opacity: 0, scale: 0.85, y: -3 }}
                     transition={{ type: "spring", stiffness: 450, damping: 25 }}
                     className="flex items-center gap-1.5"
                   >
-                    <div className="relative w-5 h-5 rounded-md overflow-hidden bg-black border border-white/20 flex items-center justify-center shrink-0">
+                    <div className="relative w-5 h-5 rounded-md overflow-hidden flex items-center justify-center shrink-0">
                       <Image
                         src="/log.jpg"
                         alt="ZAP"
