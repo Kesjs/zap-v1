@@ -52,10 +52,10 @@
   --surface: #F7F7F8;
   --border: #E5E5E5;
   --text-secondary: #6B6F7B;
-  --accent: #B5502E;
-  --accent-warm: #B5502E;
-  --accent-tint: rgba(181, 80, 46, 0.10);
-  --accent-tint-strong: rgba(181, 80, 46, 0.16);
+  --accent: #3452B4;
+  --accent-warm: #3452B4;
+  --accent-tint: rgba(52, 82, 180, 0.08);
+  --accent-tint-strong: rgba(52, 82, 180, 0.14);
   --success: #4F7942;
   --danger: #A83232;
 
@@ -71,7 +71,7 @@
   --muted-foreground: #6B6F7B;
   --destructive: #A83232;
   --input: #E5E5E5;
-  --ring: #B5502E;
+  --ring: #3452B4;
 }
 
 /* ─────────────────────────────────────────
@@ -85,10 +85,10 @@
   --surface: #161616;
   --border: #2A2A2A;
   --text-secondary: #9A9A9A;
-  --accent: #D97A54;
-  --accent-warm: #D97A54;
-  --accent-tint: rgba(217, 122, 84, 0.12);
-  --accent-tint-strong: rgba(217, 122, 84, 0.18);
+  --accent: #5B7FE0;
+  --accent-warm: #5B7FE0;
+  --accent-tint: rgba(91, 127, 224, 0.10);
+  --accent-tint-strong: rgba(91, 127, 224, 0.18);
   --success: #6FA35E;
   --danger: #D45A5A;
 
@@ -104,7 +104,7 @@
   --muted-foreground: #9A9A9A;
   --destructive: #D45A5A;
   --input: #2A2A2A;
-  --ring: #D97A54;
+  --ring: #5B7FE0;
 }
 
 /* ─────────────────────────────────────────
@@ -118,10 +118,10 @@
   --surface: #F7F7F8;
   --border: #E5E5E5;
   --text-secondary: #6B6F7B;
-  --accent: #B5502E;
-  --accent-warm: #B5502E;
-  --accent-tint: rgba(181, 80, 46, 0.10);
-  --accent-tint-strong: rgba(181, 80, 46, 0.16);
+  --accent: #3452B4;
+  --accent-warm: #3452B4;
+  --accent-tint: rgba(52, 82, 180, 0.08);
+  --accent-tint-strong: rgba(52, 82, 180, 0.14);
   --success: #4F7942;
   --danger: #A83232;
   color-scheme: light;
@@ -132,10 +132,10 @@
   --surface: #161616;
   --border: #2A2A2A;
   --text-secondary: #9A9A9A;
-  --accent: #D97A54;
-  --accent-warm: #D97A54;
-  --accent-tint: rgba(217, 122, 84, 0.12);
-  --accent-tint-strong: rgba(217, 122, 84, 0.18);
+  --accent: #5B7FE0;
+  --accent-warm: #5B7FE0;
+  --accent-tint: rgba(91, 127, 224, 0.10);
+  --accent-tint-strong: rgba(91, 127, 224, 0.18);
   --success: #6FA35E;
   --danger: #D45A5A;
   color-scheme: dark;
@@ -338,4 +338,13 @@
   border-radius: 10px;
   background: var(--accent-tint);
   color: var(--accent);
+}
+
+/* ─────────────────────────────────────────
+   Transition du toggle thème (cercle animé)
+───────────────────────────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
