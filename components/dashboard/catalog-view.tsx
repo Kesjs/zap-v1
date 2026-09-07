@@ -355,14 +355,11 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
       {/* Header & Main Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1
-            style={{ fontFamily: "'DM Serif Display', serif" }}
-            className="text-2xl text-white tracking-tight"
-          >
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
             Modèles de prix &amp; Catalogue d&apos;atelier
           </h1>
-          <p className="text-sm text-neutral-400 mt-1">
-            Utilisez les modèles d&apos;Afrique de l&apos;Ouest ou créez vos propres prestations personnalisées. Rien n&apos;est imposé.
+          <p className="text-xs sm:text-sm text-zinc-400 mt-1">
+            Gérez les prestations et tarifs de votre atelier pour facturer rapidement.
           </p>
         </div>
 
@@ -371,16 +368,16 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
             <button
               type="button"
               onClick={() => setIsClearConfirmOpen(true)}
-              className="py-2 px-3 rounded-xl border border-[#262626] hover:border-red-900/50 text-xs text-neutral-400 hover:text-red-400 transition-colors cursor-pointer"
+              className="h-10 px-3.5 rounded-xl border border-white/10 hover:border-red-500/40 text-xs text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
               title="Supprimer tous les modèles existants pour partir d'une liste 100% vierge"
             >
-              Vider les exemples (Partir de zéro)
+              Vider les exemples
             </button>
           ) : (
             <button
               type="button"
               onClick={handleRestoreDefaults}
-              className="flex items-center gap-1.5 py-2 px-3 rounded-xl border border-[#262626] hover:border-[#D4AF37]/50 text-xs text-neutral-300 hover:text-[#D4AF37] transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 h-10 px-3.5 rounded-xl border border-white/10 hover:border-white/25 text-xs text-zinc-300 hover:text-white transition-colors cursor-pointer"
               title="Restaurer les modèles types d'atelier"
             >
               <ArrowPathIcon className="w-3.5 h-3.5" />
@@ -391,25 +388,25 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
           <button
             type="button"
             onClick={handleOpenAdd}
-            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#D4AF37] hover:bg-[#e2b170] text-[#000000] text-sm font-semibold transition-colors cursor-pointer shrink-0"
+            className="flex items-center justify-center gap-2 h-10 px-4 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs sm:text-sm font-semibold transition-colors cursor-pointer shrink-0 shadow-sm"
           >
             <PlusIcon className="w-4 h-4 stroke-[2.5]" />
-            <span>+ Ajouter une prestation</span>
+            <span>Ajouter une prestation</span>
           </button>
         </div>
       </div>
 
       {/* Category Pills and Search Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#171717] border border-[#262626] rounded-2xl p-3">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#0C0C0C] border border-white/10 rounded-2xl p-2.5">
         {/* Category Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
           <button
             type="button"
             onClick={() => setActiveCategory("Tous")}
-            className={`py-1.5 px-3 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+            className={`h-8 px-3 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
               activeCategory === "Tous"
-                ? "bg-[#262626] text-[#D4AF37] font-semibold border border-[#D4AF37]/40"
-                : "text-neutral-400 hover:text-white hover:bg-[#202020]"
+                ? "bg-white text-black font-semibold shadow-sm"
+                : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
             }`}
           >
             Tous ({items.length})
@@ -420,10 +417,10 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               key={cat}
               type="button"
               onClick={() => setActiveCategory(cat)}
-              className={`py-1.5 px-3 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+              className={`h-8 px-3 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                 activeCategory === cat
-                  ? "bg-[#262626] text-[#D4AF37] font-semibold border border-[#D4AF37]/40"
-                  : "text-neutral-400 hover:text-white hover:bg-[#202020]"
+                  ? "bg-white text-black font-semibold shadow-sm"
+                  : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
               {cat}
@@ -433,26 +430,26 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
         {/* Search Input */}
         <div className="relative min-w-[220px]">
-          <MagnifyingGlassIcon className="w-4 h-4 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <MagnifyingGlassIcon className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Rechercher une prestation..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-[#000000] border border-[#262626] rounded-xl text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#D4AF37] transition-colors"
+            className="w-full h-9 pl-9 pr-3 bg-black border border-white/15 rounded-xl text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
           />
         </div>
       </div>
 
       {/* Catalog Table Card */}
-      <div className="bg-[#171717] border border-[#262626] rounded-2xl overflow-hidden">
+      <div className="bg-[#0C0C0C] border border-white/10 rounded-2xl overflow-hidden">
         {filteredItems.length === 0 ? (
           <div className="p-12 text-center">
-            <TagIcon className="w-10 h-10 text-neutral-500 mx-auto mb-3" />
+            <TagIcon className="w-10 h-10 text-zinc-500 mx-auto mb-3" />
             <p className="text-base text-white font-medium">
               {items.length === 0 ? "Votre catalogue est actuellement vierge" : "Aucun modèle trouvé"}
             </p>
-            <p className="text-xs text-neutral-400 mt-1 mb-4">
+            <p className="text-xs text-zinc-400 mt-1 mb-4">
               {items.length === 0
                 ? "Vous avez choisi de partir de zéro. Créez vos propres prestations selon votre activité."
                 : searchQuery
@@ -463,15 +460,15 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               <button
                 type="button"
                 onClick={handleOpenAdd}
-                className="py-2 px-4 rounded-xl bg-[#D4AF37] text-[#000000] text-xs font-semibold cursor-pointer"
+                className="h-9 px-4 rounded-xl bg-white text-black hover:bg-zinc-200 text-xs font-semibold cursor-pointer transition-colors shadow-sm"
               >
-                + Ajouter ma première prestation
+                Ajouter ma première prestation
               </button>
               {items.length === 0 && (
                 <button
                   type="button"
                   onClick={handleRestoreDefaults}
-                  className="py-2 px-4 rounded-xl border border-[#262626] text-neutral-300 hover:text-white text-xs cursor-pointer"
+                  className="h-9 px-4 rounded-xl border border-white/15 text-zinc-300 hover:text-white text-xs cursor-pointer hover:bg-white/5 transition-colors"
                 >
                   Charger les modèles types
                 </button>
@@ -482,21 +479,21 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[#262626] text-[11px] font-mono uppercase text-neutral-400">
+                <tr className="border-b border-white/10 text-[11px] font-mono uppercase text-zinc-400 bg-white/[0.02]">
                   <th className="py-3 px-4 font-medium">PRESTATION / ARTICLE</th>
                   <th className="py-3 px-4 font-medium">CORPS DE MÉTIER</th>
                   <th className="py-3 px-4 font-medium text-right">PRIX UNITAIRE</th>
                   <th className="py-3 px-4 font-medium text-right">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#222]">
+              <tbody className="divide-y divide-white/5">
                 {filteredItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-[#1c1c1c] transition-colors">
+                  <tr key={item.id} className="hover:bg-white/[0.02] transition-colors">
                     {/* Item label & description */}
                     <td className="py-3.5 px-4">
                       <p className="text-sm font-medium text-white">{item.label}</p>
                       {item.description && (
-                        <p className="text-xs text-neutral-400 mt-0.5 max-w-md line-clamp-1">
+                        <p className="text-xs text-zinc-400 mt-0.5 max-w-md line-clamp-1">
                           {item.description}
                         </p>
                       )}
@@ -504,14 +501,14 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
                     {/* Category badge */}
                     <td className="py-3.5 px-4">
-                      <span className="inline-block py-0.5 px-2 rounded-md bg-[#262626] border border-[#333] text-[11px] text-neutral-300">
+                      <span className="inline-block py-0.5 px-2 rounded-md bg-white/[0.04] border border-white/10 text-[11px] text-zinc-300 font-mono">
                         {item.category}
                       </span>
                     </td>
 
                     {/* Price in FCFA */}
                     <td className="py-3.5 px-4 text-right">
-                      <span className="text-sm font-semibold text-[#D4AF37] font-mono tabular-nums">
+                      <span className="text-sm font-semibold text-white font-mono tabular-nums">
                         {item.price.toLocaleString("fr-FR")} FCFA
                       </span>
                     </td>
@@ -523,7 +520,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                           <button
                             type="button"
                             onClick={() => onSelectItemForInvoice(item)}
-                            className="flex items-center gap-1 py-1 px-2 rounded-lg bg-[#262626] hover:bg-[#303030] text-[#D4AF37] text-xs font-medium transition-colors cursor-pointer"
+                            className="flex items-center gap-1 h-8 px-2.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-zinc-200 hover:text-white border border-white/10 text-xs font-medium transition-colors cursor-pointer"
                             title="Créer une facture avec cet article"
                           >
                             <DocumentTextIcon className="w-3.5 h-3.5" />
@@ -534,7 +531,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                         <button
                           type="button"
                           onClick={() => handleOpenEdit(item)}
-                          className="p-1.5 rounded-lg border border-[#262626] hover:border-[#404040] text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                          className="h-8 w-8 rounded-lg border border-white/10 hover:border-white/25 text-zinc-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer flex items-center justify-center"
                           title="Modifier l'article"
                         >
                           <PencilSquareIcon className="w-4 h-4" />
@@ -543,7 +540,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                         <button
                           type="button"
                           onClick={() => setDeleteItem(item)}
-                          className="p-1.5 rounded-lg border border-[#262626] hover:border-red-900/60 text-neutral-500 hover:text-red-400 transition-colors cursor-pointer"
+                          className="h-8 w-8 rounded-lg border border-white/10 hover:border-red-900/50 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer flex items-center justify-center"
                           title="Supprimer l'article"
                         >
                           <TrashIcon className="w-4 h-4" />
@@ -560,13 +557,10 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
       {/* Add / Edit Modal Dialog */}
       {(isAddOpen || editItem) && (
-        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#171717] border border-[#262626] rounded-2xl p-6 space-y-4 shadow-none">
-            <div className="flex items-center justify-between border-b border-[#262626] pb-3">
-              <h3
-                style={{ fontFamily: "'DM Serif Display', serif" }}
-                className="text-lg text-white"
-              >
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-[#0C0C0C] border border-white/15 rounded-2xl p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <h3 className="text-base font-semibold text-white tracking-tight">
                 {editItem ? "Modifier la prestation" : "Nouveau modèle de prestation"}
               </h3>
               <button
@@ -575,7 +569,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   setIsAddOpen(false);
                   setEditItem(null);
                 }}
-                className="p-1 text-neutral-400 hover:text-white"
+                className="p-1 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
               >
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -583,13 +577,13 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
             <div className="space-y-3.5">
               <div>
-                <label className="block text-xs font-medium text-neutral-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
                   Catégorie / Corps de métier *
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#000000] border border-[#262626] text-sm text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors cursor-pointer"
                 >
                   {categories.map((c) => (
                     <option key={c} value={c}>
@@ -600,7 +594,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-neutral-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
                   Ou créer une nouvelle catégorie personnalisée
                 </label>
                 <input
@@ -608,12 +602,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   placeholder="Ex: Soudure & Ferronnerie / Sérigraphie"
                   value={customCategoryInput}
                   onChange={(e) => setCustomCategoryInput(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-[#000000] border border-[#262626] text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-neutral-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
                   Libellé de la prestation *
                 </label>
                 <input
@@ -621,12 +615,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   placeholder="Ex: Confection costume 3 pièces Bazin"
                   value={label}
                   onChange={(e) => setLabel(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#000000] border border-[#262626] text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-neutral-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
                   Description complémentaire (facultatif)
                 </label>
                 <input
@@ -634,12 +628,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   placeholder="Détails des matériaux ou prestations incluses..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#000000] border border-[#262626] text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-neutral-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1.5">
                   Prix unitaire (FCFA) *
                 </label>
                 <input
@@ -648,26 +642,26 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
                   step={500}
                   value={price}
                   onChange={(e) => setPrice(Number(e.target.value) || 0)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#000000] border border-[#262626] text-sm text-white font-mono focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full h-11 px-3.5 rounded-xl bg-black border border-white/15 text-sm text-white font-mono tabular-nums focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors"
                 />
               </div>
             </div>
 
-            <div className="flex gap-3 pt-2 border-t border-[#262626]">
+            <div className="flex gap-3 pt-2 border-t border-white/10">
               <button
                 type="button"
                 onClick={() => {
                   setIsAddOpen(false);
                   setEditItem(null);
                 }}
-                className="flex-1 py-2.5 rounded-xl border border-[#262626] text-xs text-neutral-300 hover:text-white font-medium"
+                className="flex-1 h-11 rounded-xl border border-white/15 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleSaveItem}
-                className="flex-1 py-2.5 rounded-xl bg-[#D4AF37] text-[#000000] text-xs font-semibold hover:bg-[#e2b170] transition-colors"
+                className="flex-1 h-11 rounded-xl bg-white text-black text-xs font-semibold hover:bg-zinc-200 transition-colors cursor-pointer shadow-sm"
               >
                 Enregistrer
               </button>
@@ -678,15 +672,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
       {/* Clear All Confirmation Modal */}
       {isClearConfirmOpen && (
-        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-[#171717] border border-[#262626] rounded-2xl p-6 space-y-3">
-            <h3
-              style={{ fontFamily: "'DM Serif Display', serif" }}
-              className="text-lg text-white"
-            >
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-[#0C0C0C] border border-white/15 rounded-2xl p-6 space-y-3 shadow-2xl">
+            <h3 className="text-base font-semibold text-white tracking-tight">
               Vider tous les modèles ?
             </h3>
-            <p className="text-xs text-neutral-400 leading-relaxed">
+            <p className="text-xs text-zinc-400 leading-relaxed">
               Cette action supprimera tous les exemples pour vous permettre de créer vos propres modèles sur une base 100% vierge. Vous pourrez les restaurer à tout moment.
             </p>
 
@@ -694,14 +685,14 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               <button
                 type="button"
                 onClick={() => setIsClearConfirmOpen(false)}
-                className="flex-1 py-2.5 rounded-xl border border-[#262626] text-xs text-neutral-300 hover:text-white"
+                className="flex-1 h-10 rounded-xl border border-white/15 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleClearAllExamples}
-                className="flex-1 py-2.5 rounded-xl bg-red-500/80 hover:bg-red-500 text-white text-xs font-semibold transition-colors"
+                className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition-colors cursor-pointer"
               >
                 Vider et partir de zéro
               </button>
@@ -712,15 +703,12 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
 
       {/* Delete Single Item Modal */}
       {deleteItem && (
-        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-[#171717] border border-[#262626] rounded-2xl p-6 space-y-3">
-            <h3
-              style={{ fontFamily: "'DM Serif Display', serif" }}
-              className="text-lg text-white"
-            >
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-[#0C0C0C] border border-white/15 rounded-2xl p-6 space-y-3 shadow-2xl">
+            <h3 className="text-base font-semibold text-white tracking-tight">
               Supprimer cette prestation ?
             </h3>
-            <p className="text-xs text-neutral-400 leading-relaxed">
+            <p className="text-xs text-zinc-400 leading-relaxed">
               Voulez-vous supprimer <strong className="text-white">{deleteItem.label}</strong> du catalogue ? Cette action est irréversible.
             </p>
 
@@ -728,14 +716,14 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
               <button
                 type="button"
                 onClick={() => setDeleteItem(null)}
-                className="flex-1 py-2.5 rounded-xl border border-[#262626] text-xs text-neutral-300 hover:text-white"
+                className="flex-1 h-10 rounded-xl border border-white/15 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
-                className="flex-1 py-2.5 rounded-xl bg-red-500/80 hover:bg-red-500 text-white text-xs font-semibold transition-colors"
+                className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition-colors cursor-pointer"
               >
                 Supprimer
               </button>

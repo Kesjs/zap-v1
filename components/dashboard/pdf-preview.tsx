@@ -28,13 +28,13 @@ export default function PdfPreview() {
   return (
     <div className="flex flex-col gap-6 max-w-5xl mx-auto pb-16">
       {/* Bandeau explicatif */}
-      <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#121215] border border-white/15">
+      <div className="flex items-start gap-3 p-4 rounded-2xl bg-[#0C0C0C] border border-white/10">
         <BeakerIcon className="w-5 h-5 text-zinc-300 shrink-0 mt-0.5" />
         <div>
-          <h2 style={{ fontFamily: "'DM Serif Display', serif" }} className="text-base text-white">
+          <h2 className="text-base font-semibold text-white tracking-tight">
             Aperçu PDF — Mode test (données factices)
           </h2>
-          <p className="text-xs text-neutral-400 mt-1">
+          <p className="text-xs text-zinc-400 mt-1">
             Cette vue sert à valider le rendu imprimable des deux gabarits (Facture/Devis format A4 et Reçu
             format ticket) avant de les brancher sur les vraies saisies du formulaire. Les informations
             affichées ci-dessous ne sont pas connectées à l&apos;éditeur de document.
@@ -43,12 +43,12 @@ export default function PdfPreview() {
       </div>
 
       {/* Sélecteur de gabarit */}
-      <div className="flex bg-[#171717] border border-[#262626] rounded-xl p-1 w-full sm:w-fit">
+      <div className="flex bg-[#0C0C0C] border border-white/10 rounded-xl p-1 w-full sm:w-fit">
         <button
           type="button"
           onClick={() => setActive("invoice")}
-          className={`flex items-center gap-2 py-2 px-4 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
-            active === "invoice" ? "bg-[#262626] text-[#D4AF37]" : "text-neutral-400 hover:text-white"
+          className={`flex items-center gap-2 py-2 px-4 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+            active === "invoice" ? "bg-white text-black font-semibold shadow-sm" : "text-zinc-400 hover:text-white"
           }`}
         >
           <DocumentTextIcon className="w-4 h-4" />
@@ -57,8 +57,8 @@ export default function PdfPreview() {
         <button
           type="button"
           onClick={() => setActive("receipt")}
-          className={`flex items-center gap-2 py-2 px-4 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
-            active === "receipt" ? "bg-[#262626] text-[#D4AF37]" : "text-neutral-400 hover:text-white"
+          className={`flex items-center gap-2 py-2 px-4 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+            active === "receipt" ? "bg-white text-black font-semibold shadow-sm" : "text-zinc-400 hover:text-white"
           }`}
         >
           <TicketIcon className="w-4 h-4" />
@@ -72,7 +72,7 @@ export default function PdfPreview() {
           <PDFDownloadLink
             document={<InvoicePdf data={MOCK_INVOICE} />}
             fileName={`${MOCK_INVOICE.number}.pdf`}
-            className="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-[#D4AF37] hover:bg-[#e2b170] text-[#000000] text-xs font-semibold transition-colors no-underline"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-semibold transition-colors no-underline shadow-sm"
           >
             {({ loading }: { loading: boolean }) => (
               <>
@@ -85,7 +85,7 @@ export default function PdfPreview() {
           <PDFDownloadLink
             document={<ReceiptPdf data={MOCK_RECEIPT} />}
             fileName={`${MOCK_RECEIPT.number}.pdf`}
-            className="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-[#D4AF37] hover:bg-[#e2b170] text-[#000000] text-xs font-semibold transition-colors no-underline"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-white hover:bg-zinc-200 text-black text-xs font-semibold transition-colors no-underline shadow-sm"
           >
             {({ loading }: { loading: boolean }) => (
               <>
