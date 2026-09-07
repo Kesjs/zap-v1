@@ -12,12 +12,14 @@ import CatalogView, { CatalogItem } from "@/components/dashboard/catalog-view";
 import PdfPreview from "@/components/dashboard/pdf-preview";
 import Spinner from "@/components/ui/spinner";
 import { WorkshopProvider } from "@/components/dashboard/workshop-context";
+import { DashboardThemeProvider, useDashboardTheme } from "@/components/dashboard/theme-context";
 import { createClient } from "@/lib/supabase/client";
 
 const supabase = createClient();
 
 function DashboardMainContent() {
   const { isCollapsed } = useSidebar();
+  const { theme } = useDashboardTheme();
 
   const [isReady, setIsReady] = useState(false);
   const [currentView, setCurrentView] = useState<DashboardView>("home");
@@ -54,7 +56,11 @@ function DashboardMainContent() {
 
   if (!isReady) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div
+        className="zap-dashboard min-h-screen flex items-center justify-center"
+        data-theme={theme}
+        style={{ background: "var(--background)" }}
+      >
         <Spinner size="md" />
       </div>
     );
@@ -97,7 +103,11 @@ function DashboardMainContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] text-[#F4F4F5] flex flex-col">
+    <div
+      className="zap-dashboard min-h-screen flex flex-col"
+      data-theme={theme}
+      style={{ background: "var(--background)", color: "var(--foreground)" }}
+    >
       {/* 1. Sidebar Collapsible Desktop (240px <-> 68px) + Mobile Drawer */}
       <DashboardSidebar
         currentView={currentView}
@@ -181,10 +191,12 @@ function DashboardMainContent() {
 
 export default function DashboardPage() {
   return (
-    <SidebarProvider>
-      <WorkshopProvider>
-        <DashboardMainContent />
-      </WorkshopProvider>
-    </SidebarProvider>
+    <DashboardThemeProvider>
+      <SidebarProvider>
+        <WorkshopProvider>
+          <DashboardMainContent />
+        </WorkshopProvider>
+      </SidebarProvider>
+    </DashboardThemeProvider>
   );
 }
