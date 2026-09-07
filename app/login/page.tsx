@@ -6,6 +6,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/lib/supabase/client";
 import AnimatedButton from "@/components/ui/animated-button";
@@ -68,6 +69,7 @@ function LoginPageInner() {
 
   // Loading state
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isBackHovered, setIsBackHovered] = useState(false);
 
   useEffect(() => {
     if (queryTab === "register") {
@@ -364,30 +366,65 @@ function LoginPageInner() {
            ───────────────────────────────────────────────────────────── */}
         <div className="order-1 lg:order-2 flex min-h-[640px] flex-col justify-between rounded-xl border border-white/10 bg-[#000000] px-6 py-8 sm:px-10 lg:min-h-0 lg:px-14 xl:px-16">
           <div className="mx-auto w-full max-w-[440px]">
-            {/* Top Logo & Retour unifiés façon Stripe Checkout */}
+            {/* Top Logo & Retour interactif morphing style Stripe Checkout */}
             <div className="flex items-center justify-between mb-8">
               <Link
                 href="/"
+                onMouseEnter={() => setIsBackHovered(true)}
+                onMouseLeave={() => setIsBackHovered(false)}
                 aria-label="Retour à l'accueil ZAP"
-                className="group inline-flex items-center gap-2.5 py-1 px-2.5 -ml-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.04] transition-all no-underline"
+                className="group inline-flex items-center gap-2 h-9 px-3 -ml-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 transition-all no-underline cursor-pointer"
               >
-                <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-white/5 border border-white/10 group-hover:border-white/20 group-hover:bg-white/10 transition-all text-zinc-400 group-hover:text-white">
-                  <ArrowLeftIcon className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
+                {/* Flèche retour animée */}
+                <motion.div
+                  animate={{ x: isBackHovered ? -2 : 0 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                  className="flex items-center justify-center text-zinc-400 group-hover:text-white transition-colors"
+                >
+                  <ArrowLeftIcon className="w-3.5 h-3.5" />
+                </motion.div>
+
+                {/* Zone animée : Texte 'Retour' se transforme en Logo ZAP */}
+                <div className="relative h-6 flex items-center overflow-hidden min-w-[48px]">
+                  <AnimatePresence mode="wait" initial={false}>
+                    {!isBackHovered ? (
+                      <motion.span
+                        key="text"
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        transition={{ duration: 0.15, ease: "easeInOut" }}
+                        className="text-xs font-medium text-zinc-300 group-hover:text-white select-none whitespace-nowrap"
+                      >
+                        Retour
+                      </motion.span>
+                    ) : (
+                      <motion.div
+                        key="logo"
+                        initial={{ opacity: 0, scale: 0.85, y: 5 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.85, y: -5 }}
+                        transition={{ type: "spring", stiffness: 450, damping: 25 }}
+                        className="flex items-center gap-1.5"
+                      >
+                        <div className="relative w-5 h-5 rounded-md overflow-hidden bg-black border border-white/20 flex items-center justify-center shrink-0">
+                          <Image
+                            src="/log.jpg"
+                            alt="ZAP"
+                            width={20}
+                            height={20}
+                            priority
+                            className="rotate-90"
+                            style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                          />
+                        </div>
+                        <span className="text-xs font-bold text-white tracking-wider font-['Space_Grotesk']">
+                          ZAP
+                        </span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                <div className="relative w-7 h-7 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0 bg-black border border-white/10">
-                  <Image
-                    src="/log.jpg"
-                    alt="ZAP"
-                    width={28}
-                    height={28}
-                    priority
-                    className="rotate-90 transition-transform duration-300"
-                    style={{ objectFit: "cover", width: "100%", height: "100%" }}
-                  />
-                </div>
-                <span className="text-sm font-bold tracking-tight text-white font-['Space_Grotesk']">
-                  ZAP
-                </span>
               </Link>
 
               {activeTab === "forgot" && (
