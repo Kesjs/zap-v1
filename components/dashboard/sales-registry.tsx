@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/client";
 import CustomSelect, { SelectOption } from "@/components/ui/custom-select";
 import {
   MagnifyingGlassIcon,
@@ -13,8 +14,10 @@ import {
   BanknotesIcon,
   ClockIcon,
   XMarkIcon,
-  EllipsisVerticalIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
+
+const supabase = createClient();
 
 const DOC_TYPE_OPTIONS: SelectOption[] = [
   { value: "all", label: "Tous les types" },
@@ -83,7 +86,8 @@ export default function SalesRegistry({
   onNavigateDocuments,
   mode = "documents",
 }: SalesRegistryProps) {
-  const [documents, setDocuments] = useState<DocumentItem[]>(initialDocuments);
+  const [documents, setDocuments] = useState<DocumentItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
@@ -96,6 +100,69 @@ export default function SalesRegistry({
   const [paymentMode, setPaymentMode] = useState<"Wave" | "MoMo" | "Cash">("Wave");
   const [encaissementAmount, setEncaissementAmount] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // 1. Fetch documents from Supabase Cloud + LocalStorage fallback
+  const fetchDocuments = async () => {
+    try {
+      setIsLoading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: dbDocs, error } = await supabase
+          .from("documents")
+          .select("*, items:document_items(*)")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false });
+
+        if (!error && dbDocs && dbDocs.length > 0) {
+          const mapped: DocumentItem[] = dbDocs.map((d: any) => ({
+            id: d.id,
+            number: d.number,
+            date: new Date(d.created_at).toLocaleDateString("fr-FR") + " · " + new Date(d.created_at).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
+            client: d.client_name,
+            clientPhone: d.client_phone || undefined,
+            type: d.type === "invoice" ? "facture" : d.type === "quote" ? "devis" : "recu",
+            amount: Number(d.total) || 0,
+            status: d.status === "paid" ? "paye" : "en_attente",
+            items: (d.items || []).map((it: any) => ({
+              label: it.description,
+              qty: Number(it.quantity) || 1,
+              price: Number(it.unit_price) || 0,
+            })),
+          }));
+          setDocuments(mapped);
+          try {
+            localStorage.setItem("zap:documents", JSON.stringify(mapped));
+          } catch {
+            // ignore
+          }
+          return;
+        }
+      }
+
+      // Fallback to local storage
+      const local = localStorage.getItem("zap:documents");
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setDocuments(parsed);
+          return;
+        }
+      }
+
+      // Default demo documents if totally empty
+      setDocuments(initialDocuments);
+    } catch (e) {
+      console.warn("Supabase fetch documents error:", e);
+      setDocuments(initialDocuments);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
 
   // Metrics calculation
   const totalEncaissed = useMemo(() => {
@@ -133,25 +200,72 @@ export default function SalesRegistry({
     setEncaissementAmount(doc.amount);
   };
 
-  const handleConfirmEncaisser = () => {
+  const handleConfirmEncaisser = async () => {
     if (!encaisserDoc) return;
     setIsProcessing(true);
 
-    setTimeout(() => {
-      setDocuments((prev) =>
-        prev.map((d) =>
+    try {
+      // 1. Mettre à jour dans Supabase
+      const newNumber = encaisserDoc.number.replace("FAC", "REC");
+      await supabase
+        .from("documents")
+        .update({
+          status: "paid",
+          type: "receipt",
+          amount_paid: encaissementAmount || encaisserDoc.amount,
+          number: newNumber,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", encaisserDoc.id);
+
+      // 2. Mettre à jour l'état local
+      setDocuments((prev) => {
+        const next = prev.map((d) =>
           d.id === encaisserDoc.id
-            ? { ...d, type: "recu", status: "paye", number: d.number.replace("FAC", "REC") }
+            ? { ...d, type: "recu" as const, status: "paye" as const, number: newNumber }
             : d
-        )
-      );
-      setIsProcessing(false);
+        );
+        try {
+          localStorage.setItem("zap:documents", JSON.stringify(next));
+        } catch {
+          // ignore
+        }
+        return next;
+      });
+
       const encDocNum = encaisserDoc.number;
       setEncaisserDoc(null);
       toast.success("Reçu généré avec succès", {
-        description: `La pièce ${encDocNum} a été encaissée et le reçu est prêt.`,
+        description: `La pièce ${encDocNum} a été encaissée et le reçu est synchronisé dans Supabase.`,
       });
-    }, 600);
+    } catch (e) {
+      console.warn("Error updating doc status:", e);
+      toast.error("Erreur lors de l'enregistrement de l'encaissement.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Handle delete document action
+  const handleDeleteDocument = async (docId: string, docNumber: string) => {
+    if (!confirm(`Confirmer la suppression du document ${docNumber} ?`)) return;
+
+    try {
+      await supabase.from("documents").delete().eq("id", docId);
+      setDocuments((prev) => {
+        const next = prev.filter((d) => d.id !== docId);
+        try {
+          localStorage.setItem("zap:documents", JSON.stringify(next));
+        } catch {
+          // ignore
+        }
+        return next;
+      });
+      toast.success(`Document ${docNumber} supprimé.`);
+    } catch (e) {
+      console.warn("Delete document err:", e);
+      toast.error("Erreur lors de la suppression du document.");
+    }
   };
 
   const getTypeBadgeStyle = (type: DocumentItem["type"]) => {
@@ -559,6 +673,23 @@ export default function SalesRegistry({
                       >
                         <DocumentDuplicateIcon style={{ width: 16, height: 16 }} />
                       </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteDocument(doc.id, doc.number)}
+                        title="Supprimer définitivement ce document"
+                        style={{
+                          background: "transparent",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          borderRadius: "8px",
+                          padding: "6px 8px",
+                          color: "#71717A",
+                          cursor: "pointer",
+                        }}
+                        className="hover:text-red-400 hover:border-red-500/30 transition-colors"
+                      >
+                        <TrashIcon style={{ width: 16, height: 16 }} />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -655,6 +786,22 @@ export default function SalesRegistry({
                     }}
                   >
                     <DocumentDuplicateIcon style={{ width: 16, height: 16 }} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteDocument(doc.id, doc.number)}
+                    style={{
+                      background: "transparent",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      borderRadius: "8px",
+                      padding: "6px",
+                      color: "#71717A",
+                      cursor: "pointer",
+                    }}
+                    className="hover:text-red-400 hover:border-red-500/30 transition-colors"
+                  >
+                    <TrashIcon style={{ width: 16, height: 16 }} />
                   </button>
                 </div>
               </div>

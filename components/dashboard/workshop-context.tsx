@@ -110,9 +110,40 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
       setIsCloudSynced(true);
 
       const cloudWorkshop = user.user_metadata?.workshop as Partial<WorkshopProfile> | undefined;
-
-      // Also read from public.profiles table in Supabase
       const profileUpdates: Partial<WorkshopProfile> = {};
+
+      // 1. Lire depuis la table public.workshops
+      try {
+        const { data: dbWorkshop } = await supabase
+          .from("workshops")
+          .select("*")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if (dbWorkshop) {
+          const fromDb: Partial<WorkshopProfile> = {
+            name: dbWorkshop.name || undefined,
+            city: dbWorkshop.city || undefined,
+            country: dbWorkshop.country || undefined,
+            whatsapp: dbWorkshop.phone || undefined,
+            ifu: dbWorkshop.tax_id || undefined,
+            logoUrl: dbWorkshop.logo_url || undefined,
+            stampUrl: dbWorkshop.stamp_signature_url || undefined,
+          };
+          if (dbWorkshop.momo_number) {
+            fromDb.mobileMoney1 = {
+              provider: (dbWorkshop.momo_operator as any) || "MTN Mobile Money",
+              number: dbWorkshop.momo_number,
+              name: dbWorkshop.owner_name || dbWorkshop.name || "",
+            };
+          }
+          Object.assign(profileUpdates, fromDb);
+        }
+      } catch (e) {
+        console.warn("Table workshops fetch warning:", e);
+      }
+
+      // 2. Lire depuis public.profiles table en complément
       try {
         const { data: profile } = await supabase
           .from("profiles")
@@ -121,10 +152,10 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
           .maybeSingle();
 
         if (profile) {
-          if (profile.full_name) profileUpdates.name = profile.full_name;
-          if (profile.city) profileUpdates.city = profile.city;
-          if (profile.phone_number) profileUpdates.whatsapp = profile.phone_number;
-          if (profile.avatar_url && !cloudWorkshop?.logoUrl) profileUpdates.logoUrl = profile.avatar_url;
+          if (profile.full_name && !profileUpdates.name) profileUpdates.name = profile.full_name;
+          if (profile.city && !profileUpdates.city) profileUpdates.city = profile.city;
+          if (profile.phone_number && !profileUpdates.whatsapp) profileUpdates.whatsapp = profile.phone_number;
+          if (profile.avatar_url && !profileUpdates.logoUrl && !cloudWorkshop?.logoUrl) profileUpdates.logoUrl = profile.avatar_url;
         }
       } catch {
         // Table fallback
@@ -132,7 +163,7 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
 
       if (cloudWorkshop || Object.keys(profileUpdates).length > 0) {
         setWorkshop((prev) => {
-          const merged = { ...prev, ...profileUpdates, ...(cloudWorkshop || {}) };
+          const merged = { ...prev, ...cloudWorkshop, ...profileUpdates };
           try {
             localStorage.setItem("zap:workshop_profile", JSON.stringify(merged));
           } catch {
@@ -191,7 +222,30 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
           },
         });
 
-        // 2. Sync core identity fields to public.profiles SQL table
+        // 2. Sync into public.workshops SQL table
+        try {
+          await supabase.from("workshops").upsert(
+            {
+              user_id: user.id,
+              name: nextProfile.name,
+              owner_name: nextProfile.mobileMoney1?.name || nextProfile.name,
+              phone: nextProfile.whatsapp,
+              city: nextProfile.city,
+              country: nextProfile.country,
+              tax_id: nextProfile.ifu,
+              momo_operator: nextProfile.mobileMoney1?.provider || "MTN Mobile Money",
+              momo_number: nextProfile.mobileMoney1?.number || null,
+              logo_url: nextProfile.logoUrl,
+              stamp_signature_url: nextProfile.stampUrl,
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: "user_id" }
+          );
+        } catch (wsErr) {
+          console.warn("Supabase workshops table upsert warning:", wsErr);
+        }
+
+        // 3. Sync core identity fields to public.profiles SQL table
         try {
           await supabase
             .from("profiles")

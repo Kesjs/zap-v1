@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
+import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/client";
 import {
   PlusIcon,
   PencilSquareIcon,
@@ -11,6 +13,8 @@ import {
   DocumentTextIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
+
+const supabase = createClient();
 
 export interface CatalogItem {
   id: string;
@@ -142,9 +146,41 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(25000);
 
-  // Load from localStorage on mount
-  useEffect(() => {
+  // Load from Supabase and LocalStorage on mount
+  const fetchServices = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: dbServices, error } = await supabase
+          .from("catalog_services")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: true });
+
+        if (!error && dbServices && dbServices.length > 0) {
+          const mapped: CatalogItem[] = dbServices.map((s: any) => ({
+            id: s.id,
+            label: s.name,
+            category: s.category || "Service",
+            description: s.description || undefined,
+            price: Number(s.price) || 0,
+          }));
+          setItems(mapped);
+
+          const uniqueCats = Array.from(new Set(mapped.map((m) => m.category))).filter(Boolean);
+          if (uniqueCats.length > 0) {
+            setCategories(uniqueCats);
+          }
+          try {
+            localStorage.setItem("zap_custom_catalog", JSON.stringify(mapped));
+          } catch {
+            // ignore
+          }
+          return;
+        }
+      }
+
+      // Fallback local storage
       const savedItems = localStorage.getItem("zap_custom_catalog");
       if (savedItems) {
         setItems(JSON.parse(savedItems));
@@ -156,6 +192,10 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
     } catch {
       // ignore
     }
+  };
+
+  useEffect(() => {
+    fetchServices();
   }, []);
 
   // Save to localStorage
@@ -207,7 +247,7 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
     setPrice(item.price);
   };
 
-  const handleSaveItem = () => {
+  const handleSaveItem = async () => {
     if (!label.trim()) return;
 
     const finalCategory = customCategoryInput.trim() ? customCategoryInput.trim() : category;
@@ -215,6 +255,8 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
     if (customCategoryInput.trim() && !categories.includes(customCategoryInput.trim())) {
       persistCategories([...categories, customCategoryInput.trim()]);
     }
+
+    const { data: { user } } = await supabase.auth.getUser();
 
     if (editItem) {
       const updated = items.map((it) =>
@@ -224,9 +266,49 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
       );
       persistItems(updated);
       setEditItem(null);
+
+      if (user) {
+        try {
+          await supabase
+            .from("catalog_services")
+            .update({
+              name: label.trim(),
+              description: description.trim() || null,
+              category: finalCategory,
+              price,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", editItem.id);
+        } catch (err) {
+          console.warn("Supabase service update error:", err);
+        }
+      }
+      toast.success("Prestation mise à jour avec succès dans Supabase !");
     } else {
+      const tempId = Date.now().toString();
+      let realId = tempId;
+
+      if (user) {
+        try {
+          const { data: inserted } = await supabase
+            .from("catalog_services")
+            .insert({
+              user_id: user.id,
+              name: label.trim(),
+              description: description.trim() || null,
+              category: finalCategory,
+              price,
+            })
+            .select()
+            .single();
+          if (inserted?.id) realId = inserted.id;
+        } catch (err) {
+          console.warn("Supabase service insert error:", err);
+        }
+      }
+
       const newItem: CatalogItem = {
-        id: Date.now().toString(),
+        id: realId,
         label: label.trim(),
         category: finalCategory,
         description: description.trim(),
@@ -234,14 +316,26 @@ export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps
       };
       persistItems([newItem, ...items]);
       setIsAddOpen(false);
+      toast.success("Prestation ajoutée au catalogue Supabase !");
     }
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (!deleteItem) return;
-    const updated = items.filter((it) => it.id !== deleteItem.id);
+    const targetId = deleteItem.id;
+    const updated = items.filter((it) => it.id !== targetId);
     persistItems(updated);
     setDeleteItem(null);
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      try {
+        await supabase.from("catalog_services").delete().eq("id", targetId);
+      } catch (err) {
+        console.warn("Supabase service delete error:", err);
+      }
+    }
+    toast.success("Prestation supprimée.");
   };
 
   // Option: Clear all examples to start from complete scratch

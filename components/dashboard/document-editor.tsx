@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/client";
 import {
   PlusIcon,
   TrashIcon,
@@ -13,6 +15,8 @@ import {
   ArrowPathIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
+
+const supabase = createClient();
 
 export interface LineItem {
   id: string;
@@ -291,20 +295,98 @@ export default function DocumentEditor({
     setDepositAmount(Math.round((total * percent) / 100));
   };
 
-  const handleGenerateAndShare = () => {
+  const handleGenerateAndShare = async () => {
     if (!clientName.trim()) {
-      alert("Veuillez renseigner le nom du client.");
+      toast.error("Veuillez renseigner le nom du client.");
       return;
     }
 
     setIsGenerating(true);
-    setTimeout(() => {
-      setIsGenerating(false);
-      setToastMessage("Document certifié généré avec succès !");
+
+    try {
+      const prefix = docType === "recu" ? "REC" : docType === "facture" ? "FAC" : "DEV";
+      const year = new Date().getFullYear();
+      const randomSeq = Math.floor(1000 + Math.random() * 9000);
+      const docNumber = `${prefix}-${year}-${randomSeq}`;
+
+      const dbType = docType === "recu" ? "receipt" : docType === "facture" ? "invoice" : "quote";
+      const dbStatus = docType === "recu" ? "paid" : (hasDeposit && effectiveDeposit >= total ? "paid" : "pending");
+
+      // 1. Sauvegarder dans Supabase Cloud si connecté
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        let workshopId: string | null = null;
+        try {
+          const { data: ws } = await supabase
+            .from("workshops")
+            .select("id")
+            .eq("user_id", user.id)
+            .maybeSingle();
+          if (ws?.id) workshopId = ws.id;
+        } catch {
+          // ignore
+        }
+
+        const { data: newDoc, error: docError } = await supabase
+          .from("documents")
+          .insert({
+            user_id: user.id,
+            workshop_id: workshopId,
+            number: docNumber,
+            type: dbType,
+            status: dbStatus,
+            client_name: clientName.trim(),
+            client_phone: clientPhone.trim() || null,
+            date: new Date().toISOString().split("T")[0],
+            subtotal: total,
+            total: total,
+            amount_paid: hasDeposit ? effectiveDeposit : (docType === "recu" ? total : 0),
+            payment_method: paymentProvider,
+            notes: validity,
+            terms: hasDeposit
+              ? `Acompte perçu: ${effectiveDeposit.toLocaleString("fr-FR")} FCFA, solde: ${remainingBalance.toLocaleString("fr-FR")} FCFA`
+              : null,
+          })
+          .select()
+          .single();
+
+        if (!docError && newDoc?.id && items.length > 0) {
+          const itemsPayload = items.map((it, idx) => ({
+            document_id: newDoc.id,
+            description: it.label,
+            quantity: it.qty,
+            unit_price: it.price,
+            total: it.qty * it.price,
+            sort_order: idx,
+          }));
+
+          await supabase.from("document_items").insert(itemsPayload);
+        }
+      }
+
+      // 2. Sauvegarde locale miroir immédiate (zero délai)
+      try {
+        const localDoc = {
+          id: docNumber,
+          number: docNumber,
+          date: new Date().toLocaleDateString("fr-FR") + " · " + new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }),
+          client: clientName.trim(),
+          clientPhone: clientPhone.trim(),
+          type: docType,
+          amount: total,
+          status: (docType === "recu" || (hasDeposit && effectiveDeposit >= total)) ? "paye" : "en_attente",
+          items: items.map((it) => ({ label: it.label, qty: it.qty, price: it.price })),
+        };
+        const existingRaw = localStorage.getItem("zap:documents");
+        const existingList = existingRaw ? JSON.parse(existingRaw) : [];
+        localStorage.setItem("zap:documents", JSON.stringify([localDoc, ...existingList]));
+      } catch {
+        // ignore
+      }
+
+      toast.success(`Document ${docNumber} enregistré avec succès dans Supabase !`);
 
       const typeLabel = docType === "recu" ? "Reçu officiel" : docType === "facture" ? "Facture" : "Devis proforma";
-      const docNumber = docType === "recu" ? "REC-2025-0043" : docType === "facture" ? "FAC-2025-0105" : "DEV-2025-0090";
-
       let paymentText = `Règlement accepté via ${paymentProvider} (${paymentPhone}).`;
       if (hasDeposit && effectiveDeposit > 0) {
         paymentText += `\n- Acompte perçu : ${effectiveDeposit.toLocaleString("fr-FR")} FCFA\n- Reste dû à la livraison : ${remainingBalance.toLocaleString("fr-FR")} FCFA`;
@@ -318,7 +400,12 @@ export default function DocumentEditor({
 
       window.open(waUrl, "_blank");
       onSuccess?.();
-    }, 700);
+    } catch (err: any) {
+      console.error("Document save error:", err);
+      toast.error("Erreur lors de la sauvegarde du document.");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
