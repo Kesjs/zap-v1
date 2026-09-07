@@ -1,3 +1,14 @@
+interface ViewTransition {
+  ready: Promise<void>;
+  finished: Promise<void>;
+  updateCallbackDone: Promise<void>;
+  skipTransition: () => void;
+}
+
+interface Document {
+  startViewTransition?: (callback: () => void | Promise<void>) => ViewTransition;
+}
+
 declare module 'next/link' {
   import * as React from 'react';
   const Link: React.ComponentType<any>;
