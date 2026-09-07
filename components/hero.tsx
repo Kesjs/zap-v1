@@ -76,9 +76,8 @@ function HeroBadge() {
         />
         <span
           style={{
-            background: "#000000",
-            color: "#FFFFFF",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
+            background: "#FFFFFF",
+            color: "#000000",
             fontSize: "10px",
             fontWeight: 700,
             fontFamily: "'DM Sans', sans-serif",
