@@ -128,12 +128,7 @@ export default function DocumentEditor({
 
   // Line items
   const [items, setItems] = useState<LineItem[]>(
-    initialItems && initialItems.length > 0
-      ? initialItems
-      : [
-          { id: "1", label: "Table de réunion teck massif (12 places)", qty: 1, price: 350000 },
-          { id: "2", label: "Livraison & assemblage sur site", qty: 1, price: 35000 },
-        ]
+    initialItems && initialItems.length > 0 ? initialItems : []
   );
 
   // Dialog for adding manual line item

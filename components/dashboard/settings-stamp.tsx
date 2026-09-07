@@ -14,11 +14,11 @@ import {
 
 export default function SettingsStamp() {
   // Company profile states
-  const [companyName, setCompanyName] = useState("Atelier Koffi & Fils");
-  const [ifu, setIfu] = useState("3202112456789");
-  const [rccm, setRccm] = useState("RB/COT/21 B 12345");
+  const [companyName, setCompanyName] = useState("");
+  const [ifu, setIfu] = useState("");
+  const [rccm, setRccm] = useState("");
   const [city, setCity] = useState("Cotonou");
-  const [whatsapp, setWhatsapp] = useState("+229 97 00 11 22");
+  const [whatsapp, setWhatsapp] = useState("");
   const [isSavedCompany, setIsSavedCompany] = useState(false);
 
   // Stamp processing state (Canvas API background removal)

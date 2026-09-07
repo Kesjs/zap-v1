@@ -21,7 +21,7 @@ function DashboardMainContent() {
 
   const [isReady, setIsReady] = useState(false);
   const [currentView, setCurrentView] = useState<DashboardView>("home");
-  const [documentCount, setDocumentCount] = useState(3);
+  const [documentCount, setDocumentCount] = useState(0);
   const maxDocuments = 8;
 
   const [prefilledClient, setPrefilledClient] = useState("");
@@ -30,6 +30,25 @@ function DashboardMainContent() {
 
   useEffect(() => {
     const timer = setTimeout(() => setIsReady(true), 150);
+
+    const fetchRealCount = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { count, error } = await supabase
+            .from("documents")
+            .select("*", { count: "exact", head: true })
+            .eq("user_id", user.id);
+          if (!error && count !== null) {
+            setDocumentCount(count);
+          }
+        }
+      } catch {
+        // ignore
+      }
+    };
+
+    fetchRealCount();
     return () => clearTimeout(timer);
   }, []);
 

@@ -31,30 +31,20 @@ export interface WorkshopProfile {
 }
 
 const DEFAULT_WORKSHOP: WorkshopProfile = {
-  name: "Atelier Koffi & Fils",
-  activity: "Menuiserie & Agencement",
+  name: "Mon Atelier",
+  activity: "Artisanat & Services",
   city: "Cotonou",
   country: "Bénin",
-  whatsapp: "+229 97 00 11 22",
-  ifu: "3202112456789",
-  rccm: "RB/COT/21 B 12345",
+  whatsapp: "",
+  ifu: "",
+  rccm: "",
   logoUrl: null,
   stampUrl: null,
   signatureUrl: null,
   mobileMoney1: {
     provider: "MTN MoMo",
-    number: "+229 97 00 11 22",
-    name: "Koffi Mensah",
-  },
-  mobileMoney2: {
-    provider: "Moov Money",
-    number: "+229 95 33 44 55",
-    name: "Atelier Koffi",
-  },
-  bankInfo: {
-    bank: "BOA Bénin",
-    rib: "BJ061 01001 002345678901 23",
-    iban: "BJ66 BJ06 1010 0100 2345 6789 0123",
+    number: "",
+    name: "",
   },
 };
 

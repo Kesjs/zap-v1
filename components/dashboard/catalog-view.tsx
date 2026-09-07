@@ -128,7 +128,7 @@ interface CatalogViewProps {
 }
 
 export default function CatalogView({ onSelectItemForInvoice }: CatalogViewProps) {
-  const [items, setItems] = useState<CatalogItem[]>(DEFAULT_CATALOG);
+  const [items, setItems] = useState<CatalogItem[]>([]);
   const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
   const [activeCategory, setActiveCategory] = useState<string>("Tous");
   const [searchQuery, setSearchQuery] = useState("");

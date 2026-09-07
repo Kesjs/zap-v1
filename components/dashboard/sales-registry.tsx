@@ -15,6 +15,7 @@ import {
   ClockIcon,
   XMarkIcon,
   TrashIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 
 const supabase = createClient();
@@ -38,38 +39,7 @@ export interface DocumentItem {
   items?: Array<{ label: string; qty: number; price: number }>;
 }
 
-const initialDocuments: DocumentItem[] = [
-  {
-    id: "1",
-    number: "REC-2025-0042",
-    date: "05/09/2025 · 11:30",
-    client: "Koffi Mensah",
-    clientPhone: "+229 97 00 11 22",
-    type: "recu",
-    amount: 28000,
-    status: "paye",
-  },
-  {
-    id: "2",
-    number: "FAC-2025-0104",
-    date: "04/09/2025 · 16:45",
-    client: "Garage Central",
-    clientPhone: "+229 96 44 33 22",
-    type: "facture",
-    amount: 75000,
-    status: "en_attente",
-  },
-  {
-    id: "3",
-    number: "DEV-2025-0089",
-    date: "03/09/2025 · 09:15",
-    client: "Mme Tossou",
-    clientPhone: "+229 95 12 34 56",
-    type: "devis",
-    amount: 145000,
-    status: "en_attente",
-  },
-];
+const initialDocuments: DocumentItem[] = [];
 
 interface SalesRegistryProps {
   onCreateDocument: () => void;
@@ -587,121 +557,194 @@ export default function SalesRegistry({
             </tr>
           </thead>
           <tbody>
-            {displayedDocuments.map((doc) => {
-              const badge = getTypeBadgeStyle(doc.type);
-              return (
-                <tr key={doc.id} style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)" }}>
-                  <td style={{ padding: "16px 20px" }}>
-                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13.5px", color: "#F4F4F5", margin: 0, fontWeight: 500 }}>
-                      {doc.number}
-                    </p>
-                    <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "11px", color: "#A1A1AA", margin: "2px 0 0" }}>
-                      {doc.date}
-                    </p>
-                  </td>
-
-                  <td style={{ padding: "16px 20px", fontFamily: "'DM Sans', sans-serif", fontSize: "14px", color: "#F4F4F5" }}>
-                    {doc.client}
-                  </td>
-
-                  <td style={{ padding: "16px 20px" }}>
-                    <span
-                      style={{
-                        background: badge.bg,
-                        border: `1px solid ${badge.border}`,
-                        color: badge.text,
-                        fontSize: "11px",
-                        fontFamily: "'DM Sans', sans-serif",
-                        fontWeight: 600,
-                        padding: "3px 8px",
-                        borderRadius: "8px",
-                        letterSpacing: "0.05em",
-                      }}
-                    >
-                      {badge.label}
-                    </span>
-                  </td>
-
-                  <td
+            {displayedDocuments.length === 0 ? (
+              <tr>
+                <td colSpan={5} style={{ padding: "48px 20px", textAlign: "center" }}>
+                  <DocumentTextIcon style={{ width: "36px", height: "36px", margin: "0 auto 12px", color: "#52525B" }} />
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "14px", fontWeight: 500, color: "#D4D4D8", margin: 0 }}>
+                    Aucun document enregistré
+                  </p>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "12px", color: "#71717A", margin: "4px 0 16px" }}>
+                    Créez votre première facture, devis ou reçu officiel conforme OHADA.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={onCreateDocument}
                     style={{
-                      padding: "16px 20px",
-                      textAlign: "right",
-                      fontFamily: "'DM Sans', sans-serif",
-                      fontSize: "14.5px",
-                      color: "#F4F4F5",
-                      fontWeight: 500,
-                      fontVariantNumeric: "tabular-nums",
+                      background: "#FFFFFF",
+                      color: "#000000",
+                      border: "none",
+                      borderRadius: "10px",
+                      padding: "8px 16px",
+                      fontSize: "12.5px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "6px",
                     }}
                   >
-                    {doc.amount.toLocaleString("fr-FR")} FCFA
-                  </td>
+                    <PlusIcon style={{ width: "14px", height: "14px" }} />
+                    <span>Créer un document</span>
+                  </button>
+                </td>
+              </tr>
+            ) : (
+              displayedDocuments.map((doc) => {
+                const badge = getTypeBadgeStyle(doc.type);
+                return (
+                  <tr key={doc.id} style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)" }}>
+                    <td style={{ padding: "16px 20px" }}>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "13.5px", color: "#F4F4F5", margin: 0, fontWeight: 500 }}>
+                        {doc.number}
+                      </p>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "11px", color: "#A1A1AA", margin: "2px 0 0" }}>
+                        {doc.date}
+                      </p>
+                    </td>
 
-                  <td style={{ padding: "16px 20px", textAlign: "right" }}>
-                    <div className="flex items-center justify-end gap-2">
-                      {doc.type === "facture" && doc.status === "en_attente" && (
+                    <td style={{ padding: "16px 20px", fontFamily: "'DM Sans', sans-serif", fontSize: "14px", color: "#F4F4F5" }}>
+                      {doc.client}
+                    </td>
+
+                    <td style={{ padding: "16px 20px" }}>
+                      <span
+                        style={{
+                          background: badge.bg,
+                          border: `1px solid ${badge.border}`,
+                          color: badge.text,
+                          fontSize: "11px",
+                          fontFamily: "'DM Sans', sans-serif",
+                          fontWeight: 600,
+                          padding: "3px 8px",
+                          borderRadius: "8px",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {badge.label}
+                      </span>
+                    </td>
+
+                    <td
+                      style={{
+                        padding: "16px 20px",
+                        textAlign: "right",
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: "14.5px",
+                        color: "#F4F4F5",
+                        fontWeight: 500,
+                        fontVariantNumeric: "tabular-nums",
+                      }}
+                    >
+                      {doc.amount.toLocaleString("fr-FR")} FCFA
+                    </td>
+
+                    <td style={{ padding: "16px 20px", textAlign: "right" }}>
+                      <div className="flex items-center justify-end gap-2">
+                        {doc.type === "facture" && doc.status === "en_attente" && (
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEncaisser(doc)}
+                            style={{
+                              background: "rgba(255, 255, 255, 0.08)",
+                              border: "1px solid rgba(255, 255, 255, 0.2)",
+                              borderRadius: "8px",
+                              padding: "6px 12px",
+                              color: "#FFFFFF",
+                              fontFamily: "'DM Sans', sans-serif",
+                              fontSize: "12.5px",
+                              fontWeight: 500,
+                              cursor: "pointer",
+                            }}
+                          >
+                            Encaisser
+                          </button>
+                        )}
+
                         <button
                           type="button"
-                          onClick={() => handleOpenEncaisser(doc)}
+                          onClick={() => onDuplicateDocument?.(doc)}
+                          title="Dupliquer le document"
                           style={{
-                            background: "rgba(255, 255, 255, 0.08)",
-                            border: "1px solid rgba(255, 255, 255, 0.2)",
+                            background: "transparent",
+                            border: "1px solid rgba(255, 255, 255, 0.1)",
                             borderRadius: "8px",
-                            padding: "6px 12px",
-                            color: "#FFFFFF",
-                            fontFamily: "'DM Sans', sans-serif",
-                            fontSize: "12.5px",
-                            fontWeight: 500,
+                            padding: "6px 8px",
+                            color: "#A1A1AA",
                             cursor: "pointer",
                           }}
                         >
-                          Encaisser
+                          <DocumentDuplicateIcon style={{ width: 16, height: 16 }} />
                         </button>
-                      )}
 
-                      <button
-                        type="button"
-                        onClick={() => onDuplicateDocument?.(doc)}
-                        title="Dupliquer le document"
-                        style={{
-                          background: "transparent",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                          borderRadius: "8px",
-                          padding: "6px 8px",
-                          color: "#A1A1AA",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <DocumentDuplicateIcon style={{ width: 16, height: 16 }} />
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteDocument(doc.id, doc.number)}
-                        title="Supprimer définitivement ce document"
-                        style={{
-                          background: "transparent",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
-                          borderRadius: "8px",
-                          padding: "6px 8px",
-                          color: "#71717A",
-                          cursor: "pointer",
-                        }}
-                        className="hover:text-red-400 hover:border-red-500/30 transition-colors"
-                      >
-                        <TrashIcon style={{ width: 16, height: 16 }} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteDocument(doc.id, doc.number)}
+                          title="Supprimer définitivement ce document"
+                          style={{
+                            background: "transparent",
+                            border: "1px solid rgba(255, 255, 255, 0.1)",
+                            borderRadius: "8px",
+                            padding: "6px 8px",
+                            color: "#71717A",
+                            cursor: "pointer",
+                          }}
+                          className="hover:text-red-400 hover:border-red-500/30 transition-colors"
+                        >
+                          <TrashIcon style={{ width: 16, height: 16 }} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
 
       {/* Mobile Cards View (<640px) */}
       <div className="sm:hidden flex flex-col gap-3">
-        {displayedDocuments.map((doc) => {
+        {displayedDocuments.length === 0 ? (
+          <div
+            style={{
+              background: "#171717",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "14px",
+              padding: "36px 20px",
+              textAlign: "center",
+            }}
+          >
+            <DocumentTextIcon style={{ width: "32px", height: "32px", margin: "0 auto 10px", color: "#52525B" }} />
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "14px", fontWeight: 500, color: "#D4D4D8", margin: 0 }}>
+              Aucun document enregistré
+            </p>
+            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "12px", color: "#71717A", margin: "4px 0 16px" }}>
+              Créez votre première facture, devis ou reçu.
+            </p>
+            <button
+              type="button"
+              onClick={onCreateDocument}
+              style={{
+                background: "#FFFFFF",
+                color: "#000000",
+                border: "none",
+                borderRadius: "10px",
+                padding: "8px 16px",
+                fontSize: "12px",
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <PlusIcon style={{ width: "14px", height: "14px" }} />
+              <span>Créer un document</span>
+            </button>
+          </div>
+        ) : (
+          displayedDocuments.map((doc) => {
           const badge = getTypeBadgeStyle(doc.type);
           return (
             <div
@@ -807,7 +850,8 @@ export default function SalesRegistry({
               </div>
             </div>
           );
-        })}
+        })
+      )}
       </div>
 
       {/* Encaisser Dialog */}
