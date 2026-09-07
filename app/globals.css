@@ -38,6 +38,17 @@
   --color-destructive: var(--destructive);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 200%;
+  }
 }
 
 /* ─────────────────────────────────────────
@@ -72,6 +83,13 @@
   --destructive: #A83232;
   --input: #E5E5E5;
   --ring: #3452B4;
+
+  /* Rainbow Button colors */
+  --color-1: hsl(0 100% 63%);
+  --color-2: hsl(270 100% 63%);
+  --color-3: hsl(210 100% 63%);
+  --color-4: hsl(195 100% 63%);
+  --color-5: hsl(90 100% 63%);
 }
 
 /* ─────────────────────────────────────────

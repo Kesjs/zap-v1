@@ -13,6 +13,7 @@ import {
 
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 
 const navLinkStyle: React.CSSProperties = {
   fontFamily: "'DM Sans', sans-serif",
@@ -228,35 +229,11 @@ export default function NavBar() {
           {/* Right: Connexion + CTA + mobile hamburger */}
           <div className="flex items-center gap-3">
             {isLoggedIn ? (
-              <Link
-                href="/dashboard"
-                className="hidden md:flex items-center transition-all duration-200 hover:scale-[1.02]"
-                style={{
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "13px",
-                  fontWeight: 500,
-                  color: "#FFFFFF",
-                  background: "rgba(255, 255, 255, 0.08)",
-                  border: "1px solid rgba(255, 255, 255, 0.18)",
-                  padding: "7px 18px",
-                  borderRadius: "9999px",
-                  textDecoration: "none",
-                  whiteSpace: "nowrap",
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
-                  boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)",
-                }}
-                onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.15)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.32)";
-                }}
-                onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.08)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.18)";
-                }}
-              >
-                Tableau de bord
-              </Link>
+              <RainbowButton asChild size="sm" className="hidden md:inline-flex rounded-full text-xs font-medium px-4">
+                <Link href="/dashboard">
+                  Tableau de bord
+                </Link>
+              </RainbowButton>
             ) : (
               <>
                 <Link
@@ -280,37 +257,11 @@ export default function NavBar() {
                   Connexion
                 </Link>
 
-                <Link
-                  href="/login?tab=register"
-                  className="hidden md:flex items-center transition-all duration-200 hover:scale-[1.02]"
-                  style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "13px",
-                    fontWeight: 500,
-                    color: "#FFFFFF",
-                    background: "rgba(255, 255, 255, 0.08)",
-                    border: "1px solid rgba(255, 255, 255, 0.18)",
-                    padding: "7px 18px",
-                    borderRadius: "9999px",
-                    textDecoration: "none",
-                    whiteSpace: "nowrap",
-                    backdropFilter: "blur(8px)",
-                    WebkitBackdropFilter: "blur(8px)",
-                    boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)",
-                  }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.15)";
-                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.32)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 255, 255, 0.12)";
-                  }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.08)";
-                    (e.currentTarget as HTMLElement).style.borderColor = "rgba(255, 255, 255, 0.18)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)";
-                  }}
-                >
-                  Inscription
-                </Link>
+                <RainbowButton asChild size="sm" className="hidden md:inline-flex rounded-full text-xs font-medium px-4">
+                  <Link href="/login?tab=register">
+                    Inscription
+                  </Link>
+                </RainbowButton>
               </>
             )}
 
@@ -438,26 +389,14 @@ export default function NavBar() {
 
           {isLoggedIn ? (
             <div style={{ padding: "8px 6px 4px" }}>
-              <Link
-                href="/dashboard"
-                onClick={() => setIsMenuOpen(false)}
-                style={{
-                  display: "block",
-                  textAlign: "center",
-                  fontFamily: "'DM Sans', sans-serif",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: "#FFFFFF",
-                  background: "rgba(255, 255, 255, 0.08)",
-                  border: "1px solid rgba(255, 255, 255, 0.18)",
-                  padding: "11px 16px",
-                  borderRadius: "9999px",
-                  textDecoration: "none",
-                  boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25)",
-                }}
-              >
-                Tableau de bord
-              </Link>
+              <RainbowButton asChild size="default" className="w-full rounded-full flex justify-center text-sm font-medium">
+                <Link
+                  href="/dashboard"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Tableau de bord
+                </Link>
+              </RainbowButton>
             </div>
           ) : (
             <>
@@ -479,26 +418,14 @@ export default function NavBar() {
               </Link>
 
               <div style={{ padding: "8px 6px 4px" }}>
-                <Link
-                  href="/login?tab=register"
-                  onClick={() => setIsMenuOpen(false)}
-                  style={{
-                    display: "block",
-                    textAlign: "center",
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    color: "#FFFFFF",
-                    background: "rgba(255, 255, 255, 0.08)",
-                    border: "1px solid rgba(255, 255, 255, 0.18)",
-                    padding: "11px 16px",
-                    borderRadius: "9999px",
-                    textDecoration: "none",
-                    boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.25)",
-                  }}
-                >
-                  Inscription
-                </Link>
+                <RainbowButton asChild size="default" className="w-full rounded-full flex justify-center text-sm font-medium">
+                  <Link
+                    href="/login?tab=register"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Inscription
+                  </Link>
+                </RainbowButton>
               </div>
             </>
           )}
