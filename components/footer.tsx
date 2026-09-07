@@ -50,6 +50,7 @@ export default function Footer() {
                   alt="ZAP"
                   width={42}
                   height={42}
+                  className="rotate-90 transition-transform duration-300"
                   style={{ objectFit: "cover", width: "100%", height: "100%" }}
                 />
               </div>

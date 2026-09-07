@@ -178,6 +178,7 @@ export default function NavBar() {
                 width={36}
                 height={36}
                 priority
+                className="rotate-90 transition-transform duration-300"
                 style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />
             </div>
