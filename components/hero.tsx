@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ShieldCheckIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
 import { useLanguage } from "@/lib/i18n/language-context";
+import FoldText from "@/components/ui/FoldText";
+import DepthText from "@/components/ui/DepthText";
 
 const Beams = dynamic(() => import("@/components/ui/Beams"), { ssr: false });
 
@@ -55,7 +57,20 @@ function HeroBadge() {
             color: "rgba(255, 255, 255, 0.85)",
           }}
         >
-          {t.hero.badge}
+          <FoldText
+            text={t.hero.badge}
+            splitBy="char"
+            hinge="top"
+            trigger="mount"
+            duration={0.5}
+            stagger={0.018}
+            ease="power3.out"
+            perspective={400}
+            creaseShading={0.4}
+            fontSize="inherit"
+            fontWeight="inherit"
+            color="currentColor"
+          />
         </span>
       </div>
     </div>
@@ -180,6 +195,37 @@ export default function Hero() {
         />
       </div>
 
+      {/* Accent décoratif "IA" en relief 3D — filigrane derrière le contenu */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "8%",
+          right: "4%",
+          zIndex: 0,
+          opacity: 0.1,
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      >
+        <DepthText
+          text="IA"
+          layers={30}
+          depth={2.6}
+          faceColor="#E4E4E7"
+          depthColor="#18181B"
+          tilt={6}
+          pointerTracking
+          smoothing={0.14}
+          perspective={850}
+          autoOrbit
+          orbitSpeed={0.25}
+          fontSize="clamp(6rem, 16vw, 11rem)"
+          fontWeight={900}
+          shadow={false}
+        />
+      </div>
+
       <div
         style={{
           position: "relative",
@@ -206,10 +252,24 @@ export default function Hero() {
             marginBottom: "18px",
           }}
         >
-          {t.hero.h1Line1}
-          <br />
+          <FoldText
+            text={t.hero.h1Line1}
+            splitBy="word"
+            hinge="top"
+            trigger="mount"
+            duration={0.7}
+            stagger={0.05}
+            ease="power3.out"
+            perspective={700}
+            creaseShading={0.55}
+            fontSize="inherit"
+            fontWeight="inherit"
+            color="#FFFFFF"
+            style={{ display: "block" }}
+          />
           <span
             style={{
+              display: "block",
               fontStyle: "italic",
               background: "linear-gradient(180deg, #FFFFFF 20%, #A1A1AA 100%)",
               WebkitBackgroundClip: "text",
@@ -217,7 +277,20 @@ export default function Hero() {
               backgroundClip: "text",
             }}
           >
-            {t.hero.h1Line2}
+            <FoldText
+              text={t.hero.h1Line2}
+              splitBy="word"
+              hinge="top"
+              trigger="mount"
+              duration={0.7}
+              stagger={0.05}
+              ease="power3.out"
+              perspective={700}
+              creaseShading={0.55}
+              fontSize="inherit"
+              fontWeight="inherit"
+              color="currentColor"
+            />
           </span>
         </h1>
 
@@ -232,7 +305,20 @@ export default function Hero() {
             marginBottom: "30px",
           }}
         >
-          {t.hero.description}
+          <FoldText
+            text={t.hero.description}
+            splitBy="word"
+            hinge="top"
+            trigger="mount"
+            duration={0.55}
+            stagger={0.012}
+            ease="power2.out"
+            perspective={500}
+            creaseShading={0.35}
+            fontSize="inherit"
+            fontWeight="inherit"
+            color="currentColor"
+          />
         </p>
 
         <div className="flex flex-col items-center gap-2.5 w-full">
@@ -258,7 +344,22 @@ export default function Hero() {
           }}
         >
           <ShieldCheckIcon className="w-4 h-4 text-zinc-400" />
-          <span>{t.hero.trustLine}</span>
+          <span>
+            <FoldText
+              text={t.hero.trustLine}
+              splitBy="word"
+              hinge="top"
+              trigger="mount"
+              duration={0.5}
+              stagger={0.02}
+              ease="power2.out"
+              perspective={400}
+              creaseShading={0.3}
+              fontSize="inherit"
+              fontWeight="inherit"
+              color="currentColor"
+            />
+          </span>
         </div>
       </div>
     </section>
