@@ -181,7 +181,7 @@ export default function NavBar() {
                 fontFamily: "'Space Grotesk', sans-serif",
                 fontSize: "17px",
                 fontWeight: 700,
-                color: "#39FF14",
+                color: "#FFFFFF",
                 letterSpacing: "0.01em",
                 lineHeight: 1,
               }}
@@ -191,7 +191,7 @@ export default function NavBar() {
           </Link>
 
           {/* Center nav — desktop — texte simple espacé, sur le fond de la navbar */}
-          <div className="hidden md:flex items-center gap-7">
+          <div className="hidden md:flex items-center gap-1">
             <Link
               href="/#fonctionnalites"
               style={navLinkStyle}
@@ -220,7 +220,7 @@ export default function NavBar() {
           </div>
 
           {/* Right: switch langue + Connexion + CTA + mobile hamburger */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-5">
             <LanguageSwitcher className="hidden md:inline-flex" />
 
             {isLoggedIn ? (
