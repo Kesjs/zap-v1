@@ -242,7 +242,7 @@ export default function Hero() {
       >
         <HeroBadge />
 
-        <h1
+               <h1
           style={{
             fontFamily: "'DM Serif Display', serif",
             fontSize: "clamp(34px, 6vw, 50px)",
@@ -267,7 +267,19 @@ export default function Hero() {
             color="#FFFFFF"
             style={{ display: "block" }}
           />
-          <span
+          <FoldText
+            text={t.hero.h1Line2}
+            splitBy="word"
+            hinge="top"
+            trigger="mount"
+            duration={0.7}
+            stagger={0.05}
+            ease="power3.out"
+            perspective={700}
+            creaseShading={0.55}
+            fontSize="inherit"
+            fontWeight="inherit"
+            color="#FFFFFF"
             style={{
               display: "block",
               fontStyle: "italic",
@@ -276,22 +288,7 @@ export default function Hero() {
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
             }}
-          >
-            <FoldText
-              text={t.hero.h1Line2}
-              splitBy="word"
-              hinge="top"
-              trigger="mount"
-              duration={0.7}
-              stagger={0.05}
-              ease="power3.out"
-              perspective={700}
-              creaseShading={0.55}
-              fontSize="inherit"
-              fontWeight="inherit"
-              color="currentColor"
-            />
-          </span>
+          />
         </h1>
 
         <p
