@@ -72,8 +72,6 @@ function HeroScanForm() {
     e.preventDefault();
     const trimmed = url.trim();
     if (!trimmed) return;
-    // Le scan public réutilise le même moteur de compréhension que l'onboarding (Phase 1) —
-    // route à brancher côté /scan une fois l'endpoint disponible.
     router.push(`/scan?url=${encodeURIComponent(trimmed)}`);
   }
 
@@ -181,15 +179,16 @@ export default function Hero() {
         />
       </div>
 
-      {/* Accent décoratif "IA" en relief 3D — filigrane derrière le contenu */}
+      {/* Accent décoratif "IA" en relief 3D — centré derrière "inside AI answers" */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
-          top: "8%",
-          right: "4%",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, calc(-50% - 20px))",
           zIndex: 0,
-          opacity: 0.1,
+          opacity: 0.18,
           pointerEvents: "none",
           userSelect: "none",
         }}
@@ -198,17 +197,17 @@ export default function Hero() {
           text="IA"
           layers={30}
           depth={2.6}
-          faceColor="#E4E4E7"
-          depthColor="#18181B"
+          faceColor="#B6FF6E"
+          depthColor="#39FF14"
           tilt={6}
           pointerTracking
           smoothing={0.14}
           perspective={850}
           autoOrbit
           orbitSpeed={0.25}
-          fontSize="clamp(7rem, 17.5vw, 12.5rem)"
+          fontSize="clamp(9rem, 22vw, 16rem)"
           fontWeight={900}
-          shadow={false}
+          shadow
         />
       </div>
 
