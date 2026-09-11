@@ -145,7 +145,7 @@ export default function NavBar() {
           boxShadow: "0 10px 30px rgba(0, 0, 0, 0.6)",
         }}
       >
-        <div className="flex items-center justify-between h-full px-6 sm:px-8">
+        <div className="flex items-center justify-between h-full px-4 sm:px-5">
           {/* Logo — mark blanc sur fond noir + wordmark Reflet */}
           <Link
             href="/"
@@ -191,7 +191,7 @@ export default function NavBar() {
           </Link>
 
           {/* Center nav — desktop — texte simple espacé, sur le fond de la navbar */}
-          <div className="hidden md:flex items-center gap-10">
+          <div className="hidden md:flex items-center gap-7">
             <Link
               href="/#fonctionnalites"
               style={navLinkStyle}
