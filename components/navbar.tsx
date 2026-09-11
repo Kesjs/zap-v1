@@ -3,7 +3,7 @@
 import { useState, useEffect, type MouseEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Bars2Icon, XMarkIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { Bars2Icon, XMarkIcon, ChevronDownIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -190,7 +190,7 @@ export default function NavBar() {
             </span>
           </Link>
 
-          {/* Center nav — desktop */}
+          {/* Center nav — desktop — texte simple espacé, sur le fond de la navbar */}
           <div className="hidden md:flex items-center gap-1">
             <Link
               href="/#fonctionnalites"
@@ -252,9 +252,10 @@ export default function NavBar() {
                   {t.nav.login}
                 </Link>
 
-                <RainbowButton asChild size="sm" className="hidden md:inline-flex rounded-full text-xs font-medium px-4">
+                <RainbowButton asChild size="sm" className="hidden md:inline-flex items-center gap-1.5 rounded-full text-xs font-medium px-4">
                   <Link href="/login?tab=register">
                     {t.nav.register}
+                    <ArrowRightIcon style={{ width: 13, height: 13 }} />
                   </Link>
                 </RainbowButton>
               </>
@@ -416,12 +417,13 @@ export default function NavBar() {
               </Link>
 
               <div style={{ padding: "8px 6px 4px" }}>
-                <RainbowButton asChild size="default" className="w-full rounded-full flex justify-center text-sm font-medium">
+                <RainbowButton asChild size="default" className="w-full rounded-full flex items-center justify-center gap-1.5 text-sm font-medium">
                   <Link
                     href="/login?tab=register"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {t.nav.register}
+                    <ArrowRightIcon style={{ width: 14, height: 14 }} />
                   </Link>
                 </RainbowButton>
               </div>
