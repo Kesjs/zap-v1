@@ -4,7 +4,8 @@ import Hero from "@/components/hero";
 const CraftsMarquee = dynamic(() => import("@/components/crafts-marquee"));
 const FeaturesBento = dynamic(() => import("@/components/features-bento"));
 const HowItWorks = dynamic(() => import("@/components/how-it-works"));
-const Testimonials = dynamic(() => import("@/components/testimonials"));
+// Testimonials retiré : pas encore de vrais retours clients (voir roadmap 10-15 entretiens).
+// À réintroduire une fois que Reflet a des témoignages réels — jamais avec des citations inventées.
 const Pricing = dynamic(() => import("@/components/pricing"));
 const Faq = dynamic(() => import("@/components/faq"));
 const FinalCta = dynamic(() => import("@/components/final-cta"));
@@ -25,7 +26,6 @@ export default function Home() {
         <CraftsMarquee />
         <FeaturesBento />
         <HowItWorks />
-        <Testimonials />
         <Pricing />
         <Faq />
         <FinalCta />

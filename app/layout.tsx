@@ -28,24 +28,23 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "ZAP — Devis, Factures & Reçus Officiels pour Entrepreneurs Africains",
+  title: "Reflet — Ta visibilité dans les réponses IA",
   description:
-    "Créez vos devis, factures et reçus en moins de 60 secondes avec votre cachet d'atelier apposé automatiquement. L'outil officiel pour artisans et indépendants d'Afrique de l'Ouest.",
+    "Reflet mesure comment ChatGPT parle de ta marque, avec des preuves à l'appui. Scan gratuit, score de visibilité, opportunités priorisées pour PME, SaaS, e-commerce et agences.",
   keywords: [
-    "facture",
-    "devis",
-    "reçu",
-    "artisan",
-    "Afrique de l'Ouest",
-    "Wave",
-    "Orange Money",
-    "FCFA",
-    "document officiel",
+    "visibilité IA",
+    "GEO",
+    "ChatGPT",
+    "monitoring marque",
+    "PME",
+    "SaaS",
+    "e-commerce",
+    "agence marketing",
   ],
   openGraph: {
-    title: "ZAP — Documents officiels en 60 secondes",
+    title: "Reflet — Ta visibilité dans les réponses IA",
     description:
-      "Votre cachet, votre signature et vos informations réunis pour offrir une image professionnelle à chaque client.",
+      "Vois où ta marque apparaît — et où elle est absente — quand on parle de ton secteur à ChatGPT.",
     type: "website",
     locale: "fr_FR",
   },
