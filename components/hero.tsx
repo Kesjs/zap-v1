@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ShieldCheckIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
 import { useLanguage } from "@/lib/i18n/language-context";
-import DepthText from "@/components/ui/DepthText";
 
 const Beams = dynamic(() => import("@/components/ui/Beams"), { ssr: false });
 
@@ -72,6 +71,8 @@ function HeroScanForm() {
     e.preventDefault();
     const trimmed = url.trim();
     if (!trimmed) return;
+    // Le scan public réutilise le même moteur de compréhension que l'onboarding (Phase 1) —
+    // route à brancher côté /scan une fois l'endpoint disponible.
     router.push(`/scan?url=${encodeURIComponent(trimmed)}`);
   }
 
@@ -176,38 +177,6 @@ export default function Hero() {
               "radial-gradient(circle at 50% 35%, transparent 35%, #000000 95%)",
             pointerEvents: "none",
           }}
-        />
-      </div>
-
-      {/* Accent décoratif "IA" en relief 3D — centré derrière "inside AI answers" */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, calc(-50% - 20px))",
-          zIndex: 0,
-          opacity: 0.18,
-          pointerEvents: "none",
-          userSelect: "none",
-        }}
-      >
-        <DepthText
-          text="IA"
-          layers={30}
-          depth={2.6}
-          faceColor="#B6FF6E"
-          depthColor="#39FF14"
-          tilt={6}
-          pointerTracking
-          smoothing={0.14}
-          perspective={850}
-          autoOrbit
-          orbitSpeed={0.25}
-          fontSize="clamp(9rem, 22vw, 16rem)"
-          fontWeight={900}
-          shadow
         />
       </div>
 
