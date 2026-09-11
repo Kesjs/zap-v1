@@ -1,137 +1,110 @@
-// Mini-illustrations monochromes pour la rangée compacte de features-bento.
-// Même palette que l'anneau de score : fond ardoise #1A1A1D, trait/fill blanc.
+// Mini-illustrations pour la rangée compacte de features-bento.
+// Toutes partagent le même cadre : une fenêtre de réponse IA (chrome de chat + repère IA),
+// pour ancrer chaque carte dans le vrai mécanisme du produit — pas des pictos SaaS génériques.
 
 const TRACK = "#1A1A1D";
 
-function IllustrationFrame({
-  children,
-  viewBox = "0 0 220 72",
-}: {
-  children: React.ReactNode;
-  viewBox?: string;
-}) {
+function AnswerWindowFrame({ children }: { children: React.ReactNode }) {
   return (
-    <svg
-      viewBox={viewBox}
-      preserveAspectRatio="none"
-      className="w-full h-full"
-    >
+    <svg viewBox="0 0 220 72" preserveAspectRatio="none" className="w-full h-full">
       <rect x="0" y="0" width="220" height="72" rx="10" fill={TRACK} />
+
+      {/* Chrome de fenêtre de chat */}
+      <circle cx="14" cy="16" r="2" fill="#4B4B52" />
+      <circle cx="21" cy="16" r="2" fill="#4B4B52" />
+      <circle cx="28" cy="16" r="2" fill="#4B4B52" />
+      {/* Repère "réponse IA" */}
+      <path
+        d="M198,12 L200,16 L204,17 L200,18 L198,22 L196,18 L192,17 L196,16 Z"
+        fill="#FFFFFF"
+        opacity="0.5"
+      />
+      <line x1="14" y1="24" x2="206" y2="24" stroke="#26262B" strokeWidth="1" />
+
       {children}
     </svg>
   );
 }
 
-/** Requêtes suivies — mini courbe de suivi. */
-export function TrendLineIllustration() {
+/** Requêtes suivies — la question telle qu'elle est tapée à l'IA, pas une tendance abstraite. */
+export function TrackedQueriesIllustration() {
   return (
-    <IllustrationFrame>
-      <polyline
-        points="14,52 52,40 90,47 128,24 166,30 204,15"
+    <AnswerWindowFrame>
+      <rect x="14" y="43" width="118" height="6" rx="3" fill="#FFFFFF" opacity="0.85" />
+      <text
+        x="142"
+        y="55"
+        fontFamily="'DM Serif Display', serif"
+        fontSize="26"
+        fill="#FFFFFF"
+      >
+        ?
+      </text>
+      <rect x="170" y="38" width="2" height="16" fill="#FFFFFF" opacity="0.5" />
+    </AnswerWindowFrame>
+  );
+}
+
+/** Opportunités priorisées — le trou dans la réponse IA où la marque pourrait apparaître. */
+export function ConfidenceBarsIllustration() {
+  return (
+    <AnswerWindowFrame>
+      <rect x="14" y="34" width="150" height="5" rx="2.5" fill="#3F3F46" />
+      <rect x="14" y="45" width="88" height="5" rx="2.5" fill="#3F3F46" />
+      <rect
+        x="108"
+        y="40"
+        width="42"
+        height="13"
+        rx="6.5"
         fill="none"
         stroke="#FFFFFF"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        opacity="0.9"
+        strokeWidth="1.3"
+        strokeDasharray="3 3"
       />
-      <circle cx="128" cy="24" r="3" fill="#FFFFFF" />
-      <circle cx="204" cy="15" r="3.5" fill="#FFFFFF" />
-    </IllustrationFrame>
+      <text
+        x="129"
+        y="50"
+        fontFamily="Arial, sans-serif"
+        fontSize="11"
+        fill="#FFFFFF"
+        textAnchor="middle"
+      >
+        +
+      </text>
+      <rect x="14" y="57" width="110" height="5" rx="2.5" fill="#3F3F46" />
+    </AnswerWindowFrame>
   );
 }
 
-/** Opportunités priorisées — barres de confiance, même logique visuelle que l'anneau (track + fill). */
-export function ConfidenceBarsIllustration() {
-  const bars = [
-    { y: 18, width: 178 },
-    { y: 36, width: 132 },
-    { y: 54, width: 96 },
-  ];
-  return (
-    <IllustrationFrame>
-      {bars.map((bar, i) => (
-        <g key={i}>
-          <rect x="14" y={bar.y - 3} width="192" height="6" rx="3" fill="#2A2A2E" />
-          <rect
-            x="14"
-            y={bar.y - 3}
-            width={bar.width}
-            height="6"
-            rx="3"
-            fill="#FFFFFF"
-            opacity={1 - i * 0.2}
-          />
-        </g>
-      ))}
-    </IllustrationFrame>
-  );
-}
-
-/** Preuves cliquables — citation + lien souligné. */
+/** Preuves cliquables — le passage exact surligné dans la réponse, avec le lien vers la source. */
 export function QuoteLinkIllustration() {
   return (
-    <IllustrationFrame>
-      <text
-        x="12"
-        y="36"
-        fontFamily="'DM Serif Display', serif"
-        fontSize="34"
-        fill="#FFFFFF"
-        opacity="0.9"
-      >
-        &ldquo;
-      </text>
-      <rect x="46" y="20" width="150" height="4" rx="2" fill="#3F3F46" />
-      <rect x="46" y="30" width="110" height="4" rx="2" fill="#3F3F46" />
-      <rect x="46" y="48" width="70" height="3" rx="1.5" fill="#FFFFFF" opacity="0.9" />
-      <line
-        x1="46"
-        y1="55"
-        x2="116"
-        y2="55"
-        stroke="#FFFFFF"
-        strokeWidth="1"
-        opacity="0.6"
+    <AnswerWindowFrame>
+      <rect x="14" y="34" width="130" height="5" rx="2.5" fill="#3F3F46" />
+      <rect x="14" y="45" width="96" height="5" rx="2.5" fill="#FFFFFF" opacity="0.95" />
+      <rect x="14" y="56" width="70" height="5" rx="2.5" fill="#3F3F46" />
+      <circle cx="196" cy="58" r="12" fill="#FFFFFF" />
+      <path
+        d="M191,63 L201,53 M195,53 H201 V59"
+        stroke="#0A0A0B"
+        strokeWidth="1.7"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
-    </IllustrationFrame>
+    </AnswerWindowFrame>
   );
 }
 
-/** Concurrents détectés — réseau de nœuds (marque centrale + concurrents satellites). */
+/** Concurrents détectés — plusieurs marques citées dans la même réponse : vous, et les autres. */
 export function NodeNetworkIllustration() {
-  const satellites = [
-    { x: 46, y: 20 },
-    { x: 46, y: 52 },
-    { x: 176, y: 36 },
-  ];
   return (
-    <IllustrationFrame>
-      {satellites.map((s, i) => (
-        <line
-          key={i}
-          x1="110"
-          y1="36"
-          x2={s.x}
-          y2={s.y}
-          stroke="#FFFFFF"
-          strokeWidth="1"
-          opacity="0.35"
-        />
-      ))}
-      {satellites.map((s, i) => (
-        <circle
-          key={i}
-          cx={s.x}
-          cy={s.y}
-          r="5"
-          fill="#1A1A1D"
-          stroke="#FFFFFF"
-          strokeWidth="1.5"
-          opacity="0.75"
-        />
-      ))}
-      <circle cx="110" cy="36" r="9" fill="#FFFFFF" />
-    </IllustrationFrame>
+    <AnswerWindowFrame>
+      <rect x="14" y="34" width="150" height="5" rx="2.5" fill="#3F3F46" />
+      <rect x="14" y="48" width="40" height="11" rx="5.5" fill="#FFFFFF" />
+      <rect x="60" y="48" width="36" height="11" rx="5.5" fill="none" stroke="#5A5A60" strokeWidth="1.2" />
+      <rect x="102" y="48" width="36" height="11" rx="5.5" fill="none" stroke="#5A5A60" strokeWidth="1.2" />
+    </AnswerWindowFrame>
   );
 }
