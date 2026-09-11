@@ -1,40 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import {
-  StarIcon,
-  BoltIcon,
-  PaperAirplaneIcon,
-  ShieldCheckIcon,
-} from "@heroicons/react/24/solid";
+import { ShieldCheckIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
 
 const Beams = dynamic(() => import("@/components/ui/Beams"), { ssr: false });
-import MotionButton from "@/components/ui/motion-button";
-
-const avatars = [
-  {
-    name: "Moussa Diop - Menuisier",
-    src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80",
-  },
-  {
-    name: "Amina Touré - Couture & Mode",
-    src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
-  },
-  {
-    name: "Koffi Mensah - Mécanique Auto",
-    src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80",
-  },
-  {
-    name: "Fatou Sow - Créatrice d'Atelier",
-    src: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80",
-  },
-  {
-    name: "Ibrahim Koné - Électricien BTP",
-    src: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&auto=format&fit=crop&q=80",
-  },
-];
 
 function HeroBadge() {
   return (
@@ -86,7 +57,7 @@ function HeroBadge() {
             borderRadius: "100px",
           }}
         >
-          NEW
+          SCAN GRATUIT
         </span>
         <span
           style={{
@@ -96,69 +67,73 @@ function HeroBadge() {
             color: "rgba(255, 255, 255, 0.8)",
           }}
         >
-          En finir avec les carnets papier
+          Vois ce que ChatGPT dit de ta marque
         </span>
       </div>
     </div>
   );
 }
 
-function HeroSocialProof() {
+function HeroScanForm() {
+  const router = useRouter();
+  const [url, setUrl] = useState("");
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const trimmed = url.trim();
+    if (!trimmed) return;
+    // Le scan public réutilise le même moteur de compréhension que l'onboarding (Phase 1) —
+    // route à brancher côté /scan une fois l'endpoint disponible.
+    router.push(`/scan?url=${encodeURIComponent(trimmed)}`);
+  }
+
   return (
-    <div className="flex flex-col items-center gap-4 mt-8 pt-6 border-t border-white/10 w-full max-w-lg">
-      {/* Avatars & Ratings */}
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        {/* Avatars stack */}
-        <div className="flex items-center -space-x-2.5">
-          {avatars.map((avatar, idx) => (
-            <div
-              key={idx}
-              className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-black"
-              style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.5)" }}
-            >
-              <Image
-                src={avatar.src}
-                alt={avatar.name}
-                fill
-                sizes="32px"
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Stars and score */}
-        <div className="flex items-center gap-1.5">
-          <div className="flex items-center gap-0.5">
-            {[...Array(5)].map((_, i) => (
-              <StarIcon key={i} className="w-4 h-4 text-amber-400" />
-            ))}
-          </div>
-          <span className="text-white text-xs font-semibold tracking-tight">4.9/5</span>
-        </div>
-      </div>
-
-      {/* Trust text */}
-      <p className="text-xs text-zinc-400 text-center font-normal">
-        Recommandé par plus de <span className="text-zinc-200 font-medium">150 artisans & indépendants</span>
-      </p>
-
-      {/* 3 Value pills with Heroicons */}
-      <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] text-zinc-300">
-          <BoltIcon className="w-3.5 h-3.5 text-zinc-300" />
-          <span>Prêt en 30 secondes</span>
-        </div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] text-zinc-300">
-          <PaperAirplaneIcon className="w-3.5 h-3.5 text-zinc-300" />
-          <span>Partage direct WhatsApp</span>
-        </div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] text-zinc-300">
-          <ShieldCheckIcon className="w-3.5 h-3.5 text-zinc-300" />
-          <span>8 documents offerts</span>
-        </div>
-      </div>
-    </div>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col sm:flex-row items-center gap-2.5 w-full"
+      style={{ maxWidth: "460px" }}
+    >
+      <input
+        type="text"
+        inputMode="url"
+        required
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        placeholder="votresite.com"
+        style={{
+          width: "100%",
+          height: "48px",
+          padding: "0 16px",
+          borderRadius: "10px",
+          background: "rgba(255, 255, 255, 0.05)",
+          border: "1px solid rgba(255, 255, 255, 0.15)",
+          color: "#FFFFFF",
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: "14px",
+          outline: "none",
+        }}
+      />
+      <button
+        type="submit"
+        className="flex items-center justify-center gap-1.5 w-full sm:w-auto flex-shrink-0"
+        style={{
+          height: "48px",
+          padding: "0 22px",
+          borderRadius: "10px",
+          background: "#FFFFFF",
+          color: "#000000",
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: "14px",
+          fontWeight: 600,
+          border: "none",
+          cursor: "pointer",
+          whiteSpace: "nowrap",
+        }}
+      >
+        Analyser ma visibilité
+        <ArrowRightIcon className="w-4 h-4" />
+      </button>
+    </form>
   );
 }
 
@@ -202,7 +177,6 @@ export default function Hero() {
           beamColor="#000000"
           backgroundColor="#000000"
         />
-        {/* Soft radial vignette overlay */}
         <div
           style={{
             position: "absolute",
@@ -240,7 +214,7 @@ export default function Hero() {
             marginBottom: "18px",
           }}
         >
-          Créez vos devis, factures et reçus
+          Ta marque existe.
           <br />
           <span
             style={{
@@ -251,7 +225,7 @@ export default function Hero() {
               backgroundClip: "text",
             }}
           >
-            en toute simplicité.
+            Est-elle visible dans les réponses IA ?
           </span>
         </h1>
 
@@ -266,15 +240,11 @@ export default function Hero() {
             marginBottom: "30px",
           }}
         >
-          Vos informations, votre signature et votre cachet officiel, réunis sur chaque document.
+          Entre ton site, on lance une analyse réelle et on te montre où tu apparais — et où tu es absent — quand on parle de ton secteur à ChatGPT.
         </p>
 
-        <div className="flex flex-col items-center gap-2.5">
-          <MotionButton
-            label="Créer un document"
-            href="/login?tab=register"
-            classes="w-64"
-          />
+        <div className="flex flex-col items-center gap-2.5 w-full">
+          <HeroScanForm />
 
           <p
             style={{
@@ -283,12 +253,21 @@ export default function Hero() {
               color: "rgba(255, 255, 255, 0.5)",
             }}
           >
-            8 documents gratuits pour commencer sans engagement
+            Scan gratuit, sans carte bancaire · résultat en quelques secondes
           </p>
         </div>
 
-        {/* Social proof replacing the mockup */}
-        <HeroSocialProof />
+        <div
+          className="flex items-center gap-2 mt-8 pt-6 border-t border-white/10"
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "12px",
+            color: "rgba(255, 255, 255, 0.5)",
+          }}
+        >
+          <ShieldCheckIcon className="w-4 h-4 text-zinc-400" />
+          <span>Aucune recommandation sans preuve — chaque score s&apos;appuie sur des réponses IA réelles, pas une estimation</span>
+        </div>
       </div>
     </section>
   );

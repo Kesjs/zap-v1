@@ -5,19 +5,19 @@ import { motion } from "framer-motion";
 const steps = [
   {
     step: "01",
-    title: "Choisissez",
-    description: "Devis, facture ou reçu selon votre besoin du moment.",
+    title: "Entre ton site",
+    description: "Une URL suffit. On lance une analyse réelle : pages, offres, positionnement, secteur.",
   },
   {
     step: "02",
-    title: "Renseignez",
-    description: "Ajoutez les informations nécessaires au document.",
+    title: "Confirme le résumé",
+    description: "Reflet te propose un résumé de ton activité et une première liste de requêtes suivies, modifiables avant de lancer quoi que ce soit.",
   },
   {
     step: "03",
-    title: "Signez & cachetez",
+    title: "Vois ta visibilité",
     description:
-      "Ajoutez votre signature et votre cachet, puis obtenez votre document.",
+      "ChatGPT est interrogé sur tes requêtes suivies. Tu obtiens un score, des preuves cliquables et des opportunités priorisées.",
   },
 ];
 
@@ -46,7 +46,7 @@ export default function HowItWorks() {
               marginBottom: "14px",
             }}
           >
-            De votre demande au document en quelques secondes.
+            De ton URL à ton score de visibilité, en quelques minutes.
           </motion.h2>
 
           <motion.p
@@ -64,8 +64,8 @@ export default function HowItWorks() {
               lineHeight: 1.6,
             }}
           >
-            Quelques étapes suffisent pour obtenir un document propre et
-            personnalisé.
+            Trois étapes, aucune supposition — chaque résultat s&apos;appuie sur
+            une analyse réelle de ton site et des réponses IA effectivement mesurées.
           </motion.p>
         </div>
 

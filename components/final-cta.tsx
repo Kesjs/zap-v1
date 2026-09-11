@@ -48,7 +48,7 @@ export default function FinalCta() {
             letterSpacing: "-0.02em",
           }}
         >
-          Prêt à professionnaliser vos documents ?
+          Prêt à savoir ce que ChatGPT dit de toi ?
         </h2>
 
         <p
@@ -62,20 +62,20 @@ export default function FinalCta() {
             marginBottom: "36px",
           }}
         >
-          Devis, facture ou reçu certifié : émettez votre prochain document officiel en moins de deux minutes.
+          Un scan gratuit, sans carte bancaire, pour voir où tu apparais — et où tu es absent — dans les réponses IA de ton secteur.
         </p>
 
         {/* Bouton CTA signature identique à celui du Hero (MotionButton) */}
         <div className="flex flex-col items-center gap-3">
           <MotionButton
-            label="Créer un document"
-            href="/login?tab=register"
+            label="Lancer mon scan gratuit"
+            href="/#hero"
             classes="w-64"
           />
 
           <div className="flex items-center gap-2 mt-3 text-xs text-zinc-400">
             <ShieldCheckIcon className="w-4 h-4 text-zinc-300" />
-            <span>8 documents offerts à l'inscription · Zéro carte bancaire requise</span>
+            <span>Résultat en quelques secondes · Aucune carte bancaire requise</span>
           </div>
         </div>
       </motion.div>

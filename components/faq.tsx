@@ -6,57 +6,57 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 const faqs = [
   {
-    id: "create-doc",
-    question: "Comment créer un document ?",
+    id: "which-ai",
+    question: "Quelles IA sont mesurées ?",
     answer:
-      "Sélectionnez le type de document souhaité (devis, facture ou reçu), renseignez les prestations et montants, puis validez. Votre document est prêt en moins de 60 secondes avec vos coordonnées complètes.",
+      "ChatGPT en V1. C'est l'IA effectivement interrogée pour mesurer ta visibilité réelle — pas juste citée en exemple.",
   },
   {
-    id: "signature",
-    question: "Comment fonctionne la signature ?",
+    id: "gemini-role",
+    question: "Pourquoi Gemini apparaît quelque part dans le produit ?",
     answer:
-      "Vous signez une seule fois du doigt directement sur l'écran tactile de votre smartphone ou tablette. ZAP enregistre votre tracé de façon sécurisée et l'appose automatiquement sur chacun de vos documents.",
+      "Gemini n'est jamais mesuré. Il sert uniquement, en coulisses, à comprendre ton site (secteur, offre, positionnement) au moment de l'onboarding — un composant interne, invisible pour toi.",
   },
   {
-    id: "cachet",
-    question: "Comment ajouter mon cachet/tampon ?",
+    id: "how-measured",
+    question: "Comment le score est-il calculé ?",
     answer:
-      "Prenez simplement en photo votre cachet physique réel avec votre téléphone. Notre studio numérique détoure l'empreinte et crée un tampon officiel net et fidèle qui est estampillé sur vos factures.",
+      "Chaque requête suivie est interrogée plusieurs fois (3 à 5 runs minimum), jamais une seule. Le résultat est une fréquence d'apparition mesurée, jamais un score binaire ou une estimation.",
   },
   {
-    id: "pdf-download",
-    question: "Puis-je télécharger mon document en PDF ?",
+    id: "opportunities",
+    question: "Comment une opportunité est-elle validée ?",
     answer:
-      "Absolument. Chaque document généré est disponible immédiatement au format PDF haute résolution, prêt à être imprimé, archivé ou partagé directement à votre client par WhatsApp ou email.",
+      "Une opportunité n'apparaît que si elle est confirmée sur plusieurs runs ET plusieurs requêtes liées au même sujet. Aucune recommandation n'est affichée sans preuve consultable.",
   },
   {
-    id: "free-tier",
-    question: "Combien de documents puis-je créer gratuitement ?",
+    id: "trial",
+    question: "Comment fonctionne l'essai gratuit ?",
     answer:
-      "L'offre Gratuite vous offre 8 documents complets pour tester l'application sans carte bancaire et sans aucun engagement. Vous disposez de toutes les fonctions essentielles dès l'inscription.",
+      "7 jours, carte bancaire requise. 1,50€ sont prélevés à l'inscription pour valider la carte, puis 49€ facturés au jour 7 si tu ne résilies pas avant.",
   },
   {
-    id: "pro-offer",
-    question: "Que comprend l'offre Pro ?",
+    id: "queries-limit",
+    question: "Combien de requêtes puis-je suivre ?",
     answer:
-      "L'abonnement Pro comprend 80 documents par mois (ou 120 documents/mois en facturation annuelle), le cachet et la signature réutilisables à l'infini, l'historique complet et un support prioritaire WhatsApp 7j/7.",
+      "Jusqu'à 30 requêtes actives, analysées chaque semaine. Tu peux les modifier, en pauser ou en ajouter à tout moment depuis le dashboard.",
   },
   {
-    id: "offline-usage",
-    question: "Puis-je utiliser ZAP sans connexion internet ?",
+    id: "re-measure",
+    question: "Après une modification de mon site, quand vois-je l'effet ?",
     answer:
-      "La création et la synchronisation nécessitent une connexion de données. Vos documents générés restent cependant consultables dans votre historique local et prêts pour vos rendez-vous clients.",
+      "Compte 2 à 3 semaines minimum avant qu'un signal de re-mesure soit jugé fiable — le temps que les moteurs IA reflètent le changement.",
   },
   {
-    id: "payment-methods",
-    question: "Quels moyens de paiement sont acceptés pour l'abonnement ?",
+    id: "free-scan",
+    question: "Le scan gratuit engage-t-il à quelque chose ?",
     answer:
-      "ZAP intègre les moyens de paiement mobile les plus populaires en Afrique de l'Ouest : Wave, Orange Money, MTN MoMo et Moov Money. Aucune carte bancaire internationale n'est requise.",
+      "Non. Le scan public donne un premier aperçu sans création de compte ni carte bancaire. L'abonnement n'intervient qu'au moment où tu veux le suivi complet dans le temps.",
   },
 ];
 
 export default function Faq() {
-  const [openId, setOpenId] = useState<string | null>("create-doc");
+  const [openId, setOpenId] = useState<string | null>("which-ai");
 
   return (
     <section

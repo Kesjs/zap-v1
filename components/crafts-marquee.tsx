@@ -1,25 +1,22 @@
 "use client";
 
 import {
-  WrenchScrewdriverIcon,
-  ScissorsIcon,
-  BuildingStorefrontIcon,
-  BriefcaseIcon,
-  UserGroupIcon,
-  SparklesIcon,
+  BuildingOffice2Icon,
+  CubeTransparentIcon,
+  ShoppingBagIcon,
+  MegaphoneIcon,
 } from "@heroicons/react/24/outline";
 
-const crafts = [
-  { name: "Mécanicien", icon: WrenchScrewdriverIcon },
-  { name: "Couturière", icon: ScissorsIcon },
-  { name: "Menuisier", icon: SparklesIcon },
-  { name: "Commerçant", icon: BuildingStorefrontIcon },
-  { name: "Prestataire de service", icon: BriefcaseIcon },
-  { name: "Artisan", icon: UserGroupIcon },
+// Segments cibles de Reflet (cohérent avec le dropdown "Solutions" de la navbar)
+const segments = [
+  { name: "PME", icon: BuildingOffice2Icon },
+  { name: "SaaS", icon: CubeTransparentIcon },
+  { name: "E-commerce", icon: ShoppingBagIcon },
+  { name: "Agences marketing & SEO", icon: MegaphoneIcon },
 ];
 
 export default function CraftsMarquee() {
-  const items = [...crafts, ...crafts, ...crafts];
+  const items = [...segments, ...segments, ...segments];
 
   return (
     <div
@@ -57,50 +54,22 @@ export default function CraftsMarquee() {
             (e.currentTarget as HTMLElement).style.animationPlayState = "running";
           }}
         >
-          {items.map((craft, i) => {
-            const Icon = craft.icon;
+          {items.map((segment, i) => {
+            const Icon = segment.icon;
             return (
               <div
-                key={`${craft.name}-${i}`}
+                key={i}
+                className="flex items-center gap-2 flex-shrink-0"
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  flexShrink: 0,
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: "13px",
+                  fontWeight: 400,
+                  color: "#71717A",
+                  whiteSpace: "nowrap",
                 }}
               >
-                <Icon
-                  style={{
-                    width: 20,
-                    height: 20,
-                    color: "#FFFFFF",
-                    opacity: 0.85,
-                    flexShrink: 0,
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "13px",
-                    fontWeight: 400,
-                    color: "rgba(244, 244, 245, 0.60)",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {craft.name}
-                </span>
-
-                {/* Dot separator */}
-                <span
-                  aria-hidden="true"
-                  style={{
-                    width: "3px",
-                    height: "3px",
-                    borderRadius: "50%",
-                    background: "rgba(244, 244, 245, 0.20)",
-                    marginLeft: "24px",
-                  }}
-                />
+                <Icon className="w-4 h-4" style={{ color: "#52525B" }} />
+                {segment.name}
               </div>
             );
           })}

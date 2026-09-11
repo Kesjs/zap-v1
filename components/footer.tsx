@@ -28,7 +28,7 @@ export default function Footer() {
               href="/"
               className="flex items-center gap-2.5 transition-opacity hover:opacity-90 group"
               style={{ textDecoration: "none", width: "fit-content" }}
-              aria-label="Accueil ZAP"
+              aria-label="Accueil Reflet"
             >
               <div
                 style={{
@@ -46,12 +46,12 @@ export default function Footer() {
                 }}
               >
                 <Image
-                  src="/log.jpg"
-                  alt="ZAP"
+                  src="/logo-mark.png"
+                  alt="Reflet"
                   width={42}
                   height={42}
-                  className="rotate-90 transition-transform duration-300"
-                  style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                  className="transition-transform duration-300"
+                  style={{ objectFit: "contain", width: "100%", height: "100%" }}
                 />
               </div>
 
@@ -65,7 +65,7 @@ export default function Footer() {
                   lineHeight: 1,
                 }}
               >
-                ZAP
+                Reflet
               </span>
             </Link>
 
@@ -80,7 +80,7 @@ export default function Footer() {
                 margin: 0,
               }}
             >
-              Le carnet de reçus, devis et factures officiel et numérique pour les entrepreneurs et indépendants africains.
+              La couche de monitoring de visibilité entre ta marque et les moteurs d&apos;IA.
             </p>
           </div>
 
@@ -147,8 +147,7 @@ export default function Footer() {
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
-                { label: "Support WhatsApp", href: "https://wa.me/22900000000" },
-                { label: "Email : contact@zap.africa", href: "mailto:contact@zap.africa" },
+                { label: "Email : contact@reflet.app", href: "mailto:contact@reflet.app" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link
@@ -195,7 +194,7 @@ export default function Footer() {
               margin: 0,
             }}
           >
-            © {new Date().getFullYear()} ZAP. Tous droits réservés.
+            © {new Date().getFullYear()} Reflet. Tous droits réservés.
           </p>
 
           <div className="flex items-center gap-4">

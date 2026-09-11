@@ -42,12 +42,12 @@ const dropdownItemStyle: React.CSSProperties = {
 
 
 
-// Pages dédiées par métier
+// Pages dédiées par segment cible
 const solutionsItems = [
-  { label: "Menuiserie & Bois", href: "/solutions/menuiserie-bois" },
-  { label: "Couture & Mode", href: "/solutions/couture-mode" },
-  { label: "BTP & Électricité", href: "/solutions/btp-electricite" },
-  { label: "Mécanique & Auto", href: "/solutions/mecanique-auto" },
+  { label: "PME", href: "/solutions/pme" },
+  { label: "SaaS", href: "/solutions/saas" },
+  { label: "E-commerce", href: "/solutions/e-commerce" },
+  { label: "Agences marketing & SEO", href: "/solutions/agences" },
 ];
 
 function NavDropdown({
@@ -158,7 +158,7 @@ export default function NavBar() {
             href="/"
             className="flex items-center flex-shrink-0 gap-2.5 transition-opacity hover:opacity-90"
             style={{ textDecoration: "none" }}
-            aria-label="Accueil ZAP"
+            aria-label="Accueil Reflet"
           >
             <div
               style={{
@@ -174,13 +174,13 @@ export default function NavBar() {
               }}
             >
               <Image
-                src="/log.jpg"
-                alt="ZAP"
+                src="/logo-mark.png"
+                alt="Reflet"
                 width={36}
                 height={36}
                 priority
-                className="rotate-90 transition-transform duration-300"
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                className="transition-transform duration-300"
+                style={{ objectFit: "contain", width: "100%", height: "100%" }}
               />
             </div>
             <span
@@ -193,7 +193,7 @@ export default function NavBar() {
                 lineHeight: 1,
               }}
             >
-              ZAP
+              Reflet
             </span>
           </Link>
 
