@@ -10,6 +10,7 @@ import {
   DocumentCheckIcon,
 } from "@heroicons/react/24/outline";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { ScoreRing } from "@/components/ui/score-ring";
 
 const cardStyle: React.CSSProperties = {
   background: "#121215",
@@ -20,11 +21,36 @@ function CardHeader({
   icon: Icon,
   title,
   description,
+  compact = false,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   title: string;
   description: string;
+  compact?: boolean;
 }) {
+  if (compact) {
+    return (
+      <div>
+        <div className="w-8 h-8 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center mb-3">
+          <Icon className="w-4 h-4 text-white" />
+        </div>
+        <h3
+          style={{
+            fontFamily: "'DM Serif Display', serif",
+            fontSize: "16px",
+            color: "#FFFFFF",
+            marginBottom: "6px",
+          }}
+        >
+          {title}
+        </h3>
+        <p className="text-xs text-zinc-500 font-light leading-relaxed">
+          {description}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center mb-5">
@@ -98,89 +124,42 @@ export default function FeaturesBento() {
           </p>
         </div>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Card 1: Score de visibilité (2 cols) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="md:col-span-2 rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
-            style={cardStyle}
-          >
+        {/* Anneau de score — seule pièce animée, porte tout le mouvement de la section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="rounded-2xl p-7 md:p-9 flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-10 transition-all duration-200"
+          style={cardStyle}
+        >
+          <ScoreRing value={73} />
+
+          <div className="flex-1 text-center md:text-left">
             <CardHeader icon={ChartBarIcon} title={f.card1.title} description={f.card1.description} />
-            <div className="mt-8 pt-6 border-t border-white/[0.06] flex items-center gap-4 flex-wrap">
-              <div
-                className="rounded-full border border-white/30 flex flex-col items-center justify-center text-center bg-white/[0.02]"
-                style={{ width: "64px", height: "64px" }}
-              >
-                <span
-                  style={{
-                    fontFamily: "'DM Serif Display', serif",
-                    fontSize: "20px",
-                    color: "#FFFFFF",
-                  }}
-                >
-                  3-5
-                </span>
-                <span className="text-[9px] text-zinc-400 uppercase tracking-wide">
-                  {f.card1.runsLabel}
-                </span>
-              </div>
-              <p className="text-xs text-zinc-500 max-w-[220px]">
-                {f.card1.caption}
-              </p>
-            </div>
-          </motion.div>
+            <p className="mt-4 text-xs text-zinc-500 max-w-md mx-auto md:mx-0">
+              {f.card1.caption}
+            </p>
+          </div>
+        </motion.div>
 
-          {/* Card 2: Requêtes suivies */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.05 }}
-            className="rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
-            style={cardStyle}
-          >
-            <CardHeader icon={ListBulletIcon} title={f.card2.title} description={f.card2.description} />
-          </motion.div>
+        {/* Rangée compacte — statique, sans animation individuelle */}
+        <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="rounded-xl p-5" style={cardStyle}>
+            <CardHeader compact icon={ListBulletIcon} title={f.card2.title} description={f.card2.description} />
+          </div>
 
-          {/* Card 3: Opportunités */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
-            style={cardStyle}
-          >
-            <CardHeader icon={LightBulbIcon} title={f.card3.title} description={f.card3.description} />
-          </motion.div>
+          <div className="rounded-xl p-5" style={cardStyle}>
+            <CardHeader compact icon={LightBulbIcon} title={f.card3.title} description={f.card3.description} />
+          </div>
 
-          {/* Card 4: Preuves / citations */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
-            style={cardStyle}
-          >
-            <CardHeader icon={DocumentMagnifyingGlassIcon} title={f.card4.title} description={f.card4.description} />
-          </motion.div>
+          <div className="rounded-xl p-5" style={cardStyle}>
+            <CardHeader compact icon={DocumentMagnifyingGlassIcon} title={f.card4.title} description={f.card4.description} />
+          </div>
 
-          {/* Card 5: Concurrents détectés automatiquement */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
-            style={cardStyle}
-          >
-            <CardHeader icon={UserGroupIcon} title={f.card5.title} description={f.card5.description} />
-          </motion.div>
+          <div className="rounded-xl p-5" style={cardStyle}>
+            <CardHeader compact icon={UserGroupIcon} title={f.card5.title} description={f.card5.description} />
+          </div>
         </div>
       </div>
     </section>
