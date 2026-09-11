@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import {
   ChartBarIcon,
   ListBulletIcon,
@@ -11,6 +12,13 @@ import {
 } from "@heroicons/react/24/outline";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { ScoreRing } from "@/components/ui/score-ring";
+import { ReflectSweep } from "@/components/ui/reflect-sweep";
+import {
+  TrendLineIllustration,
+  ConfidenceBarsIllustration,
+  QuoteLinkIllustration,
+  NodeNetworkIllustration,
+} from "@/components/ui/feature-illustrations";
 
 const cardStyle: React.CSSProperties = {
   background: "#121215",
@@ -76,6 +84,9 @@ function CardHeader({
 export default function FeaturesBento() {
   const { t } = useLanguage();
   const f = t.features;
+
+  const rowRef = useRef<HTMLDivElement>(null);
+  const rowInView = useInView(rowRef, { once: true, margin: "-10% 0px" });
 
   return (
     <section
@@ -143,22 +154,38 @@ export default function FeaturesBento() {
           </div>
         </motion.div>
 
-        {/* Rangée compacte — statique, sans animation individuelle */}
-        <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-4">
+        {/* Rangée compacte — statique, sans animation individuelle propre. Le seul mouvement (le reflet) est déclenché en cascade au niveau de la rangée. */}
+        <div ref={rowRef} className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="rounded-xl p-5" style={cardStyle}>
             <CardHeader compact icon={ListBulletIcon} title={f.card2.title} description={f.card2.description} />
+            <div className="relative mt-4 h-[72px] overflow-hidden rounded-lg">
+              <TrendLineIllustration />
+              <ReflectSweep active={rowInView} delayMs={0} />
+            </div>
           </div>
 
           <div className="rounded-xl p-5" style={cardStyle}>
             <CardHeader compact icon={LightBulbIcon} title={f.card3.title} description={f.card3.description} />
+            <div className="relative mt-4 h-[72px] overflow-hidden rounded-lg">
+              <ConfidenceBarsIllustration />
+              <ReflectSweep active={rowInView} delayMs={80} />
+            </div>
           </div>
 
           <div className="rounded-xl p-5" style={cardStyle}>
             <CardHeader compact icon={DocumentMagnifyingGlassIcon} title={f.card4.title} description={f.card4.description} />
+            <div className="relative mt-4 h-[72px] overflow-hidden rounded-lg">
+              <QuoteLinkIllustration />
+              <ReflectSweep active={rowInView} delayMs={160} />
+            </div>
           </div>
 
           <div className="rounded-xl p-5" style={cardStyle}>
             <CardHeader compact icon={UserGroupIcon} title={f.card5.title} description={f.card5.description} />
+            <div className="relative mt-4 h-[72px] overflow-hidden rounded-lg">
+              <NodeNetworkIllustration />
+              <ReflectSweep active={rowInView} delayMs={240} />
+            </div>
           </div>
         </div>
       </div>
