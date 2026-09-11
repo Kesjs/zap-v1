@@ -276,6 +276,31 @@
   .score-ring-sweep { animation: none; opacity: 0; }
 }
 
+/* Mini-cartes features — reflet diagonal, un seul passage, en cascade */
+@keyframes reflect-sweep {
+  0%   { transform: translateX(-120%) skewX(-20deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(220%) skewX(-20deg); opacity: 0; }
+}
+
+.reflect-sweep {
+  position: absolute;
+  inset: -20% -40%;
+  background: linear-gradient(
+    100deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.16) 50%,
+    transparent 58%
+  );
+  pointer-events: none;
+  animation: reflect-sweep 1.3s ease-out 1 forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reflect-sweep { animation: none; opacity: 0; }
+}
+
 .hero-cta { transition: transform 0.15s ease; }
 .hero-cta:hover { transform: translateY(-1px); }
 
