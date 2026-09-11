@@ -16,9 +16,17 @@ import {
   InputOTPSlot,
   InputOTPSeparator,
 } from "@/components/ui/input-otp";
-import { FloatingPaths } from "@/components/ui/background-paths";
 
 const supabase = createClient();
+
+// Dynamic import with ssr: false to prevent WebGL hydration mismatches
+const GrainGradientShader = dynamic(
+  () => import("@/components/auth/grain-gradient-shader"),
+  {
+    ssr: false,
+    loading: () => <div className="absolute inset-0 bg-black" />,
+  }
+);
 
 type AuthTab = "login" | "register" | "forgot";
 type LoginMethod = "otp" | "password";
@@ -814,22 +822,17 @@ function LoginPageInner() {
         </div>
 
           {/* ─────────────────────────────────────────────────────────────
-              VISUAL PANEL (Desktop: Left / Mobile: Bottom) : Background FloatingPaths identique au CTA final
+              VISUAL PANEL (Desktop: Left / Mobile: Bottom) : GrainGradient WebGL Shader + Value Proposition
              ───────────────────────────────────────────────────────────── */}
-          <div className="order-2 lg:order-1 relative flex min-h-[560px] flex-col justify-center overflow-hidden rounded-xl border border-white/10 bg-[#000000] p-8 text-white sm:p-12 lg:min-h-0 lg:p-14">
-            {/* Background Animated Floating Paths — identique au Final CTA de la landing page */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              <FloatingPaths position={1} />
-              <FloatingPaths position={-1} />
-              {/* Masque radial sombre pour fondre les trajectoires aux extrémités */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(ellipse at 50% 50%, transparent 20%, #000000 90%)",
-                }}
-              />
-            </div>
+          <div className="order-2 lg:order-1 relative flex min-h-[560px] flex-col justify-center overflow-hidden rounded-xl bg-black p-8 text-white sm:p-12 lg:min-h-0 lg:p-14">
+            {/* The Dynamic WebGL GrainGradient Shader */}
+            <GrainGradientShader />
+
+            {/* Overlay Gradient for contrast */}
+            <div
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/60"
+              aria-hidden="true"
+            />
 
             {/* Center Content */}
             <div className="relative z-10 py-8">
