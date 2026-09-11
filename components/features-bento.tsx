@@ -14,7 +14,7 @@ import { useLanguage } from "@/lib/i18n/language-context";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { ReflectSweep } from "@/components/ui/reflect-sweep";
 import {
-  TrendLineIllustration,
+  TrackedQueriesIllustration,
   ConfidenceBarsIllustration,
   QuoteLinkIllustration,
   NodeNetworkIllustration,
@@ -159,7 +159,7 @@ export default function FeaturesBento() {
           <div className="rounded-xl p-5" style={cardStyle}>
             <CardHeader compact icon={ListBulletIcon} title={f.card2.title} description={f.card2.description} />
             <div className="relative mt-4 h-[72px] overflow-hidden rounded-lg">
-              <TrendLineIllustration />
+              <TrackedQueriesIllustration />
               <ReflectSweep active={rowInView} delayMs={0} />
             </div>
           </div>
