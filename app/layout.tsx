@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBar from "@/components/navbar";
 import TopLoader from "@/components/ui/top-loader";
 import { Toaster } from "sonner";
+import { LanguageProvider } from "@/lib/i18n/language-context";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -62,23 +63,25 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className={`${dmSans.className} antialiased`} style={{ background: "#000000" }}>
-        <TopLoader />
-        <Toaster
-          position="top-right"
-          theme="dark"
-          closeButton
-          toastOptions={{
-            style: {
-              background: "#0A0A0A",
-              border: "1px solid rgba(255, 255, 255, 0.15)",
-              color: "#F4F4F5",
-              borderRadius: "14px",
-              boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.9)",
-            },
-          }}
-        />
-        <NavBar />
-        {children}
+        <LanguageProvider>
+          <TopLoader />
+          <Toaster
+            position="top-right"
+            theme="dark"
+            closeButton
+            toastOptions={{
+              style: {
+                background: "#0A0A0A",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
+                color: "#F4F4F5",
+                borderRadius: "14px",
+                boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.9)",
+              },
+            }}
+          />
+          <NavBar />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );
