@@ -6,16 +6,13 @@ import {
   ShoppingBagIcon,
   MegaphoneIcon,
 } from "@heroicons/react/24/outline";
+import { useLanguage } from "@/lib/i18n/language-context";
 
-// Segments cibles de Reflet (cohérent avec le dropdown "Solutions" de la navbar)
-const segments = [
-  { name: "PME", icon: BuildingOffice2Icon },
-  { name: "SaaS", icon: CubeTransparentIcon },
-  { name: "E-commerce", icon: ShoppingBagIcon },
-  { name: "Agences marketing & SEO", icon: MegaphoneIcon },
-];
+const icons = [BuildingOffice2Icon, CubeTransparentIcon, ShoppingBagIcon, MegaphoneIcon];
 
 export default function CraftsMarquee() {
+  const { t } = useLanguage();
+  const segments = t.marquee.segments.map((name, i) => ({ name, icon: icons[i] }));
   const items = [...segments, ...segments, ...segments];
 
   return (

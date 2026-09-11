@@ -4,8 +4,12 @@ import { motion } from "framer-motion";
 import { ShieldCheckIcon } from "@heroicons/react/24/solid";
 import { FloatingPaths } from "@/components/ui/background-paths";
 import MotionButton from "@/components/ui/motion-button";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 export default function FinalCta() {
+  const { t } = useLanguage();
+  const c = t.finalCta;
+
   return (
     <section
       className="relative overflow-hidden flex items-center justify-center text-center"
@@ -48,7 +52,7 @@ export default function FinalCta() {
             letterSpacing: "-0.02em",
           }}
         >
-          Prêt à savoir ce que ChatGPT dit de toi ?
+          {c.title}
         </h2>
 
         <p
@@ -62,20 +66,20 @@ export default function FinalCta() {
             marginBottom: "36px",
           }}
         >
-          Un scan gratuit, sans carte bancaire, pour voir où tu apparais — et où tu es absent — dans les réponses IA de ton secteur.
+          {c.description}
         </p>
 
         {/* Bouton CTA signature identique à celui du Hero (MotionButton) */}
         <div className="flex flex-col items-center gap-3">
           <MotionButton
-            label="Lancer mon scan gratuit"
+            label={c.cta}
             href="/#hero"
             classes="w-64"
           />
 
           <div className="flex items-center gap-2 mt-3 text-xs text-zinc-400">
             <ShieldCheckIcon className="w-4 h-4 text-zinc-300" />
-            <span>Résultat en quelques secondes · Aucune carte bancaire requise</span>
+            <span>{c.trustLine}</span>
           </div>
         </div>
       </motion.div>

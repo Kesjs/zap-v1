@@ -1,27 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-const steps = [
-  {
-    step: "01",
-    title: "Entre ton site",
-    description: "Une URL suffit. On lance une analyse réelle : pages, offres, positionnement, secteur.",
-  },
-  {
-    step: "02",
-    title: "Confirme le résumé",
-    description: "Reflet te propose un résumé de ton activité et une première liste de requêtes suivies, modifiables avant de lancer quoi que ce soit.",
-  },
-  {
-    step: "03",
-    title: "Vois ta visibilité",
-    description:
-      "ChatGPT est interrogé sur tes requêtes suivies. Tu obtiens un score, des preuves cliquables et des opportunités priorisées.",
-  },
-];
+import { useLanguage } from "@/lib/i18n/language-context";
 
 export default function HowItWorks() {
+  const { t } = useLanguage();
+  const h = t.howItWorks;
+
   return (
     <section
       id="comment-ca-marche"
@@ -46,7 +31,7 @@ export default function HowItWorks() {
               marginBottom: "14px",
             }}
           >
-            De ton URL à ton score de visibilité, en quelques minutes.
+            {h.title}
           </motion.h2>
 
           <motion.p
@@ -64,8 +49,7 @@ export default function HowItWorks() {
               lineHeight: 1.6,
             }}
           >
-            Trois étapes, aucune supposition — chaque résultat s&apos;appuie sur
-            une analyse réelle de ton site et des réponses IA effectivement mesurées.
+            {h.subtitle}
           </motion.p>
         </div>
 
@@ -77,7 +61,7 @@ export default function HowItWorks() {
             gap: "24px",
           }}
         >
-          {steps.map((item, i) => (
+          {h.steps.map((item, i) => (
             <motion.div
               key={item.step}
               initial={{ opacity: 0, y: 18 }}

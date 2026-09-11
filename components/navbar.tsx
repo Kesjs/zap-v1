@@ -14,6 +14,8 @@ import {
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { RainbowButton } from "@/components/ui/rainbow-button";
+import { useLanguage } from "@/lib/i18n/language-context";
+import LanguageSwitcher from "@/components/language-switcher";
 
 const navLinkStyle: React.CSSProperties = {
   fontFamily: "'DM Sans', sans-serif",
@@ -39,16 +41,6 @@ const dropdownItemStyle: React.CSSProperties = {
   textDecoration: "none",
   transition: "all 0.15s ease",
 };
-
-
-
-// Pages dédiées par segment cible
-const solutionsItems = [
-  { label: "PME", href: "/solutions/pme" },
-  { label: "SaaS", href: "/solutions/saas" },
-  { label: "E-commerce", href: "/solutions/e-commerce" },
-  { label: "Agences marketing & SEO", href: "/solutions/agences" },
-];
 
 function NavDropdown({
   label,
@@ -111,6 +103,7 @@ function NavDropdown({
 
 export default function NavBar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -153,7 +146,7 @@ export default function NavBar() {
         }}
       >
         <div className="flex items-center justify-between h-full px-4 sm:px-5">
-          {/* Logo — image seule (déjà fond noir + Z blanc), plus de cadre blanc, + wordmark ZAP */}
+          {/* Logo — mark blanc sur fond noir + wordmark Reflet */}
           <Link
             href="/"
             className="flex items-center flex-shrink-0 gap-2.5 transition-opacity hover:opacity-90"
@@ -209,9 +202,9 @@ export default function NavBar() {
                 (e.target as HTMLElement).style.color = "#A1A1AA";
               }}
             >
-              Fonctionnalités
+              {t.nav.features}
             </Link>
-            <NavDropdown label="Solutions" items={solutionsItems} />
+            <NavDropdown label={t.nav.solutions} items={t.nav.solutionsItems as unknown as { label: string; href: string }[]} />
             <Link
               href="/#pricing"
               style={navLinkStyle}
@@ -222,16 +215,18 @@ export default function NavBar() {
                 (e.target as HTMLElement).style.color = "#A1A1AA";
               }}
             >
-              Tarifs
+              {t.nav.pricing}
             </Link>
           </div>
 
-          {/* Right: Connexion + CTA + mobile hamburger */}
+          {/* Right: switch langue + Connexion + CTA + mobile hamburger */}
           <div className="flex items-center gap-3">
+            <LanguageSwitcher className="hidden md:inline-flex" />
+
             {isLoggedIn ? (
               <RainbowButton asChild size="sm" className="hidden md:inline-flex rounded-full text-xs font-medium px-4">
                 <Link href="/dashboard">
-                  Tableau de bord
+                  {t.nav.dashboard}
                 </Link>
               </RainbowButton>
             ) : (
@@ -254,12 +249,12 @@ export default function NavBar() {
                     (e.target as HTMLElement).style.color = "#A1A1AA";
                   }}
                 >
-                  Connexion
+                  {t.nav.login}
                 </Link>
 
                 <RainbowButton asChild size="sm" className="hidden md:inline-flex rounded-full text-xs font-medium px-4">
                   <Link href="/login?tab=register">
-                    Inscription
+                    {t.nav.register}
                   </Link>
                 </RainbowButton>
               </>
@@ -279,9 +274,7 @@ export default function NavBar() {
                 padding: "10px",
                 borderRadius: "8px",
               }}
-              aria-label={
-                isMenuOpen ? "Fermer le menu de navigation" : "Ouvrir le menu de navigation"
-              }
+              aria-label={isMenuOpen ? t.nav.closeMenu : t.nav.openMenu}
               id="navbar-menu-toggle"
             >
               {isMenuOpen ? (
@@ -310,6 +303,11 @@ export default function NavBar() {
             boxShadow: "0 20px 40px rgba(0, 0, 0, 0.8)",
           }}
         >
+          {/* Switch de langue en tête du menu mobile */}
+          <div style={{ display: "flex", justifyContent: "flex-end", padding: "4px 6px 8px" }}>
+            <LanguageSwitcher />
+          </div>
+
           {/* Direct link for Fonctionnalités */}
           <Link
             href="/#fonctionnalites"
@@ -325,7 +323,7 @@ export default function NavBar() {
               textDecoration: "none",
             }}
           >
-            Fonctionnalités
+            {t.nav.features}
           </Link>
 
           {/* Solutions Accordion */}
@@ -344,11 +342,11 @@ export default function NavBar() {
                 cursor: "pointer",
               }}
             >
-              Solutions
+              {t.nav.solutions}
               <ChevronDownIcon className="nav-accordion-icon" style={{ width: 16, height: 16 }} />
             </summary>
             <div style={{ display: "flex", flexDirection: "column", padding: "2px 14px 8px 22px" }}>
-              {solutionsItems.map((item) => (
+              {t.nav.solutionsItems.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
@@ -384,7 +382,7 @@ export default function NavBar() {
               textDecoration: "none",
             }}
           >
-            Tarifs
+            {t.nav.pricing}
           </Link>
 
           {isLoggedIn ? (
@@ -394,7 +392,7 @@ export default function NavBar() {
                   href="/dashboard"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Tableau de bord
+                  {t.nav.dashboard}
                 </Link>
               </RainbowButton>
             </div>
@@ -414,7 +412,7 @@ export default function NavBar() {
                   textDecoration: "none",
                 }}
               >
-                Connexion
+                {t.nav.login}
               </Link>
 
               <div style={{ padding: "8px 6px 4px" }}>
@@ -423,7 +421,7 @@ export default function NavBar() {
                     href="/login?tab=register"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Inscription
+                    {t.nav.register}
                   </Link>
                 </RainbowButton>
               </div>

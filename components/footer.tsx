@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 export default function Footer() {
+  const { t } = useLanguage();
+  const f = t.footer;
+
   return (
     <footer
       style={{
@@ -80,7 +84,7 @@ export default function Footer() {
                 margin: 0,
               }}
             >
-              La couche de monitoring de visibilité entre ta marque et les moteurs d&apos;IA.
+              {f.description}
             </p>
           </div>
 
@@ -97,15 +101,10 @@ export default function Footer() {
                 marginBottom: "16px",
               }}
             >
-              Produit
+              {f.productHeading}
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {[
-                { label: "Fonctionnalités", href: "#fonctionnalites" },
-                { label: "Tarifs", href: "#pricing" },
-                { label: "Comment ça marche", href: "#comment-ca-marche" },
-                { label: "FAQ", href: "#faq" },
-              ].map((link) => (
+              {f.productLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
@@ -143,12 +142,10 @@ export default function Footer() {
                 marginBottom: "16px",
               }}
             >
-              Support &amp; Contact
+              {f.supportHeading}
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
-              {[
-                { label: "Email : contact@reflet.app", href: "mailto:contact@reflet.app" },
-              ].map((link) => (
+              {[{ label: f.emailLabel, href: "mailto:contact@reflet.app" }].map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
@@ -194,7 +191,7 @@ export default function Footer() {
               margin: 0,
             }}
           >
-            © {new Date().getFullYear()} Reflet. Tous droits réservés.
+            {f.copyright(new Date().getFullYear())}
           </p>
 
           <div className="flex items-center gap-4">
@@ -207,7 +204,7 @@ export default function Footer() {
                 textDecoration: "none",
               }}
             >
-              Mentions légales
+              {f.legalNotice}
             </Link>
             <span style={{ color: "rgba(255, 255, 255, 0.2)" }}>·</span>
             <Link
@@ -219,7 +216,7 @@ export default function Footer() {
                 textDecoration: "none",
               }}
             >
-              CGU
+              {f.terms}
             </Link>
             <span style={{ color: "rgba(255, 255, 255, 0.2)" }}>·</span>
             <Link
@@ -231,7 +228,7 @@ export default function Footer() {
                 textDecoration: "none",
               }}
             >
-              Confidentialité
+              {f.privacy}
             </Link>
           </div>
         </div>

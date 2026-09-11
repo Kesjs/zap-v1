@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ShieldCheckIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 const Beams = dynamic(() => import("@/components/ui/Beams"), { ssr: false });
 
 function HeroBadge() {
+  const { t } = useLanguage();
   return (
     <div
       className="inline-flex items-center gap-2 mb-6"
@@ -17,12 +19,11 @@ function HeroBadge() {
         style={{
           display: "inline-flex",
           alignItems: "center",
-          gap: "8px",
           background: "rgba(255, 255, 255, 0.05)",
           border: "1px solid rgba(255, 255, 255, 0.15)",
           borderRadius: "100px",
           height: "28px",
-          padding: "4px 12px 4px 4px",
+          padding: "4px 14px",
           position: "relative",
           overflow: "hidden",
           backdropFilter: "blur(8px)",
@@ -47,27 +48,14 @@ function HeroBadge() {
         />
         <span
           style={{
-            background: "#FFFFFF",
-            color: "#000000",
-            fontSize: "10px",
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "11px",
             fontWeight: 700,
-            fontFamily: "'DM Sans', sans-serif",
-            letterSpacing: "0.08em",
-            padding: "2px 7px",
-            borderRadius: "100px",
+            letterSpacing: "0.1em",
+            color: "rgba(255, 255, 255, 0.85)",
           }}
         >
-          SCAN GRATUIT
-        </span>
-        <span
-          style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "12.5px",
-            fontWeight: 400,
-            color: "rgba(255, 255, 255, 0.8)",
-          }}
-        >
-          Vois ce que ChatGPT dit de ta marque
+          {t.hero.badge}
         </span>
       </div>
     </div>
@@ -76,6 +64,7 @@ function HeroBadge() {
 
 function HeroScanForm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [url, setUrl] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
@@ -99,7 +88,7 @@ function HeroScanForm() {
         required
         value={url}
         onChange={(e) => setUrl(e.target.value)}
-        placeholder="votresite.com"
+        placeholder={t.hero.inputPlaceholder}
         style={{
           width: "100%",
           height: "48px",
@@ -130,7 +119,7 @@ function HeroScanForm() {
           whiteSpace: "nowrap",
         }}
       >
-        Analyser ma visibilité
+        {t.hero.cta}
         <ArrowRightIcon className="w-4 h-4" />
       </button>
     </form>
@@ -138,8 +127,11 @@ function HeroScanForm() {
 }
 
 export default function Hero() {
+  const { t } = useLanguage();
+
   return (
     <section
+      id="hero"
       style={{
         position: "relative",
         minHeight: "92vh",
@@ -214,7 +206,7 @@ export default function Hero() {
             marginBottom: "18px",
           }}
         >
-          Ta marque existe.
+          {t.hero.h1Line1}
           <br />
           <span
             style={{
@@ -225,7 +217,7 @@ export default function Hero() {
               backgroundClip: "text",
             }}
           >
-            Est-elle visible dans les réponses IA ?
+            {t.hero.h1Line2}
           </span>
         </h1>
 
@@ -240,7 +232,7 @@ export default function Hero() {
             marginBottom: "30px",
           }}
         >
-          Entre ton site, on lance une analyse réelle et on te montre où tu apparais — et où tu es absent — quand on parle de ton secteur à ChatGPT.
+          {t.hero.description}
         </p>
 
         <div className="flex flex-col items-center gap-2.5 w-full">
@@ -253,7 +245,7 @@ export default function Hero() {
               color: "rgba(255, 255, 255, 0.5)",
             }}
           >
-            Scan gratuit, sans carte bancaire · résultat en quelques secondes
+            {t.hero.ctaSubtext}
           </p>
         </div>
 
@@ -266,7 +258,7 @@ export default function Hero() {
           }}
         >
           <ShieldCheckIcon className="w-4 h-4 text-zinc-400" />
-          <span>Aucune recommandation sans preuve — chaque score s&apos;appuie sur des réponses IA réelles, pas une estimation</span>
+          <span>{t.hero.trustLine}</span>
         </div>
       </div>
     </section>

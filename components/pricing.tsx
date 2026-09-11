@@ -3,17 +3,12 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { CheckIcon } from "@heroicons/react/24/solid";
-
-const features = [
-  "ChatGPT — 30 requêtes suivies",
-  "Analyse hebdomadaire, 3 à 5 runs par requête",
-  "1 marque suivie",
-  "Score de visibilité + preuves cliquables",
-  "3 à 5 opportunités priorisées, avec niveau de confiance",
-  "Historique roulant sur 3 mois",
-];
+import { useLanguage } from "@/lib/i18n/language-context";
 
 export default function Pricing() {
+  const { t } = useLanguage();
+  const p = t.pricing;
+
   return (
     <section
       id="pricing"
@@ -39,7 +34,7 @@ export default function Pricing() {
               marginBottom: "14px",
             }}
           >
-            Un seul plan, tarif PME.
+            {p.title}
           </motion.h2>
 
           <motion.p
@@ -56,7 +51,7 @@ export default function Pricing() {
               margin: "0 auto",
             }}
           >
-            Aucun concurrent connu ne descend sous 99$/mois. Reflet est pensé pour les PME et indépendants, sans palier compliqué.
+            {p.subtitle}
           </motion.p>
         </div>
 
@@ -100,7 +95,7 @@ export default function Pricing() {
                 marginBottom: "14px",
               }}
             >
-              Plan Reflet
+              {p.planLabel}
             </p>
 
             <div className="flex items-baseline gap-2 flex-wrap" style={{ marginBottom: "6px" }}>
@@ -124,7 +119,7 @@ export default function Pricing() {
                   color: "#A1A1AA",
                 }}
               >
-                / mois
+                {p.priceSuffix}
               </span>
             </div>
 
@@ -138,7 +133,7 @@ export default function Pricing() {
                 margin: "0 0 28px",
               }}
             >
-              Essai 7 jours, carte bancaire requise — 1,50€ prélevés à l&apos;inscription, 49€ facturés au jour 7 si non résilié.
+              {p.trialText}
             </p>
 
             <Link
@@ -159,11 +154,11 @@ export default function Pricing() {
                 boxShadow: "0 0 25px rgba(255, 255, 255, 0.15)",
               }}
             >
-              Démarrer l&apos;essai
+              {p.cta}
             </Link>
 
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "12px" }}>
-              {features.map((item) => (
+              {p.features.map((item) => (
                 <li key={item} className="flex items-start gap-2.5 text-[13.5px]">
                   <CheckIcon style={{ width: 16, height: 16, color: "#FFFFFF", flexShrink: 0, marginTop: "2px" }} />
                   <span style={{ fontFamily: "'DM Sans', sans-serif", color: "rgba(255, 255, 255, 0.75)" }}>

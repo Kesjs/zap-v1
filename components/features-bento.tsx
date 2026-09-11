@@ -6,9 +6,10 @@ import {
   ListBulletIcon,
   LightBulbIcon,
   DocumentMagnifyingGlassIcon,
-  ArrowTrendingUpIcon,
+  UserGroupIcon,
   DocumentCheckIcon,
 } from "@heroicons/react/24/outline";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 const cardStyle: React.CSSProperties = {
   background: "#121215",
@@ -47,6 +48,9 @@ function CardHeader({
 }
 
 export default function FeaturesBento() {
+  const { t } = useLanguage();
+  const f = t.features;
+
   return (
     <section
       id="fonctionnalites"
@@ -63,7 +67,7 @@ export default function FeaturesBento() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] mb-4">
             <DocumentCheckIcon className="w-3.5 h-3.5 text-zinc-300" />
             <span className="text-xs tracking-wider uppercase font-medium text-zinc-300">
-              Fonctionnalités Clés
+              {f.badge}
             </span>
           </div>
 
@@ -76,7 +80,7 @@ export default function FeaturesBento() {
               marginBottom: "16px",
             }}
           >
-            Une couche de monitoring entre ta marque et les moteurs d&apos;IA.
+            {f.title}
           </h2>
 
           <p
@@ -90,7 +94,7 @@ export default function FeaturesBento() {
               lineHeight: 1.6,
             }}
           >
-            Fini les suppositions sur ta présence dans les réponses IA. Chaque score, chaque opportunité s&apos;appuie sur des preuves vérifiables.
+            {f.subtitle}
           </p>
         </div>
 
@@ -105,11 +109,7 @@ export default function FeaturesBento() {
             className="md:col-span-2 rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
             style={cardStyle}
           >
-            <CardHeader
-              icon={ChartBarIcon}
-              title="Un score, fondé sur des réponses IA réelles"
-              description="ChatGPT est interrogé plusieurs fois sur les requêtes liées à ton secteur. Le score reflète une fréquence d'apparition mesurée — jamais une estimation ou un résultat binaire."
-            />
+            <CardHeader icon={ChartBarIcon} title={f.card1.title} description={f.card1.description} />
             <div className="mt-8 pt-6 border-t border-white/[0.06] flex items-center gap-4 flex-wrap">
               <div
                 className="rounded-full border border-white/30 flex flex-col items-center justify-center text-center bg-white/[0.02]"
@@ -125,11 +125,11 @@ export default function FeaturesBento() {
                   3-5
                 </span>
                 <span className="text-[9px] text-zinc-400 uppercase tracking-wide">
-                  runs / requête
+                  {f.card1.runsLabel}
                 </span>
               </div>
               <p className="text-xs text-zinc-500 max-w-[220px]">
-                Minimum garanti par requête suivie, jamais un seul passage.
+                {f.card1.caption}
               </p>
             </div>
           </motion.div>
@@ -143,11 +143,7 @@ export default function FeaturesBento() {
             className="rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
             style={cardStyle}
           >
-            <CardHeader
-              icon={ListBulletIcon}
-              title="30 requêtes suivies"
-              description="Les questions que tes clients posent réellement à ChatGPT, accepté, modifié ou ajouté par toi — analysées chaque semaine."
-            />
+            <CardHeader icon={ListBulletIcon} title={f.card2.title} description={f.card2.description} />
           </motion.div>
 
           {/* Card 3: Opportunités */}
@@ -159,11 +155,7 @@ export default function FeaturesBento() {
             className="rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
             style={cardStyle}
           >
-            <CardHeader
-              icon={LightBulbIcon}
-              title="Opportunités priorisées"
-              description="3 à 5 opportunités affichées, chacune avec un niveau de confiance — validée seulement si confirmée sur plusieurs runs et plusieurs requêtes liées."
-            />
+            <CardHeader icon={LightBulbIcon} title={f.card3.title} description={f.card3.description} />
           </motion.div>
 
           {/* Card 4: Preuves / citations */}
@@ -175,14 +167,10 @@ export default function FeaturesBento() {
             className="rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
             style={cardStyle}
           >
-            <CardHeader
-              icon={DocumentMagnifyingGlassIcon}
-              title="Preuves cliquables"
-              description="Chaque indicateur de visibilité renvoie à la réponse IA exacte qui le justifie. Aucune recommandation sans preuve, aucune causalité affirmée — seulement des corrélations observées."
-            />
+            <CardHeader icon={DocumentMagnifyingGlassIcon} title={f.card4.title} description={f.card4.description} />
           </motion.div>
 
-          {/* Card 5: Évolution dans le temps */}
+          {/* Card 5: Concurrents détectés automatiquement */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -191,11 +179,7 @@ export default function FeaturesBento() {
             className="rounded-2xl p-7 flex flex-col justify-between transition-all duration-200"
             style={cardStyle}
           >
-            <CardHeader
-              icon={ArrowTrendingUpIcon}
-              title="Suivi dans le temps"
-              description="Fais une modification sur ton site, reviens 2 à 3 semaines après : Reflet te montre la corrélation avant/après sur ta visibilité."
-            />
+            <CardHeader icon={UserGroupIcon} title={f.card5.title} description={f.card5.description} />
           </motion.div>
         </div>
       </div>

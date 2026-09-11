@@ -3,59 +3,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-
-const faqs = [
-  {
-    id: "which-ai",
-    question: "Quelles IA sont mesurées ?",
-    answer:
-      "ChatGPT en V1. C'est l'IA effectivement interrogée pour mesurer ta visibilité réelle — pas juste citée en exemple.",
-  },
-  {
-    id: "gemini-role",
-    question: "Pourquoi Gemini apparaît quelque part dans le produit ?",
-    answer:
-      "Gemini n'est jamais mesuré. Il sert uniquement, en coulisses, à comprendre ton site (secteur, offre, positionnement) au moment de l'onboarding — un composant interne, invisible pour toi.",
-  },
-  {
-    id: "how-measured",
-    question: "Comment le score est-il calculé ?",
-    answer:
-      "Chaque requête suivie est interrogée plusieurs fois (3 à 5 runs minimum), jamais une seule. Le résultat est une fréquence d'apparition mesurée, jamais un score binaire ou une estimation.",
-  },
-  {
-    id: "opportunities",
-    question: "Comment une opportunité est-elle validée ?",
-    answer:
-      "Une opportunité n'apparaît que si elle est confirmée sur plusieurs runs ET plusieurs requêtes liées au même sujet. Aucune recommandation n'est affichée sans preuve consultable.",
-  },
-  {
-    id: "trial",
-    question: "Comment fonctionne l'essai gratuit ?",
-    answer:
-      "7 jours, carte bancaire requise. 1,50€ sont prélevés à l'inscription pour valider la carte, puis 49€ facturés au jour 7 si tu ne résilies pas avant.",
-  },
-  {
-    id: "queries-limit",
-    question: "Combien de requêtes puis-je suivre ?",
-    answer:
-      "Jusqu'à 30 requêtes actives, analysées chaque semaine. Tu peux les modifier, en pauser ou en ajouter à tout moment depuis le dashboard.",
-  },
-  {
-    id: "re-measure",
-    question: "Après une modification de mon site, quand vois-je l'effet ?",
-    answer:
-      "Compte 2 à 3 semaines minimum avant qu'un signal de re-mesure soit jugé fiable — le temps que les moteurs IA reflètent le changement.",
-  },
-  {
-    id: "free-scan",
-    question: "Le scan gratuit engage-t-il à quelque chose ?",
-    answer:
-      "Non. Le scan public donne un premier aperçu sans création de compte ni carte bancaire. L'abonnement n'intervient qu'au moment où tu veux le suivi complet dans le temps.",
-  },
-];
+import { useLanguage } from "@/lib/i18n/language-context";
 
 export default function Faq() {
+  const { t } = useLanguage();
+  const faqs = t.faq.items;
   const [openId, setOpenId] = useState<string | null>("which-ai");
 
   return (
@@ -82,7 +34,7 @@ export default function Faq() {
               marginBottom: "14px",
             }}
           >
-            Questions fréquentes
+            {t.faq.title}
           </motion.h2>
 
           <motion.p
@@ -99,7 +51,7 @@ export default function Faq() {
               margin: "0 auto",
             }}
           >
-            Tout ce que vous devez savoir pour démarrer sereinement avec ZAP.
+            {t.faq.subtitle}
           </motion.p>
         </div>
 
